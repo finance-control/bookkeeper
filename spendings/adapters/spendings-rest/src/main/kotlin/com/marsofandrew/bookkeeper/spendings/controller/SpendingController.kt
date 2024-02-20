@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/spendings")
+@RequestMapping("/api/v1/spendings")
 internal class SpendingController(
     private val spendingAdding: SpendingAdding,
     private val spendingDeletion: SpendingDeletion,

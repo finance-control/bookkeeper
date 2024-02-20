@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/transfers")
+@RequestMapping("/api/v1/transfers")
 internal class TransferController(
     private val transferAdding: TransferAdding,
     private val transferDeletion: TransferDeletion,
