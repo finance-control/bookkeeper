@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.auth.security.configuration
 
 import com.marsofandrew.bookkeeper.auth.security.filter.AuthenticationFilter
+import com.marsofandrew.bookkeeper.auth.security.exception.AuthExceptionHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
@@ -48,7 +49,9 @@ internal class SecurityContextConfiguration(
                 .anyRequest().authenticated()
         }
 
-        // TODO: add exception handling
+        httpSecurity.exceptionHandling{
+            it.authenticationEntryPoint(AuthExceptionHandler())
+        }
 
         return httpSecurity.build()
     }

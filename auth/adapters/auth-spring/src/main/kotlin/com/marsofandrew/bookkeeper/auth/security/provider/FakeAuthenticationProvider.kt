@@ -2,6 +2,7 @@ package com.marsofandrew.bookkeeper.auth.security.provider
 
 import com.marsofandrew.bookkeeper.auth.UserAuthentication
 import com.marsofandrew.bookkeeper.auth.security.authentication.FakeAuthentication
+import com.marsofandrew.bookkeeper.auth.security.util.authenticateOrThrow
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import org.springframework.security.authentication.AuthenticationProvider
 
@@ -14,7 +15,7 @@ internal class FakeAuthenticationProvider(
 
     override fun authenticate(authentication: Authentication): Authentication {
         val auth = authentication as FakeAuthentication
-        val userId = userAuthentication.authenticate(auth.userId)
+        val userId = userAuthentication.authenticateOrThrow(auth.userId)
 
         return UserIdToken(userId)
     }
