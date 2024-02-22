@@ -8,10 +8,6 @@ data class PositiveMoneyDto(
     val digits: Int = 2,
     val currencyCode: String
 ) {
-    init {
-        check(amount > 0) { "amount is zero or negative" }
-    }
-
     fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.byCodeOrThrow(currencyCode), amount, digits)
 }
 

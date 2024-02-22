@@ -7,12 +7,13 @@ import com.marsofandrew.bookkeeper.spendings.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spendings.SpendingSelection
 import com.marsofandrew.bookkeeper.spendings.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/v1/spendings")
-internal class SpendingController(
+internal class SpendingsController(
     private val spendingAdding: SpendingAdding,
     private val spendingDeletion: SpendingDeletion,
     private val spendingSelection: SpendingSelection,
@@ -28,6 +29,7 @@ internal class SpendingController(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
         @UserId userId: Long,
         @PathVariable("id") id: String

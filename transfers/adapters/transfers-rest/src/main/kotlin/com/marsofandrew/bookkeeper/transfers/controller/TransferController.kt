@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.transfers.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.TransferSelection
 import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
@@ -28,6 +29,7 @@ internal class TransferController(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
         @UserId userId: Long,
         @PathVariable("id") id: String
