@@ -9,7 +9,7 @@ data class SpendingDto(
     val money: PositiveMoneyDto,
     val date: LocalDate,
     val comment: String,
-    val spendingCategoryId: String
+    val spendingCategoryId: Long
 )
 
 fun Spending.toSpendingDto() = SpendingDto(

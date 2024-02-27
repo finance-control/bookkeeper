@@ -11,7 +11,7 @@ data class CreateSpendingDto(
     val money: PositiveMoneyDto,
     val date: LocalDate,
     val comment: String,
-    val spendingCategoryId: String
+    val spendingCategoryId: Long
 ) {
     fun toSpending(userId: NumericId<User>) = Spending(
         StringId.unidentified(),

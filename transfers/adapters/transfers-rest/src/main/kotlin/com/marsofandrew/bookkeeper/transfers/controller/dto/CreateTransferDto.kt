@@ -12,7 +12,7 @@ data class CreateTransferDto(
     val send: PositiveMoneyDto? = null,
     val received: PositiveMoneyDto,
     val comment: String,
-    val transferCategoryId: String,
+    val transferCategoryId: Long,
     val fee: PositiveMoneyDto? = null
 ) {
     fun toSpending(userId: NumericId<User>) = Transfer(

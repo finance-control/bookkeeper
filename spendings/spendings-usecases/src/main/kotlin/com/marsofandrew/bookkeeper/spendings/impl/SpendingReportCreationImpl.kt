@@ -19,7 +19,7 @@ class SpendingReportCreationImpl(
         userId: NumericId<User>,
         startDate: LocalDate,
         endDate: LocalDate,
-        categories: Set<StringId<SpendingCategory>>?
+        categories: Set<NumericId<SpendingCategory>>?
     ): SpendingReport {
 
         if (startDate > endDate){
@@ -35,7 +35,7 @@ class SpendingReportCreationImpl(
         )
     }
 
-    private fun Collection<Spending>.byCategories(): Map<StringId<SpendingCategory>, List<PositiveMoney>> =
+    private fun Collection<Spending>.byCategories(): Map<NumericId<SpendingCategory>, List<PositiveMoney>> =
         groupBy { it.spendingCategoryId }
             .mapValues { (_, values) -> values.total() }
 

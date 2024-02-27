@@ -13,7 +13,9 @@ configurations {
 dependencies {
     api(project(":spendings:spendings-application"))
     api(project(":transfers:transfers-application"))
+    api(project(":categories:categories-application"))
     implementation(project(":auth:adapters:auth-spring"))
+    implementation(project(":common:common-rest"))
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")

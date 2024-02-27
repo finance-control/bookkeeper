@@ -14,7 +14,7 @@ data class Transfer(
     val send: PositiveMoney?,
     val received: PositiveMoney,
     val comment: String,
-    val transferCategoryId: StringId<TransferCategory>,
+    val transferCategoryId: NumericId<TransferCategory>,
     val fee: PositiveMoney? = null
 )
 

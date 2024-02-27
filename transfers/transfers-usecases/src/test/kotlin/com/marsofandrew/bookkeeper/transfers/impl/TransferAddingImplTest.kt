@@ -36,7 +36,7 @@ internal class TransferAddingImplTest {
             send = null,
             received = PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)),
             comment = "",
-            StringId("test")
+            0.asId()
         )
 
         every { transferStorage.create(transfer) } returns transfer

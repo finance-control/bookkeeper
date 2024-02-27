@@ -3,7 +3,7 @@ package com.marsofandrew.bookkeeper.spendings.controller.dto
 import com.marsofandrew.bookkeeper.spendings.SpendingReport
 
 data class SpendingReportDto(
-    val spendingByCategory: Map<String, List<PositiveMoneyDto>>,
+    val spendingByCategory: Map<Long, List<PositiveMoneyDto>>,
     val total: List<PositiveMoneyDto>
 )
 

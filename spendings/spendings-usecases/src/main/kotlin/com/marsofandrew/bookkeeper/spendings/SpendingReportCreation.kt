@@ -12,6 +12,6 @@ interface SpendingReportCreation {
         userId: NumericId<User>,
         startDate: LocalDate,
         endDate: LocalDate,
-        categories: Set<StringId<SpendingCategory>>? = null
+        categories: Set<NumericId<SpendingCategory>>? = null
     ): SpendingReport
 }

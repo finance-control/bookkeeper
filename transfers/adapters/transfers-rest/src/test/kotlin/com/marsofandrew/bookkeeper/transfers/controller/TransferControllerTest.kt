@@ -5,7 +5,12 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.transfers.*
+import com.marsofandrew.bookkeeper.transfers.Transfer
+import com.marsofandrew.bookkeeper.transfers.TransferAdding
+import com.marsofandrew.bookkeeper.transfers.TransferDeletion
+import com.marsofandrew.bookkeeper.transfers.TransferReport
+import com.marsofandrew.bookkeeper.transfers.TransferReportCreation
+import com.marsofandrew.bookkeeper.transfers.TransferSelection
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
@@ -15,6 +20,8 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.LocalDate
+import java.util.UUID
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,8 +35,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import java.time.LocalDate
-import java.util.*
 
 @WebMvcTest
 @ContextConfiguration(
@@ -59,7 +64,7 @@ internal class TransferControllerTest {
             send = PositiveMoneyDto(5, 0, "USD"),
             received = PositiveMoneyDto(4, 0, "EUR"),
             comment = "",
-            transferCategoryId = "transfer"
+            transferCategoryId = 0
         )
         val transfer = Transfer(
             StringId.unidentified(),

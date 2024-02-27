@@ -60,7 +60,7 @@ internal class SpendingsControllerTest {
             money = PositiveMoneyDto(200, 2, "EUR"),
             date = now,
             comment = "",
-            spendingCategoryId = "test"
+            spendingCategoryId = 0
         )
         val spending = Spending(
             StringId.unidentified(),
@@ -137,8 +137,8 @@ internal class SpendingsControllerTest {
         val endDate = now.plusDays(1)
         val spendingReport = SpendingReport(
             spendingByCategory = mapOf(
-                "test1".asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 5, 0)),
-                "test2".asId<SpendingCategory>() to listOf(PositiveMoney(Currency.USD, 5, 0)),
+                1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 5, 0)),
+                2.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.USD, 5, 0)),
             ),
             total = listOf(PositiveMoney(Currency.EUR, 5, 0), PositiveMoney(Currency.USD, 5, 0))
         )
@@ -148,12 +148,12 @@ internal class SpendingsControllerTest {
         mockMvc.get("/api/v1/spendings/report?end_date=${endDate}&start_date=${startDate}")
             .andExpect {
                 status { isOk() }
-                jsonPath("spendingByCategory.test1[0].currencyCode") { value(Currency.EUR.code) }
-                jsonPath("spendingByCategory.test2[0].currencyCode") { value(Currency.USD.code) }
-                jsonPath("spendingByCategory.test1[0].amount") { value(5) }
-                jsonPath("spendingByCategory.test2[0].amount") { value(5) }
-                jsonPath("spendingByCategory.test1[0].digits") { value(0) }
-                jsonPath("spendingByCategory.test2[0].digits") { value(0) }
+                jsonPath("spendingByCategory.1[0].currencyCode") { value(Currency.EUR.code) }
+                jsonPath("spendingByCategory.2[0].currencyCode") { value(Currency.USD.code) }
+                jsonPath("spendingByCategory.1[0].amount") { value(5) }
+                jsonPath("spendingByCategory.2[0].amount") { value(5) }
+                jsonPath("spendingByCategory.1[0].digits") { value(0) }
+                jsonPath("spendingByCategory.2[0].digits") { value(0) }
                 jsonPath("total[0].currencyCode") { value(Currency.EUR.code) }
                 jsonPath("total[1].currencyCode") { value(Currency.USD.code) }
             }

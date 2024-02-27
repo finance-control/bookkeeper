@@ -13,5 +13,5 @@ data class Spending(
     val money: PositiveMoney,
     val date: LocalDate,
     val comment: String,
-    val spendingCategoryId: StringId<SpendingCategory>
+    val spendingCategoryId: NumericId<SpendingCategory>
 )

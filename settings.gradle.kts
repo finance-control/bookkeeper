@@ -9,6 +9,7 @@ include(
     "common:common-data",
     "common:common-properties",
     "common:user-context",
+    "common:common-rest",
 )
 
 include(
@@ -33,6 +34,8 @@ include(
     "categories:categories-usecases",
     "categories:categories-domain",
     "categories:categories-application",
+    "categories:adapters:categories-data",
+    "categories:adapters:categories-rest",
 )
 
 include(

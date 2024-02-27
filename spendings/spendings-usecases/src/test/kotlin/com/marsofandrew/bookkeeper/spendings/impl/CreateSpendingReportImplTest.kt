@@ -2,6 +2,7 @@ package com.marsofandrew.bookkeeper.spendings.impl
 
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
+import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spendings.access.SpendingStorage
@@ -48,9 +49,9 @@ internal class CreateSpendingReportImplTest {
     @Test
     fun `createReport when data is available returns report`() {
         val userId = 5.asId<User>()
-        val category1 = StringId<SpendingCategory>("category1")
-        val category2 = StringId<SpendingCategory>("category2")
-        val category3 = StringId<SpendingCategory>("category3")
+        val category1 = NumericId<SpendingCategory>(0)
+        val category2 = NumericId<SpendingCategory>(1)
+        val category3 = NumericId<SpendingCategory>(2)
         val now = Instant.now()
         val date1 = LocalDate.from(now.minusSeconds(1000))
         val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))
@@ -110,9 +111,9 @@ internal class CreateSpendingReportImplTest {
     @Test
     fun `createReport when data is available and categories are provided returns report only with provided categories`() {
         val userId = 5.asId<User>()
-        val category1 = StringId<SpendingCategory>("category1")
-        val category2 = StringId<SpendingCategory>("category2")
-        val category3 = StringId<SpendingCategory>("category3")
+        val category1 = NumericId<SpendingCategory>(1)
+        val category2 = NumericId<SpendingCategory>(2)
+        val category3 = NumericId<SpendingCategory>(3)
         val now = Instant.now()
         val date1 = LocalDate.from(now.minusSeconds(1000))
         val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))

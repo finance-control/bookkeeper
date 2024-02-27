@@ -18,7 +18,7 @@ class SpendingFixture(
     var money: PositiveMoney = PositiveMoney(Currency.RUB, BigDecimal.valueOf(10))
     var date: LocalDate = LocalDate.now()
     var comment: String = "test"
-    var spendingCategoryId: StringId<SpendingCategory> = "test".asId()
+    var spendingCategoryId: NumericId<SpendingCategory> = 0.asId()
 
     fun build() = Spending(
         id,

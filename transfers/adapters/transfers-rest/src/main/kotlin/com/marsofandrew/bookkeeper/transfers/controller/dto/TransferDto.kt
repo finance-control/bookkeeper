@@ -11,7 +11,7 @@ data class TransferDto(
     val send: PositiveMoneyDto?,
     val received: PositiveMoneyDto,
     val comment: String,
-    val transferCategoryId: String,
+    val transferCategoryId: Long,
     val fee: PositiveMoneyDto? = null
 )
 
