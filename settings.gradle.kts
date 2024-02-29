@@ -10,6 +10,7 @@ include(
     "common:common-properties",
     "common:user-context",
     "common:common-rest",
+    "common:common-events",
 )
 
 include(
@@ -42,3 +43,5 @@ include(
     "auth:auth-usecases",
     "auth:adapters:auth-spring"
 )
+
+include("spring-events")

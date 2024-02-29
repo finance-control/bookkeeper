@@ -6,6 +6,7 @@ import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Transfer
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
+import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,15 +30,16 @@ internal class TransferAddingImplTest {
 
     @Test
     fun `add adds transfer when earning is provided`() {
-        val transfer = Transfer(
+        val transfer = transfer(
             id = StringId.unidentified(),
-            userId = 5.asId(),
-            date = LocalDate.now(),
-            send = null,
-            received = PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)),
-            comment = "",
-            0.asId()
-        )
+            userId = 5.asId()
+        ) {
+            date = LocalDate.now()
+            send = null
+            received = PositiveMoney(Currency.EUR, BigDecimal.valueOf(10))
+            comment = ""
+            transferCategoryId = 1.asId()
+        }
 
         every { transferStorage.create(transfer) } returns transfer
 

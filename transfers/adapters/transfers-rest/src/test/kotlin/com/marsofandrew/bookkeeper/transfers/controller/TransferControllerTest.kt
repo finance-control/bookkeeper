@@ -20,7 +20,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.UUID
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -64,7 +67,7 @@ internal class TransferControllerTest {
             send = PositiveMoneyDto(5, 0, "USD"),
             received = PositiveMoneyDto(4, 0, "EUR"),
             comment = "",
-            transferCategoryId = 0
+            transferCategoryId = 1
         )
         val transfer = Transfer(
             StringId.unidentified(),
@@ -73,7 +76,8 @@ internal class TransferControllerTest {
             requireNotNull(createTransferDto.send).toPositiveMoney(),
             createTransferDto.received.toPositiveMoney(),
             createTransferDto.comment,
-            createTransferDto.transferCategoryId.asId()
+            createTransferDto.transferCategoryId.asId(),
+            LocalDate.ofInstant(clock.instant(), ZoneId.of("Z"))
         )
         val identifiedTransfer = transfer.copy(id = UUID.randomUUID().toString().asId())
 
@@ -168,7 +172,8 @@ internal class TransferControllerTest {
             transferAdding,
             transferDeletion,
             transferSelection,
-            transferReportCreation
+            transferReportCreation,
+            clock
         )
     }
 
@@ -179,5 +184,6 @@ internal class TransferControllerTest {
         val transferDeletion = mockk<TransferDeletion>()
         val transferSelection = mockk<TransferSelection>()
         val transferReportCreation = mockk<TransferReportCreation>()
+        val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     }
 }

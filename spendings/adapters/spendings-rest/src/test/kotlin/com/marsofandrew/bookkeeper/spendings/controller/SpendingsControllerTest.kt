@@ -16,6 +16,8 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +32,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
 
@@ -60,7 +63,7 @@ internal class SpendingsControllerTest {
             money = PositiveMoneyDto(200, 2, "EUR"),
             date = now,
             comment = "",
-            spendingCategoryId = 0
+            spendingCategoryId = 1
         )
         val spending = Spending(
             StringId.unidentified(),
@@ -68,7 +71,8 @@ internal class SpendingsControllerTest {
             createSpendingDto.money.toPositiveMoney(),
             createSpendingDto.date,
             createSpendingDto.comment,
-            createSpendingDto.spendingCategoryId.asId()
+            createSpendingDto.spendingCategoryId.asId(),
+            now
         )
         val identifiedSpending = spending.copy(id = UUID.randomUUID().toString().asId())
 
@@ -170,7 +174,8 @@ internal class SpendingsControllerTest {
             spendingAdding,
             spendingDeletion,
             spendingSelection,
-            spendingReportCreation
+            spendingReportCreation,
+            clock
         )
     }
 
@@ -181,5 +186,6 @@ internal class SpendingsControllerTest {
         val spendingDeletion = mockk<SpendingDeletion>()
         val spendingSelection = mockk<SpendingSelection>()
         val spendingReportCreation = mockk<SpendingReportCreation>()
+        val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     }
 }

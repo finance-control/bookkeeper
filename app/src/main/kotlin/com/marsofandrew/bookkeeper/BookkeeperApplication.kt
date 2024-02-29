@@ -1,12 +1,17 @@
 package com.marsofandrew.bookkeeper
 
+import java.time.Clock
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
 
-@EnableAutoConfiguration
 @SpringBootApplication
-class BookkeeperApplication
+class BookkeeperApplication {
+
+    @Bean
+    fun clock(): Clock = Clock.systemUTC()
+}
 
 fun main(args: Array<String>) {
     runApplication<BookkeeperApplication>(*args)

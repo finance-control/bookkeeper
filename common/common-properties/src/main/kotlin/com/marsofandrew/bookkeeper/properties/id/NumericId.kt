@@ -4,6 +4,10 @@ data class NumericId<T>(
     private val inner: Long?
 ) : Id<Long> {
 
+    init {
+        check(inner == null || inner > 0) { "id should be either null or positive" }
+    }
+
     override val value: Long
         get() = requireNotNull(inner)
 

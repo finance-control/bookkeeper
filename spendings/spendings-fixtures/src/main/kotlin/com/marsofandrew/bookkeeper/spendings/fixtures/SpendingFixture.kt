@@ -18,7 +18,8 @@ class SpendingFixture(
     var money: PositiveMoney = PositiveMoney(Currency.RUB, BigDecimal.valueOf(10))
     var date: LocalDate = LocalDate.now()
     var comment: String = "test"
-    var spendingCategoryId: NumericId<SpendingCategory> = 0.asId()
+    var spendingCategoryId: NumericId<SpendingCategory> = 1.asId()
+    var createdAt: LocalDate = LocalDate.now()
 
     fun build() = Spending(
         id,
@@ -26,6 +27,7 @@ class SpendingFixture(
         money,
         date,
         comment,
-        spendingCategoryId
+        spendingCategoryId,
+        createdAt
     )
 }

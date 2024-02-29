@@ -21,7 +21,8 @@ class TransferFixture(
     var fee: PositiveMoney? = null
     var received: PositiveMoney = PositiveMoney(Currency.EUR, BigDecimal.ONE)
     var comment: String = ""
-    var transferCategoryId: NumericId<TransferCategory> = 0.asId()
+    var transferCategoryId: NumericId<TransferCategory> = 1.asId()
+    var createdAt: LocalDate = LocalDate.now()
 
     fun build() = Transfer(
         id,
@@ -31,6 +32,7 @@ class TransferFixture(
         received,
         comment,
         transferCategoryId,
+        createdAt,
         fee
     )
 }

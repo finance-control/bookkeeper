@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.spendings.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spendings.SpendingSelection
 import com.marsofandrew.bookkeeper.spendings.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
+import java.time.Clock
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -17,7 +18,8 @@ internal class SpendingsController(
     private val spendingAdding: SpendingAdding,
     private val spendingDeletion: SpendingDeletion,
     private val spendingSelection: SpendingSelection,
-    private val spendingReportCreation: SpendingReportCreation
+    private val spendingReportCreation: SpendingReportCreation,
+    private val clock: Clock
 ) {
 
     @PostMapping
@@ -25,7 +27,7 @@ internal class SpendingsController(
         @UserId userId: Long,
         @RequestBody(required = true) body: CreateSpendingDto,
     ): SpendingDto {
-        return spendingAdding.add(body.toSpending(userId.asId())).toSpendingDto()
+        return spendingAdding.add(body.toSpending(userId.asId(), clock)).toSpendingDto()
     }
 
     @DeleteMapping("/{id}")

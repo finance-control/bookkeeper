@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.transfers.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.TransferSelection
 import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
+import java.time.Clock
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -17,7 +18,8 @@ internal class TransferController(
     private val transferAdding: TransferAdding,
     private val transferDeletion: TransferDeletion,
     private val transferSelection: TransferSelection,
-    private val transferReportCreation: TransferReportCreation
+    private val transferReportCreation: TransferReportCreation,
+    private val clock: Clock,
 ) {
 
     @PostMapping
@@ -25,7 +27,7 @@ internal class TransferController(
         @UserId userId: Long,
         @RequestBody(required = true) body: CreateTransferDto,
     ): TransferDto {
-        return transferAdding.add(body.toSpending(userId.asId())).toTransferDto()
+        return transferAdding.add(body.toSpending(userId.asId(), clock)).toTransferDto()
     }
 
     @DeleteMapping("/{id}")
