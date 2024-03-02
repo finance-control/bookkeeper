@@ -23,22 +23,15 @@ class TransfersReportCreationImpl(
 
         transferStorage.findAllByUserIdBetween(userId, startDate, endDate)
             .forEach { transfer ->
-                transfersByCurrency[transfer.received.currency] =
-                    transfersByCurrency.getOrDefault(transfer.received.currency, BigDecimal.ZERO)
-                        .plus(transfer.received.amount)
+                transfersByCurrency[transfer.received.money.currency] =
+                    transfersByCurrency.getOrDefault(transfer.received.money.currency, BigDecimal.ZERO)
+                        .plus(transfer.received.money.amount)
 
                 if (transfer.send != null) {
-                    val send = requireNotNull(transfer.send)
-                    transfersByCurrency[send.currency] =
-                        transfersByCurrency.getOrDefault(send.currency, BigDecimal.ZERO)
-                            .minus(send.amount)
-                }
-
-                if (transfer.fee != null) {
-                    val fee = requireNotNull(transfer.fee)
-                    transfersByCurrency[fee.currency] =
-                        transfersByCurrency.getOrDefault(fee.currency, BigDecimal.ZERO)
-                            .minus(fee.amount)
+                    val accountsMoney = requireNotNull(transfer.send?.money)
+                    transfersByCurrency[accountsMoney.currency] =
+                        transfersByCurrency.getOrDefault(accountsMoney.currency, BigDecimal.ZERO)
+                            .minus(accountsMoney.amount)
                 }
             }
 

@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.spendings
 
+import com.marsofandrew.bookkeeper.events.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.spendings.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spendings.impl.SpendingAddingImpl
 import com.marsofandrew.bookkeeper.spendings.impl.SpendingReportCreationImpl
@@ -13,8 +14,9 @@ class SpendingContextConfiguration {
 
     @Bean
     fun addingSpending(
-        spendingStorage: SpendingStorage
-    ): SpendingAdding = SpendingAddingImpl(spendingStorage)
+        spendingStorage: SpendingStorage,
+        eventPublisher: EventPublisher,
+    ): SpendingAdding = SpendingAddingImpl(spendingStorage, eventPublisher)
 
     @Bean
     fun creatingSpendingReport(
@@ -23,8 +25,9 @@ class SpendingContextConfiguration {
 
     @Bean
     fun deletingSpending(
-        spendingStorage: SpendingStorage
-    ): SpendingDeletion = SpendingDeletionImpl(spendingStorage)
+        spendingStorage: SpendingStorage,
+        eventPublisher: EventPublisher
+    ): SpendingDeletion = SpendingDeletionImpl(spendingStorage, eventPublisher)
 
     @Bean
     fun selectingSpending(

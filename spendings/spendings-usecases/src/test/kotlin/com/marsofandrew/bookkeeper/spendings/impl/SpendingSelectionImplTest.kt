@@ -30,9 +30,9 @@ internal class SpendingSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val spendings = listOf(
-            spending("1".asId(), userId) { date = now },
-            spending("2".asId(), userId) { date = date1 },
-            spending("3".asId(), userId) { date = now },
+            spending(1.asId(), userId) { date = now },
+            spending(2.asId(), userId) { date = date1 },
+            spending(3.asId(), userId) { date = now },
         )
 
         every { spendingStorage.findAllByUserId(userId) } returns spendings
@@ -49,9 +49,9 @@ internal class SpendingSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val spendings = listOf(
-            spending("1".asId(), userId) { date = now },
-            spending("2".asId(), userId) { date = date1 },
-            spending("3".asId(), userId) { date = now },
+            spending(1.asId(), userId) { date = now },
+            spending(2.asId(), userId) { date = date1 },
+            spending(3.asId(), userId) { date = now },
         )
 
         every { spendingStorage.findAllByUserIdBetween(userId, date1, now.plusDays(1)) } returns spendings
@@ -68,9 +68,9 @@ internal class SpendingSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val spendings = listOf(
-            spending("1".asId(), userId) { date = now },
-            spending("2".asId(), userId) { date = date1 },
-            spending("3".asId(), userId) { date = now },
+            spending(1.asId(), userId) { date = now },
+            spending(2.asId(), userId) { date = date1 },
+            spending(3.asId(), userId) { date = now },
         )
 
         every { spendingStorage.findAllByUserIdBetween(userId, date1, now) } returns spendings

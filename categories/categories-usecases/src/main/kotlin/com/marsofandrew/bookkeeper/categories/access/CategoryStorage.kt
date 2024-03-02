@@ -9,5 +9,5 @@ interface CategoryStorage<T : UserCategory<T>> {
     fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Set<NumericId<T>>): List<T>
 
     fun create(userCategory: T): T
-    fun delete(userId: NumericId<User>, ids: Set<NumericId<T>>)
+    fun delete(ids: Set<NumericId<T>>)
 }

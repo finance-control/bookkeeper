@@ -6,7 +6,7 @@ import com.marsofandrew.bookkeeper.spendings.Spending
 import com.marsofandrew.bookkeeper.spendings.user.User
 
 fun spending(
-    id: StringId<Spending>,
+    id: NumericId<Spending>,
     userId: NumericId<User>,
     init: SpendingFixture.() -> Unit = {}
 ): Spending = SpendingFixture(id, userId)

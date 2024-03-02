@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service
 @Service
 internal class TransferCategoryStorage : CategoryStorage<TransferUserCategory> {
 
-    private val counter = AtomicLong(0)
+    private val counter = AtomicLong(1)
 
     private val categoriesByUser: MutableMap<NumericId<User>, MutableList<TransferUserCategory>> = mutableMapOf()
+    private val categoriesById: MutableMap<NumericId<TransferUserCategory>, TransferUserCategory> = mutableMapOf()
     override fun findAllByUserId(userId: NumericId<User>): List<TransferUserCategory> {
         return categoriesByUser.getOrDefault(userId, listOf())
     }
@@ -25,9 +26,12 @@ internal class TransferCategoryStorage : CategoryStorage<TransferUserCategory> {
             .filter { it.id in ids }
     }
 
-    override fun delete(userId: NumericId<User>, ids: Set<NumericId<TransferUserCategory>>) {
-        val categories = categoriesByUser[userId] ?: return
-        categories.removeIf { it.id in ids }
+    override fun delete(ids: Set<NumericId<TransferUserCategory>>) {
+        categoriesById.filterValues { it.id in ids }
+            .forEach { (_, userCategory) ->
+                categoriesByUser[userCategory.userId]?.removeIf { it.id == userCategory.id }
+                categoriesById.remove(userCategory.id)
+            }
     }
 
     override fun create(userCategory: TransferUserCategory): TransferUserCategory {
@@ -35,7 +39,7 @@ internal class TransferCategoryStorage : CategoryStorage<TransferUserCategory> {
         val forSave = userCategory.copy(id = counter.getAndIncrement().asId())
         categories.add(forSave)
         categoriesByUser[userCategory.userId] = categories
-
+        categoriesById[forSave.id] = forSave
         return forSave
     }
 }

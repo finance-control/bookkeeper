@@ -1,8 +1,9 @@
 package com.marsofandrew.bookkeeper.spendings
 
-import com.marsofandrew.bookkeeper.properties.id.StringId
+import com.marsofandrew.bookkeeper.properties.id.NumericId
+import com.marsofandrew.bookkeeper.spendings.user.User
 
 interface SpendingDeletion {
 
-    fun delete(ids: Collection<StringId<Spending>>) //TODO: check by userId
+    fun delete(userId: NumericId<User>, ids: Collection<NumericId<Spending>>) //TODO: check by userId
 }

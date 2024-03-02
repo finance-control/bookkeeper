@@ -74,7 +74,6 @@ internal class TransferReportCreationImplTest {
                 date = endDate
                 send = PositiveMoney(Currency.USD, BigDecimal(3))
                 received = PositiveMoney(Currency.RUB, 3005, 1)
-                fee = PositiveMoney(Currency.RUB, 25, 2)
             }
         )
 

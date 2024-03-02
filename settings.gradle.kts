@@ -11,6 +11,7 @@ include(
     "common:user-context",
     "common:common-rest",
     "common:common-events",
+    "common:common-base",
 )
 
 include(
@@ -44,4 +45,16 @@ include(
     "auth:adapters:auth-spring"
 )
 
-include("spring-events")
+include(
+    "accounts:accounts-domain",
+    "accounts:accounts-application",
+    "accounts:accounts-usecases",
+    "accounts:adapters:accounts-data",
+    "accounts:adapters:accounts-rest",
+    "accounts:adapters:accounts-events",
+)
+
+include(
+    "spring-events",
+    "spring-transactions"
+)

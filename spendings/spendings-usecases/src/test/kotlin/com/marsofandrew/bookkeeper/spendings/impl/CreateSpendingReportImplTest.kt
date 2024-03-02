@@ -57,27 +57,27 @@ internal class CreateSpendingReportImplTest {
         val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))
 
         val spendings = listOf(
-            spending(StringId("1"), userId) {
+            spending(1.asId(), userId) {
                 spendingCategoryId = category1
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(15))
             },
-            spending(StringId("2"), userId) {
+            spending(2.asId(), userId) {
                 spendingCategoryId = category1
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal(15))
             },
-            spending(StringId("3"), userId) {
+            spending(3.asId(), userId) {
                 spendingCategoryId = category2
                 date = date1
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(50.5))
             },
-            spending(StringId("4"), userId) {
+            spending(4.asId(), userId) {
                 spendingCategoryId = category2
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(42.25))
             },
-            spending(StringId("5"), userId) {
+            spending(5.asId(), userId) {
                 spendingCategoryId = category3
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(30.5))
@@ -119,27 +119,27 @@ internal class CreateSpendingReportImplTest {
         val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))
 
         val spendings = listOf(
-            spending(StringId("1"), userId) {
+            spending(1.asId(), userId) {
                 spendingCategoryId = category1
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(15))
             },
-            spending(StringId("2"), userId) {
+            spending(2.asId(), userId) {
                 spendingCategoryId = category1
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal(15))
             },
-            spending(StringId("3"), userId) {
+            spending(3.asId(), userId) {
                 spendingCategoryId = category2
                 date = date1
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(50.5))
             },
-            spending(StringId("4"), userId) {
+            spending(4.asId(), userId) {
                 spendingCategoryId = category2
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(42.25))
             },
-            spending(StringId("5"), userId) {
+            spending(5.asId(), userId) {
                 spendingCategoryId = category3
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(30.5))

@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.events.spring
 
+import com.marsofandrew.bookkeeper.events.event.Event
 import com.marsofandrew.bookkeeper.events.event.UserEvent
 import com.marsofandrew.bookkeeper.events.publisher.EventPublisher
 import org.springframework.context.ApplicationEventPublisher
@@ -10,7 +11,7 @@ internal class EventPublisherImpl(
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : EventPublisher {
 
-    override fun publish(event: UserEvent) {
+    override fun publish(event: Event) {
         applicationEventPublisher.publishEvent(event)
     }
 }

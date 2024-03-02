@@ -9,7 +9,10 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 class TransferCategoryDeletionImpl(
     private val transferUserCategoryStorage: CategoryStorage<TransferUserCategory>
 ): CategoryDeletion<TransferUserCategory> {
+
     override fun delete(userId: NumericId<User>, ids: Set<NumericId<TransferUserCategory>>) {
-        transferUserCategoryStorage.delete(userId, ids)
+        transferUserCategoryStorage.findAllByUserIdAndIds(userId, ids)
+            .mapTo(HashSet()) { it.id }
+            .let { transferUserCategoryStorage.delete(ids) }
     }
 }

@@ -10,6 +10,7 @@ configurations {
 
 dependencies {
     api(project(":spendings:spendings-domain"))
+    api(project(":common:common-events"))
 
     testImplementation(project(":spendings:spendings-fixtures"))
 

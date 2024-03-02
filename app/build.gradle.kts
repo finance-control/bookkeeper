@@ -11,12 +11,15 @@ configurations {
 }
 
 dependencies {
-    api(project(":spendings:spendings-application"))
-    api(project(":transfers:transfers-application"))
-    api(project(":categories:categories-application"))
-    implementation(project(":auth:adapters:auth-spring"))
+    implementation(project(":spendings:spendings-application"))
+    implementation(project(":transfers:transfers-application"))
+    implementation(project(":categories:categories-application"))
+    implementation(project(":accounts:accounts-application"))
+
+    implementation(project(":auth:adapters:auth-spring")) // TODO: remake to application
     implementation(project(":common:common-rest"))
     implementation(project(":spring-events"))
+    implementation(project(":spring-transactions"))
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")

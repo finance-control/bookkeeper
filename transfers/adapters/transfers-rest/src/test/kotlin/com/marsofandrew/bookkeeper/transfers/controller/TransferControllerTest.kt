@@ -3,6 +3,7 @@ package com.marsofandrew.bookkeeper.transfers.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
+import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Transfer
@@ -11,8 +12,10 @@ import com.marsofandrew.bookkeeper.transfers.TransferDeletion
 import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.TransferSelection
+import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
@@ -64,22 +67,22 @@ internal class TransferControllerTest {
         val now = LocalDate.now()
         val createTransferDto = CreateTransferDto(
             date = now,
-            send = PositiveMoneyDto(5, 0, "USD"),
-            received = PositiveMoneyDto(4, 0, "EUR"),
+            send = AccountMoneyDto(PositiveMoneyDto(5, 0, "USD")),
+            received = AccountMoneyDto(PositiveMoneyDto(4, 0, "EUR")),
             comment = "",
             transferCategoryId = 1
         )
         val transfer = Transfer(
-            StringId.unidentified(),
+            NumericId.unidentified(),
             userId.asId(),
             createTransferDto.date,
-            requireNotNull(createTransferDto.send).toPositiveMoney(),
-            createTransferDto.received.toPositiveMoney(),
+            requireNotNull(createTransferDto.send).toAccountMoney(),
+            createTransferDto.received.toAccountMoney(),
             createTransferDto.comment,
             createTransferDto.transferCategoryId.asId(),
             LocalDate.ofInstant(clock.instant(), ZoneId.of("Z"))
         )
-        val identifiedTransfer = transfer.copy(id = UUID.randomUUID().toString().asId())
+        val identifiedTransfer = transfer.copy(id = 100.asId())
 
         every { transferAdding.add(transfer) } returns identifiedTransfer
 
@@ -90,16 +93,16 @@ internal class TransferControllerTest {
             status { isOk() }
             jsonPath("id") { value(identifiedTransfer.id.value) }
             jsonPath("userId") { value(userId) }
-            jsonPath("send.amount") {
+            jsonPath("send.money.amount") {
                 value(5)
             }
-            jsonPath("send.digits") { value(0) }
-            jsonPath("send.currencyCode") { value("USD") }
-            jsonPath("received.amount") {
+            jsonPath("send.money.digits") { value(0) }
+            jsonPath("send.money.currencyCode") { value("USD") }
+            jsonPath("received.money.amount") {
                 value(4)
             }
-            jsonPath("received.digits") { value(0) }
-            jsonPath("received.currencyCode") { value("EUR") }
+            jsonPath("received.money.digits") { value(0) }
+            jsonPath("received.money.currencyCode") { value("EUR") }
             jsonPath("date") { value(now.toString()) }
         }
 
@@ -108,23 +111,23 @@ internal class TransferControllerTest {
 
     @Test
     fun `deletes deletes when provided id exists`() {
-        val id = "55tt"
-        every { transferDeletion.delete(setOf(id.asId())) } returns Unit
+        val id = 55
+        every { transferDeletion.delete(userId.asId(), setOf(id.asId())) } returns Unit
 
         mockMvc.delete("/api/v1/transfers/{id}", id).andExpect {
             status { isNoContent() }
         }
 
-        verify(exactly = 1) { transferDeletion.delete(setOf(id.asId())) }
+        verify(exactly = 1) { transferDeletion.delete(userId.asId(), setOf(id.asId())) }
     }
 
     @Test
     fun `get returns transfers`() {
         val now = LocalDate.now()
         val transfers = listOf(
-            transfer("1".asId(), userId.asId()),
-            transfer("2".asId(), userId.asId()),
-            transfer("3".asId(), userId.asId())
+            transfer(1.asId(), userId.asId()),
+            transfer(2.asId(), userId.asId()),
+            transfer(3.asId(), userId.asId())
         )
 
         every { transferSelection.select(userId.asId(), null, now) } returns transfers

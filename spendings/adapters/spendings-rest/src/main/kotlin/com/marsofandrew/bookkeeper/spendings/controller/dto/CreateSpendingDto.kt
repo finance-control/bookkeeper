@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.spendings.controller.dto
 
+import com.marsofandrew.bookkeeper.base.date
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
@@ -9,19 +10,20 @@ import java.time.Clock
 import java.time.LocalDate
 import java.time.ZoneId
 
-data class CreateSpendingDto(
-    val money: PositiveMoneyDto,
+internal data class CreateSpendingDto(
+    val money: AccountBoundedMoney,
     val date: LocalDate,
     val comment: String,
-    val spendingCategoryId: Long
+    val spendingCategoryId: Long,
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Spending(
-        StringId.unidentified(),
+        NumericId.unidentified(),
         userId,
-        money.toPositiveMoney(),
+        money.money.toPositiveMoney(),
         date,
         comment,
         spendingCategoryId.asId(),
-        LocalDate.ofInstant(clock.instant(), ZoneId.of("Z"))
+        clock.date(),
+        money.accountId?.asId()
     )
 }

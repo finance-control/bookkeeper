@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.transfers
 
+import com.marsofandrew.bookkeeper.events.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.impl.TransferAddingImpl
 import com.marsofandrew.bookkeeper.transfers.impl.TransfersReportCreationImpl
@@ -13,8 +14,9 @@ class TransfersContextConfiguration {
 
     @Bean
     fun transferAdding(
-        transferStorage: TransferStorage
-    ): TransferAdding = TransferAddingImpl(transferStorage)
+        transferStorage: TransferStorage,
+        eventPublisher: EventPublisher,
+    ): TransferAdding = TransferAddingImpl(transferStorage, eventPublisher)
 
     @Bean
     fun transferReportCreation(
@@ -23,8 +25,9 @@ class TransfersContextConfiguration {
 
     @Bean
     fun transferDeletion(
-        transferStorage: TransferStorage
-    ): TransferDeletion = TransferDeletionImpl(transferStorage)
+        transferStorage: TransferStorage,
+        eventPublisher: EventPublisher,
+    ): TransferDeletion = TransferDeletionImpl(transferStorage, eventPublisher)
 
     @Bean
     fun transferSelection(

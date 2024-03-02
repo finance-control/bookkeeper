@@ -14,6 +14,7 @@ configurations {
 dependencies {
     api(project(":spendings:spendings-usecases"))
     api(project(":common:user-context"))
+    api(project(":common:common-base"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework:spring-web")

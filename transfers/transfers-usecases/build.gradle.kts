@@ -10,6 +10,7 @@ configurations {
 
 dependencies {
     api(project(":transfers:transfers-domain"))
+    api(project(":common:common-events"))
 
     testImplementation(project(":transfers:transfers-fixtures"))
 

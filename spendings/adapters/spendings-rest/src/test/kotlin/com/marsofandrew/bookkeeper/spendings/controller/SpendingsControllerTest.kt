@@ -3,9 +3,14 @@ package com.marsofandrew.bookkeeper.spendings.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
-import com.marsofandrew.bookkeeper.properties.id.StringId
+import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.spendings.*
+import com.marsofandrew.bookkeeper.spendings.Spending
+import com.marsofandrew.bookkeeper.spendings.SpendingAdding
+import com.marsofandrew.bookkeeper.spendings.SpendingDeletion
+import com.marsofandrew.bookkeeper.spendings.SpendingReport
+import com.marsofandrew.bookkeeper.spendings.SpendingReportCreation
+import com.marsofandrew.bookkeeper.spendings.SpendingSelection
 import com.marsofandrew.bookkeeper.spendings.category.SpendingCategory
 import com.marsofandrew.bookkeeper.spendings.controller.dto.CreateSpendingDto
 import com.marsofandrew.bookkeeper.spendings.controller.dto.PositiveMoneyDto
@@ -18,6 +23,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,9 +38,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.*
 
 
 @WebMvcTest
@@ -66,15 +70,16 @@ internal class SpendingsControllerTest {
             spendingCategoryId = 1
         )
         val spending = Spending(
-            StringId.unidentified(),
+            NumericId.unidentified(),
             userId.asId(),
             createSpendingDto.money.toPositiveMoney(),
             createSpendingDto.date,
             createSpendingDto.comment,
             createSpendingDto.spendingCategoryId.asId(),
-            now
+            now,
+            null
         )
-        val identifiedSpending = spending.copy(id = UUID.randomUUID().toString().asId())
+        val identifiedSpending = spending.copy(id = 1100.asId())
 
         every { spendingAdding.add(spending) } returns identifiedSpending
 
@@ -102,23 +107,23 @@ internal class SpendingsControllerTest {
 
     @Test
     fun `deletes deletes when provided id exists`() {
-        val id = "55tt"
-        every { spendingDeletion.delete(setOf(id.asId())) } returns Unit
+        val id = 55
+        every { spendingDeletion.delete(userId.asId(), setOf(id.asId())) } returns Unit
 
         mockMvc.delete("/api/v1/spendings/{id}", id).andExpect {
             status { isNoContent() }
         }
 
-        verify(exactly = 1) { spendingDeletion.delete(setOf(id.asId())) }
+        verify(exactly = 1) { spendingDeletion.delete(userId.asId(), setOf(id.asId())) }
     }
 
     @Test
     fun `get returns spendings`() {
         val now = LocalDate.now()
         val spendings = listOf(
-            spending("1".asId(), userId.asId()),
-            spending("2".asId(), userId.asId()),
-            spending("3".asId(), userId.asId())
+            spending(1.asId(), userId.asId()),
+            spending(2.asId(), userId.asId()),
+            spending(3.asId(), userId.asId())
         )
 
         every { spendingSelection.select(userId.asId(), null, now) } returns spendings

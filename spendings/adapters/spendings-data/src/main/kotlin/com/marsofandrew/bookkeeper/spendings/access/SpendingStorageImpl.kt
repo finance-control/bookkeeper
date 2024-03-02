@@ -1,19 +1,26 @@
 package com.marsofandrew.bookkeeper.spendings.access
 
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spendings.Spending
 import com.marsofandrew.bookkeeper.spendings.user.User
 import java.time.LocalDate
-import java.util.UUID
+import java.util.concurrent.atomic.AtomicLong
 import org.springframework.stereotype.Repository
 
 @Repository
 internal class SpendingStorageImpl(
     private val spendingsByUserId: MutableMap<NumericId<User>, MutableSet<Spending>>,
-    private val spendingById: MutableMap<StringId<Spending>, Spending>
+    private val spendingById: MutableMap<NumericId<Spending>, Spending>
 ) : SpendingStorage {
+
+    private val counter = AtomicLong(1)
+
+    override fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Collection<NumericId<Spending>>): Set<Spending> {
+        return findAllByUserId(userId)
+            .filter { it.id in ids }
+            .toSet()
+    }
 
     override fun findAllByUserId(userId: NumericId<User>): List<Spending> {
         return spendingsByUserId.getOrDefault(userId, setOf()).toList()
@@ -30,7 +37,7 @@ internal class SpendingStorageImpl(
 
     override fun create(spending: Spending): Spending {
         // TODO: check that spending does not identified
-        val id = UUID.randomUUID().toString().asId<Spending>()
+        val id = counter.getAndIncrement().asId<Spending>()
 
         val spendingForSave = spending.copy(id = id)
         spendingById[id] = spendingForSave
@@ -39,7 +46,7 @@ internal class SpendingStorageImpl(
         return spendingForSave
     }
 
-    override fun delete(ids: Collection<StringId<Spending>>) {
+    override fun delete(ids: Collection<NumericId<Spending>>) {
         ids.forEach { id ->
             val spending = spendingById[id] ?: return
 

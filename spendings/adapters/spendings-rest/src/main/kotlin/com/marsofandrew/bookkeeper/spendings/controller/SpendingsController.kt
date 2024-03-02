@@ -34,9 +34,9 @@ internal class SpendingsController(
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
         @UserId userId: Long,
-        @PathVariable("id") id: String
+        @PathVariable("id") id: Long
     ) {
-        spendingDeletion.delete(setOf(id.asId()))
+        spendingDeletion.delete(userId.asId(), setOf(id.asId()))
     }
 
     @GetMapping

@@ -9,23 +9,21 @@ import java.time.Clock
 import java.time.LocalDate
 import java.time.ZoneId
 
-data class CreateTransferDto(
+internal data class CreateTransferDto(
     val date: LocalDate,
-    val send: PositiveMoneyDto? = null,
-    val received: PositiveMoneyDto,
+    val send: AccountMoneyDto? = null,
+    val received: AccountMoneyDto,
     val comment: String,
     val transferCategoryId: Long,
-    val fee: PositiveMoneyDto? = null
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Transfer(
-        StringId.unidentified(),
+        NumericId.unidentified(),
         userId,
         date,
-        send?.toPositiveMoney(),
-        received.toPositiveMoney(),
+        send?.toAccountMoney(),
+        received.toAccountMoney(),
         comment,
         transferCategoryId.asId(),
         LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
-        fee?.toPositiveMoney()
     )
 }

@@ -15,4 +15,13 @@ data class PositiveMoney(
     init {
         check(amount.toDouble() > 0) { "amount of money is negative or zero" }
     }
+
+    override fun plus(money: BaseMoney): PositiveMoney {
+        check(money.currency == currency) { "you could add only money with same currency" }
+
+        return PositiveMoney(
+            currency = currency,
+            amount = amount + money.amount
+        )
+    }
 }

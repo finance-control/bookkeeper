@@ -2,26 +2,22 @@ package com.marsofandrew.bookkeeper.transfers.controller.dto
 
 import com.marsofandrew.bookkeeper.transfers.Transfer
 
-import java.time.LocalDate
-
-data class TransferDto(
-    val id: String,
+internal data class TransferDto(
+    val id: Long,
     val userId: Long,
-    val date: LocalDate,
-    val send: PositiveMoneyDto?,
-    val received: PositiveMoneyDto,
+    val date: String,
+    val send: AccountMoneyDto?,
+    val received: AccountMoneyDto,
     val comment: String,
     val transferCategoryId: Long,
-    val fee: PositiveMoneyDto? = null
 )
 
-fun Transfer.toTransferDto() = TransferDto(
+internal fun Transfer.toTransferDto() = TransferDto(
     id.value,
     userId.value,
-    date,
-    send?.toPositiveMoneyDto(),
-    received.toPositiveMoneyDto(),
+    date.toString(),
+    send?.toAccountsMoneyDto(),
+    received.toAccountsMoneyDto(),
     comment,
     transferCategoryId.value,
-    fee?.toPositiveMoneyDto()
 )

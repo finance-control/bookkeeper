@@ -5,12 +5,24 @@ import com.marsofandrew.bookkeeper.transfers.TransferAdding
 import com.marsofandrew.bookkeeper.transfers.TransferDeletion
 import com.marsofandrew.bookkeeper.transfers.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.TransferSelection
-import com.marsofandrew.bookkeeper.transfers.controller.dto.*
+import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.TransferDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.TransferReportDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.toTransferDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.toTransferReportDto
 import com.marsofandrew.bookkeeper.userContext.UserId
 import java.time.Clock
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/transfers")
@@ -34,9 +46,9 @@ internal class TransferController(
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
         @UserId userId: Long,
-        @PathVariable("id") id: String
+        @PathVariable("id") id: Long
     ) {
-        transferDeletion.delete(setOf(id.asId()))
+        transferDeletion.delete(userId.asId(), setOf(id.asId()))
     }
 
     @GetMapping

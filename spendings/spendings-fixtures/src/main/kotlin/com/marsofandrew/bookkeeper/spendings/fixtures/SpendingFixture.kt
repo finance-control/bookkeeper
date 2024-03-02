@@ -6,13 +6,14 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spendings.Spending
+import com.marsofandrew.bookkeeper.spendings.account.Account
 import com.marsofandrew.bookkeeper.spendings.category.SpendingCategory
 import com.marsofandrew.bookkeeper.spendings.user.User
 import java.math.BigDecimal
 import java.time.LocalDate
 
 class SpendingFixture(
-    val id: StringId<Spending>,
+    val id: NumericId<Spending>,
     val userId: NumericId<User>,
 ) {
     var money: PositiveMoney = PositiveMoney(Currency.RUB, BigDecimal.valueOf(10))
@@ -20,6 +21,7 @@ class SpendingFixture(
     var comment: String = "test"
     var spendingCategoryId: NumericId<SpendingCategory> = 1.asId()
     var createdAt: LocalDate = LocalDate.now()
+    var fromAccount: StringId<Account>? = null
 
     fun build() = Spending(
         id,
@@ -28,6 +30,7 @@ class SpendingFixture(
         date,
         comment,
         spendingCategoryId,
-        createdAt
+        createdAt,
+        fromAccount
     )
 }

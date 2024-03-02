@@ -10,6 +10,8 @@ class SpendingCategoryDeletionImpl(
     private val spendingCategoryStorage: CategoryStorage<SpendingUserCategory>
 ) : CategoryDeletion<SpendingUserCategory> {
     override fun delete(userId: NumericId<User>, ids: Set<NumericId<SpendingUserCategory>>) {
-        spendingCategoryStorage.delete(userId, ids)
+        spendingCategoryStorage.findAllByUserIdAndIds(userId, ids)
+            .mapTo(HashSet()) { it.id }
+            .let { spendingCategoryStorage.delete(ids) }
     }
 }
