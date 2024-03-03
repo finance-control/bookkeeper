@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.properties
 
 import java.math.BigDecimal
+import java.util.Objects
 
 data class Money(
     override val currency: Currency,
@@ -27,5 +28,15 @@ data class Money(
             currency = currency,
             amount = amount - money.amount
         )
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Money) return false
+
+        return currency == other.currency && amount.compareTo(other.amount) == 0
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(currency, amount.movePointRight(amount.scale()).longValueExact())
     }
 }

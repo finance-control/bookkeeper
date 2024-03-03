@@ -49,6 +49,7 @@ include(
     "accounts:accounts-domain",
     "accounts:accounts-application",
     "accounts:accounts-usecases",
+    "accounts:accounts-fixtures",
     "accounts:adapters:accounts-data",
     "accounts:adapters:accounts-rest",
     "accounts:adapters:accounts-events",

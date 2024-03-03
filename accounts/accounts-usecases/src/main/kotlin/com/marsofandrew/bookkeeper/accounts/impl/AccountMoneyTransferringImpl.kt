@@ -14,14 +14,16 @@ class AccountMoneyTransferringImpl(
 
     override fun transfer(userId: NumericId<User>, from: AccountTransferAmount?, to: AccountTransferAmount?) {
         transactionalExecution.execute {
-            if (to != null) {
-                val toAccount = accountStorage.findByUserIdAndIdOrThrow(userId, to.accountId).topUp(to.money)
-                accountStorage.setMoney(toAccount.id, toAccount.money)
-            }
-            if (from != null) {
-                val fromAccount = accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).withdraw(from.money)
-                accountStorage.setMoney(fromAccount.id, fromAccount.money)
-            }
+            val toAccount = to?.let { accountStorage.findByUserIdAndIdOrThrow(userId, to.accountId).topUp(to.money) }
+            val fromAccount =
+                from?.let { accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).withdraw(from.money) }
+
+            listOf(toAccount, fromAccount)
+                .forEach { account ->
+                    account?.let {
+                        accountStorage.setMoney(it.id, it.money)
+                    }
+                }
         }
     }
 }

@@ -12,7 +12,7 @@ class AccountSelectionImpl(
 
     override fun select(userId: NumericId<User>): Set<Account> {
         return accountStorage.findAllByUserId(userId)
-            .filter { it.status != Account.Status.FOR_REMOVAL && it.closedAt == null }
+            .filter { it.status != Account.Status.FOR_REMOVAL }
             .toSet()
     }
 }

@@ -15,9 +15,12 @@ class AccountDeletionImpl(
 ) : AccountDeletion {
 
     override fun delete(userId: NumericId<User>, ids: Set<StringId<Account>>) {
+        if (ids.isEmpty()) return
+
         accountStorage.findAllByUserIdAndIds(userId, ids)
             .map { it.id }
             .toSet()
-            .let { accountStorage.setForRemovalAndClose(it, clock.date()) }
+            .takeIf { it.isNotEmpty() }
+            ?.let { accountStorage.setForRemovalAndClose(it, clock.date()) }
     }
 }

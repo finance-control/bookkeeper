@@ -16,4 +16,5 @@ dependencies {
     testImplementation("org.mockito:mockito-core:2.1.0")
     testImplementation("org.assertj:assertj-core:3.6.1")
     testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 }

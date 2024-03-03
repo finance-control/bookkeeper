@@ -21,7 +21,7 @@ internal class AccountsContextConfiguration {
     fun accountCleanup(
         accountStorage: AccountStorage,
         clock: Clock
-    ): AccountCleanup = AccountCleanupImpl(accountStorage, clock, { 1000 }) { months >= 1 }
+    ): AccountCleanup = AccountCleanupImpl(accountStorage, clock) { months >= 1 }
 
     @Bean
     fun accountCreation(accountStorage: AccountStorage): AccountCreation = AccountCreationImpl(accountStorage)
