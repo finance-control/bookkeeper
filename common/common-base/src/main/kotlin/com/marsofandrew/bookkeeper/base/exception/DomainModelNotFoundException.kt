@@ -5,4 +5,4 @@ import com.marsofandrew.bookkeeper.properties.id.Id
 
 class DomainModelNotFoundException(id: Id<*>) : RuntimeException("Domain model with id $id is not found")
 
-fun <T : DomainModel> T?.orElseThrow(id: Id<*>): T = this ?: throw DomainModelNotFoundException(id)
+fun <T> T?.orElseThrow(id: Id<*>): T = this ?: throw DomainModelNotFoundException(id)

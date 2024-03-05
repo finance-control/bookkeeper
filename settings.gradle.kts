@@ -56,6 +56,13 @@ include(
 )
 
 include(
+    "reports:reports-domain",
+    "reports:reports-application",
+    "reports:reports-usecases",
+    "reports:reports-fixtures",
+)
+
+include(
     "spring-events",
     "spring-transactions"
 )
