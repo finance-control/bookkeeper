@@ -6,7 +6,7 @@ import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import java.time.YearMonth
 
-interface MonthlyReportStorage {
+interface MonthlyUserReportStorage {
 
     fun findByUserIdAndDate(userId: NumericId<User>, date: LocalDate): MonthlyUserReport?
     fun findAllByUserIdBetween(
@@ -15,5 +15,5 @@ interface MonthlyReportStorage {
         endMonth: YearMonth
     ): List<MonthlyUserReport>
 
-    fun createOrUpdate(report: MonthlyUserReport): MonthlyUserReport
+    fun createOrUpdate(report: MonthlyUserReport)
 }

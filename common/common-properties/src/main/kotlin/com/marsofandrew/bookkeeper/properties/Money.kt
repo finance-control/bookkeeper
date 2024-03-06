@@ -39,4 +39,8 @@ data class Money(
     override fun hashCode(): Int {
         return Objects.hash(currency, amount.movePointRight(amount.scale()).longValueExact())
     }
+
+    companion object {
+        fun zero(currency: Currency) = Money(currency, BigDecimal.ZERO)
+    }
 }

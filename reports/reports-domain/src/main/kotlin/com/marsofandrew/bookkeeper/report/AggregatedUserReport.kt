@@ -1,8 +1,6 @@
 package com.marsofandrew.bookkeeper.report
 
-import com.marsofandrew.bookkeeper.base.utils.sumOfNullable
 import com.marsofandrew.bookkeeper.base.utils.summarize
-import com.marsofandrew.bookkeeper.properties.BaseMoney
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -33,6 +31,15 @@ data class AggregatedUserReport<PeriodType>(
     }
 
     companion object {
+
+        fun <PeriodType> empty(userId: NumericId<User>) = AggregatedUserReport(
+            userId = userId,
+            periods = emptyList<PeriodType>(),
+            expenses = Report.empty(),
+            earnings = Report.empty(),
+            transfers = Report.empty(),
+            total = emptyList(),
+        )
 
         fun <PeriodType> of(
             report: BaseUserReport,

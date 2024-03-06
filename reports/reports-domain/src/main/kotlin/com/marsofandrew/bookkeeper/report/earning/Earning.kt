@@ -1,4 +1,4 @@
-package com.marsofandrew.bookkeeper.report.transfer
+package com.marsofandrew.bookkeeper.report.earning
 
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -6,11 +6,10 @@ import com.marsofandrew.bookkeeper.report.category.TransferCategory
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 
-data class Transfer(
+data class Earning(
     val userId: NumericId<User>,
     val date: LocalDate,
-    val send: PositiveMoney,
-    val received: PositiveMoney,
+    val money: PositiveMoney,
     val transferCategoryId: NumericId<TransferCategory>,
 ) {
     init {

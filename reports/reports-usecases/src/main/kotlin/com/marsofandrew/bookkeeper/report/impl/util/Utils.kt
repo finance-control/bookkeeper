@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.properties.BaseMoney
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.report.transfer.Transfer
+import java.math.BigDecimal
 
 @Suppress("UNCHECKED_CAST")
 internal fun <T : BaseMoney> List<T>.addMoney(money: BaseMoney): List<T> {
@@ -16,13 +17,21 @@ internal fun <T : BaseMoney> List<T>.addMoney(money: BaseMoney): List<T> {
         .toList()
 }
 
-internal fun <T : BaseMoney> List<T>.addMoney(money: BaseMoney?): List<T> = money?.let { this.addMoney(it) } ?: this
-
 internal val Transfer.totalMoney: List<Money>
     get() = summarize(
         listOf(Money(received.currency, received.amount)),
-        send?.let { listOf(Money(it.currency, -it.amount)) } ?: emptyList()
+        send.let { listOf(Money(it.currency, -it.amount)) } ?: emptyList()
     ).toList()
 
 internal operator fun PositiveMoney.unaryMinus(): Money = Money(currency, -amount)
 internal operator fun Money.unaryMinus(): Money = copy(amount = -amount)
+
+internal fun PositiveMoney.toMoney() = Money(currency, amount)
+
+internal fun Money.toPositiveMoney() = PositiveMoney(currency, amount)
+
+internal fun List<PositiveMoney>.addNegative(money: Money): List<PositiveMoney> =
+    map { it.toMoney() }
+        .addMoney(money)
+        .filter { it.amount != BigDecimal.ZERO }
+        .map { it.toPositiveMoney() }

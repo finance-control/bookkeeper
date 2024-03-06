@@ -5,12 +5,12 @@ import com.marsofandrew.bookkeeper.report.YearlyUserReport
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 
-interface YearlyReportStorage {
+interface YearlyUserReportStorage {
 
     fun findByUserIdAndDate(userId: NumericId<User>, date: LocalDate): YearlyUserReport?
     fun findAllByUserId(
         userId: NumericId<User>,
     ): List<YearlyUserReport>
 
-    fun createOrUpdate(report: YearlyUserReport): YearlyUserReport
+    fun createOrUpdate(report: YearlyUserReport)
 }

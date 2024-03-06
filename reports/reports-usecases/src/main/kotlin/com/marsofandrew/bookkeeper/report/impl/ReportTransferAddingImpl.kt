@@ -10,9 +10,9 @@ import com.marsofandrew.bookkeeper.report.MonthlyUserReport
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.ReportTransferAdding
 import com.marsofandrew.bookkeeper.report.YearlyUserReport
-import com.marsofandrew.bookkeeper.report.access.DailyReportStorage
-import com.marsofandrew.bookkeeper.report.access.MonthlyReportStorage
-import com.marsofandrew.bookkeeper.report.access.YearlyReportStorage
+import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
+import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
+import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.category.SpendingCategory
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
 import com.marsofandrew.bookkeeper.report.impl.util.aggregate
@@ -23,9 +23,9 @@ import java.time.Year
 import java.time.YearMonth
 
 class ReportTransferAddingImpl(
-    private val dailyReportStorage: DailyReportStorage,
-    private val monthlyReportStorage: MonthlyReportStorage,
-    private val yearlyReportStorage: YearlyReportStorage,
+    private val dailyUserReportStorage: DailyUserReportStorage,
+    private val monthlyUserReportStorage: MonthlyUserReportStorage,
+    private val yearlyUserReportStorage: YearlyUserReportStorage,
     private val transactionalExecution: TransactionalExecution,
 ) : ReportTransferAdding {
 
@@ -33,16 +33,19 @@ class ReportTransferAddingImpl(
         transactionalExecution.execute {
             val userId = transfer.userId
 
-            val dailyReport = dailyReportStorage.findByUserIdAndDate(userId, transfer.date)
+            val dailyReport = dailyUserReportStorage.findByUserIdAndDate(userId, transfer.date)
+                ?.add(transfer, { date }, ::DailyUserReport)
                 ?: createReport(transfer, { date }, ::DailyUserReport)
-            val monthlyReport = monthlyReportStorage.findByUserIdAndDate(userId, transfer.date)
+            val monthlyReport = monthlyUserReportStorage.findByUserIdAndDate(userId, transfer.date)
+                ?.add(transfer, { month }, ::MonthlyUserReport)
                 ?: createReport(transfer, { YearMonth.from(date) }, ::MonthlyUserReport)
-            val yearlyReport = yearlyReportStorage.findByUserIdAndDate(userId, transfer.date)
+            val yearlyReport = yearlyUserReportStorage.findByUserIdAndDate(userId, transfer.date)
+                ?.add(transfer, { year }, ::YearlyUserReport)
                 ?: createReport(transfer, { Year.from(date) }, ::YearlyUserReport)
 
-            dailyReportStorage.createOrUpdate(dailyReport.add(transfer, { date }, ::DailyUserReport))
-            monthlyReportStorage.createOrUpdate(monthlyReport.add(transfer, { month }, ::MonthlyUserReport))
-            yearlyReportStorage.createOrUpdate(yearlyReport.add(transfer, { year }, ::YearlyUserReport))
+            dailyUserReportStorage.createOrUpdate(dailyReport)
+            monthlyUserReportStorage.createOrUpdate(monthlyReport)
+            yearlyUserReportStorage.createOrUpdate(yearlyReport)
         }
     }
 }
@@ -59,22 +62,13 @@ private fun <T : BaseUserReport, PeriodType> createReport(
         total: List<Money>
     ) -> T
 ): T {
-    val earnings = if (transfer.send == null) {
-        val totalEarnings = listOf(transfer.received)
-        Report(
-            byCategory = mapOf(transfer.transferCategoryId to totalEarnings),
-            total = totalEarnings
-        )
-    } else Report.empty()
 
-    val transfers = if (transfer.send != null) {
-        Report(
-            byCategory = mapOf(transfer.transferCategoryId to transfer.totalMoney),
-            total = transfer.totalMoney
-        )
-    } else Report.empty()
+    val transfers = Report(
+        byCategory = mapOf(transfer.transferCategoryId to transfer.totalMoney),
+        total = transfer.totalMoney
+    )
 
-    return creator(transfer.userId, transfer.period(), Report.empty(), earnings, transfers, transfer.totalMoney)
+    return creator(transfer.userId, transfer.period(), Report.empty(), Report.empty(), transfers, transfer.totalMoney)
 }
 
 private fun <T : BaseUserReport, PeriodType> T.add(
@@ -89,10 +83,10 @@ private fun <T : BaseUserReport, PeriodType> T.add(
         total: List<Money>
     ) -> T
 ): T {
-    require(transfer.userId == userId) { "UserId of report ans spending are different" }
+    require(transfer.userId == userId) { "UserId of report ans transfer are different" }
 
     val transferReport = createReport(transfer, { period() }, creator)
-    val aggregatedResult = aggregate(listOf(this, transferReport), period)
+    val aggregatedResult = aggregate(userId, listOf(this, transferReport), period)
 
     return creator(
         userId,

@@ -8,41 +8,41 @@ import com.marsofandrew.bookkeeper.report.BaseUserReport
 import com.marsofandrew.bookkeeper.report.DailyUserReport
 import com.marsofandrew.bookkeeper.report.MonthlyUserReport
 import com.marsofandrew.bookkeeper.report.Report
-import com.marsofandrew.bookkeeper.report.ReportSpendingAdding
+import com.marsofandrew.bookkeeper.report.ReportEarningAdding
 import com.marsofandrew.bookkeeper.report.YearlyUserReport
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.category.SpendingCategory
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.earning.Earning
 import com.marsofandrew.bookkeeper.report.impl.util.aggregate
-import com.marsofandrew.bookkeeper.report.spending.Spending
+import com.marsofandrew.bookkeeper.report.impl.util.toMoney
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.Year
 import java.time.YearMonth
 
-
-class ReportSpendingAddingImpl(
+class ReportEarningAddingImpl(
     private val dailyUserReportStorage: DailyUserReportStorage,
     private val monthlyUserReportStorage: MonthlyUserReportStorage,
     private val yearlyUserReportStorage: YearlyUserReportStorage,
     private val transactionalExecution: TransactionalExecution,
-) : ReportSpendingAdding {
+) : ReportEarningAdding {
 
-    override fun add(spending: Spending) {
+    override fun add(earning: Earning) {
         transactionalExecution.execute {
-            val userId = spending.userId
-            val date = spending.date
+            val userId = earning.userId
 
-            val dailyReport = dailyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { date }, ::DailyUserReport)
-                ?: createReport(spending, { date }, ::DailyUserReport)
-            val monthlyReport = monthlyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { month }, ::MonthlyUserReport)
-                ?: createReport(spending, { YearMonth.from(date) }, ::MonthlyUserReport)
-            val yearlyReport = yearlyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { year }, ::YearlyUserReport)
-                ?: createReport(spending, { Year.from(date) }, ::YearlyUserReport)
+            val dailyReport = dailyUserReportStorage.findByUserIdAndDate(userId, earning.date)
+                ?.add(earning, { date }, ::DailyUserReport)
+                ?: createReport(earning, { date }, ::DailyUserReport)
+            val monthlyReport = monthlyUserReportStorage.findByUserIdAndDate(userId, earning.date)
+                ?.add(earning, { month }, ::MonthlyUserReport)
+                ?: createReport(earning, { YearMonth.from(date) }, ::MonthlyUserReport)
+            val yearlyReport = yearlyUserReportStorage.findByUserIdAndDate(userId, earning.date)
+                ?.add(earning, { year }, ::YearlyUserReport)
+                ?: createReport(earning, { Year.from(date) }, ::YearlyUserReport)
+
 
             dailyUserReportStorage.createOrUpdate(dailyReport)
             monthlyUserReportStorage.createOrUpdate(monthlyReport)
@@ -52,8 +52,8 @@ class ReportSpendingAddingImpl(
 }
 
 private fun <T : BaseUserReport, PeriodType> createReport(
-    spending: Spending,
-    period: Spending.() -> PeriodType,
+    earning: Earning,
+    period: Earning.() -> PeriodType,
     creator: (
         userId: NumericId<User>,
         period: PeriodType,
@@ -63,21 +63,22 @@ private fun <T : BaseUserReport, PeriodType> createReport(
         total: List<Money>
     ) -> T
 ): T {
-    return creator(
-        spending.userId,
-        spending.period(),
-        Report(
-            byCategory = mapOf(spending.spendingCategoryId to listOf(spending.money)),
-            total = listOf(spending.money)
-        ),
-        Report.empty(),
-        Report.empty(),
-        listOf(Money(spending.money.currency, -spending.money.amount))
+    val earnings = Report(
+        byCategory = mapOf(earning.transferCategoryId to listOf(earning.money)),
+        total = listOf(earning.money)
     )
+
+    return creator(
+        earning.userId,
+        earning.period(),
+        Report.empty(),
+        earnings,
+        Report.empty(),
+        earnings.total.map { it.toMoney() })
 }
 
 private fun <T : BaseUserReport, PeriodType> T.add(
-    spending: Spending,
+    earning: Earning,
     period: T.() -> PeriodType,
     creator: (
         userId: NumericId<User>,
@@ -88,10 +89,10 @@ private fun <T : BaseUserReport, PeriodType> T.add(
         total: List<Money>
     ) -> T
 ): T {
-    require(spending.userId == userId) { "UserId of report ans spending are different" }
+    require(earning.userId == userId) { "UserId of report ans earning are different" }
 
-    val spendingReport = createReport(spending, { period() }, creator)
-    val aggregatedResult = aggregate(userId, listOf(this, spendingReport), period)
+    val transferReport = createReport(earning, { period() }, creator)
+    val aggregatedResult = aggregate(userId, listOf(this, transferReport), period)
 
     return creator(
         userId,

@@ -1,7 +1,6 @@
 package com.marsofandrew.bookkeeper.report.impl
 
 import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
-import com.marsofandrew.bookkeeper.properties.BaseMoney
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -11,9 +10,9 @@ import com.marsofandrew.bookkeeper.report.MonthlyUserReport
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.ReportTransferRemoving
 import com.marsofandrew.bookkeeper.report.YearlyUserReport
-import com.marsofandrew.bookkeeper.report.access.DailyReportStorage
-import com.marsofandrew.bookkeeper.report.access.MonthlyReportStorage
-import com.marsofandrew.bookkeeper.report.access.YearlyReportStorage
+import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
+import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
+import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.category.SpendingCategory
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
 import com.marsofandrew.bookkeeper.report.impl.util.addMoney
@@ -22,9 +21,9 @@ import com.marsofandrew.bookkeeper.report.transfer.Transfer
 import com.marsofandrew.bookkeeper.report.user.User
 
 class ReportTransferRemovingImpl(
-    private val dailyReportStorage: DailyReportStorage,
-    private val monthlyReportStorage: MonthlyReportStorage,
-    private val yearlyReportStorage: YearlyReportStorage,
+    private val dailyUserReportStorage: DailyUserReportStorage,
+    private val monthlyUserReportStorage: MonthlyUserReportStorage,
+    private val yearlyUserReportStorage: YearlyUserReportStorage,
     private val transactionalExecution: TransactionalExecution,
 ) : ReportTransferRemoving {
 
@@ -33,13 +32,13 @@ class ReportTransferRemovingImpl(
             val userId = transfer.userId
 
             // TODO: throw appropriate exception
-            val dailyReport = requireNotNull(dailyReportStorage.findByUserIdAndDate(userId, transfer.date))
-            val monthlyReport = requireNotNull(monthlyReportStorage.findByUserIdAndDate(userId, transfer.date))
-            val yearlyReport = requireNotNull(yearlyReportStorage.findByUserIdAndDate(userId, transfer.date))
+            val dailyReport = requireNotNull(dailyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
+            val monthlyReport = requireNotNull(monthlyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
+            val yearlyReport = requireNotNull(yearlyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
 
-            dailyReportStorage.createOrUpdate(dailyReport.remove(transfer, { date }, ::DailyUserReport))
-            monthlyReportStorage.createOrUpdate(monthlyReport.remove(transfer, { month }, ::MonthlyUserReport))
-            yearlyReportStorage.createOrUpdate(yearlyReport.remove(transfer, { year }, ::YearlyUserReport))
+            dailyUserReportStorage.createOrUpdate(dailyReport.remove(transfer, { date }, ::DailyUserReport))
+            monthlyUserReportStorage.createOrUpdate(monthlyReport.remove(transfer, { month }, ::MonthlyUserReport))
+            yearlyUserReportStorage.createOrUpdate(yearlyReport.remove(transfer, { year }, ::YearlyUserReport))
         }
     }
 }
@@ -62,7 +61,7 @@ private fun <T : BaseUserReport, PeriodType> T.remove(
         userId,
         period(),
         expenses,
-        updateEarnings(earnings, transfer),
+        earnings,
         updateTransfers(transfers, transfer),
         total.removeTransfer(transfer)
     )
@@ -72,8 +71,6 @@ private fun updateTransfers(
     transfersReport: Report<TransferCategory, Money>,
     transfer: Transfer
 ): Report<TransferCategory, Money> {
-    if (transfer.send == null) return transfersReport
-
     val byCategory = transfersReport.byCategory.toMutableMap()
     byCategory[transfer.transferCategoryId] =
         requireNotNull(byCategory[transfer.transferCategoryId]).removeTransfer(transfer)
@@ -84,21 +81,5 @@ private fun updateTransfers(
     )
 }
 
-private fun updateEarnings(
-    earningsReport: Report<TransferCategory, PositiveMoney>,
-    transfer: Transfer
-): Report<TransferCategory, PositiveMoney> {
-    if (transfer.send != null) return earningsReport
-
-    val byCategory = earningsReport.byCategory.toMutableMap()
-    byCategory[transfer.transferCategoryId] =
-        requireNotNull(byCategory[transfer.transferCategoryId]).removeTransfer(transfer)
-
-    return Report(
-        byCategory = byCategory,
-        total = earningsReport.total.removeTransfer(transfer)
-    )
-}
-
-private fun <T : BaseMoney> List<T>.removeTransfer(transfer: Transfer): List<T> =
+private fun List<Money>.removeTransfer(transfer: Transfer): List<Money> =
     addMoney(transfer.send).addMoney(-transfer.received)
