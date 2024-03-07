@@ -22,7 +22,7 @@ internal class AccountCreationImplTest {
     }
 
     @Test
-    fun `create creates storage`() {
+    fun `create creates account`() {
         val accountToCreate = account(StringId.unidentified(), 5.asId())
         val identifiedAcc = accountToCreate.copy(id = "1".asId())
         every { accountStorage.create(accountToCreate) } returns identifiedAcc
