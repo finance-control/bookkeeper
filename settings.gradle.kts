@@ -62,6 +62,7 @@ include(
     "reports:reports-fixtures",
     "reports:adapters:reports-data",
     "reports:adapters:reports-events",
+    "reports:adapters:reports-rest",
 )
 
 include(
