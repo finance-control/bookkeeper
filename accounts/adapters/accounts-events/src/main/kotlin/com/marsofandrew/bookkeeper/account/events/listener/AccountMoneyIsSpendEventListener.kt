@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-internal class MoneyIsSpendEventListener(
+internal class AccountMoneyIsSpendEventListener(
     private val accountMoneySpending: AccountMoneySpending,
     private val rollbackAccountMoneySpendingImpl: RollbackAccountMoneySpending
 ) {

@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-internal class MoneyIsTransferredEventListener(
+internal class AccountMoneyIsTransferredEventListener(
     private val accountMoneyTransferring: AccountMoneyTransferring,
     private val rollbackAccountMoneyTransferring: RollbackAccountMoneyTransferring
 ) {

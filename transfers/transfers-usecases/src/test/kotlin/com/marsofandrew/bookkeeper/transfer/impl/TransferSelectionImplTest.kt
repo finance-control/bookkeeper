@@ -30,9 +30,9 @@ internal class TransferSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val transfers = listOf(
-            transfer("1".asId(), userId) { date = now },
-            transfer("2".asId(), userId) { date = date1 },
-            transfer("3".asId(), userId) { date = now },
+            transfer(1.asId(), userId) { date = now },
+            transfer(2.asId(), userId) { date = date1 },
+            transfer(3.asId(), userId) { date = now },
         )
 
         every { transferStorage.findAllByUserId(userId) } returns transfers
@@ -49,9 +49,9 @@ internal class TransferSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val transfers = listOf(
-            transfer("1".asId(), userId) { date = now },
-            transfer("2".asId(), userId) { date = date1 },
-            transfer("3".asId(), userId) { date = now },
+            transfer(1.asId(), userId) { date = now },
+            transfer(2.asId(), userId) { date = date1 },
+            transfer(3.asId(), userId) { date = now },
         )
 
         every { transferStorage.findAllByUserIdBetween(userId, date1, now.plusDays(1)) } returns transfers
@@ -68,9 +68,9 @@ internal class TransferSelectionImplTest {
         val date1 = now.minusDays(1)
 
         val transfers = listOf(
-            transfer("1".asId(), userId) { date = now },
-            transfer("2".asId(), userId) { date = date1 },
-            transfer("3".asId(), userId) { date = now },
+            transfer(1.asId(), userId) { date = now },
+            transfer(2.asId(), userId) { date = date1 },
+            transfer(3.asId(), userId) { date = now },
         )
 
         every { transferStorage.findAllByUserIdBetween(userId, date1, now) } returns transfers

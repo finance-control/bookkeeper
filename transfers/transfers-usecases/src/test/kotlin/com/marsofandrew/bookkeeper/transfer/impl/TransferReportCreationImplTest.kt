@@ -1,12 +1,13 @@
 package com.marsofandrew.bookkeeper.transfer.impl
 
-import com.marsofandrew.bookkeeper.transfer.access.TransferStorage
-import com.marsofandrew.bookkeeper.transfer.fixtures.transfer
-import com.marsofandrew.bookkeeper.transfer.user.User
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
+import com.marsofandrew.bookkeeper.transfer.AccountMoney
+import com.marsofandrew.bookkeeper.transfer.access.TransferStorage
+import com.marsofandrew.bookkeeper.transfer.fixtures.transfer
+import com.marsofandrew.bookkeeper.transfer.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
@@ -50,28 +51,28 @@ internal class TransferReportCreationImplTest {
         val endDate = now
 
         every { transferStorage.findAllByUserIdBetween(userId, startDate, endDate) } returns listOf(
-            transfer("1".asId(), userId) {
+            transfer(1.asId(), userId) {
                 date = startDate
-                received = PositiveMoney(Currency.EUR, BigDecimal(5))
+                received = AccountMoney.create(PositiveMoney(Currency.EUR, BigDecimal(5)))
             },
-            transfer("2".asId(), userId) {
+            transfer(2.asId(), userId) {
                 date = endDate
-                received = PositiveMoney(Currency.EUR, 42, 1)
+                received = AccountMoney.create(PositiveMoney(Currency.EUR, 42, 1))
             },
-            transfer("3".asId(), userId) {
+            transfer(3.asId(), userId) {
                 date = startDate
-                send = PositiveMoney(Currency.EUR, 31, 1)
-                received = PositiveMoney(Currency.USD, BigDecimal(4))
+                send = AccountMoney.create(PositiveMoney(Currency.EUR, 31, 1))
+                received = AccountMoney.create(PositiveMoney(Currency.USD, BigDecimal(4)))
             },
-            transfer("4".asId(), userId) {
+            transfer(4.asId(), userId) {
                 date = endDate
-                send = PositiveMoney(Currency.USD, BigDecimal(2))
-                received = PositiveMoney(Currency.EUR, 25, 1)
+                send = AccountMoney.create(PositiveMoney(Currency.USD, BigDecimal(2)))
+                received = AccountMoney.create(PositiveMoney(Currency.EUR, 25, 1))
             },
-            transfer("5".asId(), userId) {
+            transfer(5.asId(), userId) {
                 date = endDate
-                send = PositiveMoney(Currency.USD, BigDecimal(3))
-                received = PositiveMoney(Currency.RUB, 3005, 1)
+                send = AccountMoney.create(PositiveMoney(Currency.USD, BigDecimal(3)))
+                received = AccountMoney.create(PositiveMoney(Currency.RUB, 3005, 1))
             }
         )
 
