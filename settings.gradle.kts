@@ -60,6 +60,7 @@ include(
     "reports:reports-application",
     "reports:reports-usecases",
     "reports:reports-fixtures",
+    "reports:adapters:reports-data",
 )
 
 include(

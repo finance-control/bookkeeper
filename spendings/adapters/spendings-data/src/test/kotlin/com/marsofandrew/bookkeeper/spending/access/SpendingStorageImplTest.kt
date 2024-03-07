@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 internal class SpendingStorageImplTest {
 
     private val spendingsByUserId: MutableMap<NumericId<User>, MutableSet<Spending>> = mutableMapOf()
-    private val spendingById: MutableMap<StringId<Spending>, Spending> = mutableMapOf()
+    private val spendingById: MutableMap<NumericId<Spending>, Spending> = mutableMapOf()
 
     private lateinit var spendingStorageImpl: SpendingStorageImpl
 
@@ -31,7 +31,7 @@ internal class SpendingStorageImplTest {
 
     @Test
     fun `create when correct values are provided then creates spending with unique id`() {
-        val spending = spending(StringId.unidentified(), userId)
+        val spending = spending(NumericId.unidentified(), userId)
 
         val savedSpending = spendingStorageImpl.create(spending)
 
@@ -46,7 +46,7 @@ internal class SpendingStorageImplTest {
 
     @Test
     fun `delete does nothing when ids are not exists`() {
-        spendingStorageImpl.delete(setOf(StringId("test")))
+        spendingStorageImpl.delete(setOf(NumericId(1)))
 
         spendingsByUserId.isEmpty() shouldBe true
         spendingById.isEmpty() shouldBe true
@@ -54,7 +54,7 @@ internal class SpendingStorageImplTest {
 
     @Test
     fun `delete deletes spendings by ids`() {
-        val spending = spending(StringId.unidentified(), userId)
+        val spending = spending(NumericId.unidentified(), userId)
         val savedSpending = spendingStorageImpl.create(spending)
 
         spendingStorageImpl.delete(setOf(savedSpending.id))
@@ -73,8 +73,8 @@ internal class SpendingStorageImplTest {
     @Test
     fun `findAllByUserId when spendings for user exist returns those spendings`() {
         val spendings = listOf(
-            spending(StringId.unidentified(), userId),
-            spending(StringId.unidentified(), userId) { money = PositiveMoney(Currency.EUR, 100) },
+            spending(NumericId.unidentified(), userId),
+            spending(NumericId.unidentified(), userId) { money = PositiveMoney(Currency.EUR, 100) },
         ).map(spendingStorageImpl::create)
 
         val result = spendingStorageImpl.findAllByUserId(userId)
@@ -94,7 +94,7 @@ internal class SpendingStorageImplTest {
     @Test
     fun `findAllByUserIdBetween when spendings within interval are absent returns empty list`() {
         val now = LocalDate.now()
-        spendingStorageImpl.create(spending(StringId.unidentified(), userId) { date = now.plusDays(1) })
+        spendingStorageImpl.create(spending(NumericId.unidentified(), userId) { date = now.plusDays(1) })
 
 
         val result = spendingStorageImpl.findAllByUserIdBetween(userId, now.minusDays(1), now)
@@ -108,11 +108,11 @@ internal class SpendingStorageImplTest {
         val startDate = now.minusDays(2)
 
         val spendings = listOf(
-            spending(StringId.unidentified(), userId) { date = now },
-            spending(StringId.unidentified(), userId) { date = startDate },
-            spending(StringId.unidentified(), userId) { date = startDate.minusDays(1) },
-            spending(StringId.unidentified(), userId) { date = now.plusDays(1) },
-            spending(StringId.unidentified(), userId) { date = now },
+            spending(NumericId.unidentified(), userId) { date = now },
+            spending(NumericId.unidentified(), userId) { date = startDate },
+            spending(NumericId.unidentified(), userId) { date = startDate.minusDays(1) },
+            spending(NumericId.unidentified(), userId) { date = now.plusDays(1) },
+            spending(NumericId.unidentified(), userId) { date = now },
         ).map(spendingStorageImpl::create)
 
         val result = spendingStorageImpl.findAllByUserIdBetween(userId, startDate, now)
