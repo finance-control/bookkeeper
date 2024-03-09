@@ -16,15 +16,13 @@ dependencies {
     api(project(":common:user-context"))
     api(project(":common:common-base"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("org.springframework:spring-web")
-    implementation("org.springframework.boot:spring-boot-starter-web-services")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework:spring-context")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -32,7 +30,6 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.6.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.9")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation(project(":spendings:spendings-fixtures"))
 

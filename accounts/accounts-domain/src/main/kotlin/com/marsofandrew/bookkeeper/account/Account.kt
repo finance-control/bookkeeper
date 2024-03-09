@@ -2,6 +2,7 @@ package com.marsofandrew.bookkeeper.account
 
 import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.base.model.DomainModel
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -15,7 +16,8 @@ data class Account(
     val title: String,
     val openedAt: LocalDate,
     val closedAt: LocalDate?,
-    val status: Status
+    val status: Status,
+    override val version: Version
 ) : DomainModel {
 
     init {

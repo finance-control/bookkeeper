@@ -66,6 +66,14 @@ include(
 )
 
 include(
+    "credentials:credentials-domain",
+    "credentials:credentials-usecases",
+    "credentials:credentials-application",
+    "credentials:adapters:credentials-data",
+    "credentials:adapters:credentials-encryption",
+)
+
+include(
     "spring-events",
     "spring-transactions"
 )

@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  bookkeeper-db:
+    container_name: bookkeeper-db
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgresql
+    ports:
+      - '5432:5432'

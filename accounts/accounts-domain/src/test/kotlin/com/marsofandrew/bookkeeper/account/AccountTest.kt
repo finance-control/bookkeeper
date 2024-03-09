@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.account
 
 import com.marsofandrew.bookkeeper.account.user.User
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
@@ -26,7 +27,8 @@ internal class AccountTest {
                 title = title,
                 openedAt = LocalDate.now(),
                 closedAt = null,
-                status = Account.Status.IN_USE
+                status = Account.Status.IN_USE,
+                version = Version(0)
             )
         }
     }
@@ -47,7 +49,9 @@ internal class AccountTest {
             title = title,
             openedAt = openedAt,
             closedAt = null,
-            status = status
+            status = status,
+            version = Version(0)
+
         )
 
         account.id shouldBe id
@@ -67,7 +71,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now(),
             closedAt = null,
-            status = Account.Status.IN_USE
+            status = Account.Status.IN_USE,
+            version = Version(0)
         )
         val updatedAccount = account.topUp(PositiveMoney(Currency.EUR, 10, 0))
 
@@ -83,7 +88,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now(),
             closedAt = null,
-            status = Account.Status.FOR_REMOVAL
+            status = Account.Status.FOR_REMOVAL,
+            version = Version(0)
         )
         shouldThrowExactly<IllegalStateException> {
             account.topUp(PositiveMoney(Currency.EUR, 10, 0))
@@ -99,7 +105,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now().minusDays(1),
             closedAt = LocalDate.now(),
-            status = Account.Status.IN_USE
+            status = Account.Status.IN_USE,
+            version = Version(0)
         )
         shouldThrowExactly<IllegalStateException> {
             account.topUp(PositiveMoney(Currency.EUR, 10, 0))
@@ -115,7 +122,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now(),
             closedAt = null,
-            status = Account.Status.IN_USE
+            status = Account.Status.IN_USE,
+            version = Version(0)
         )
         val updatedAccount = account.withdraw(PositiveMoney(Currency.EUR, 10, 0))
 
@@ -131,7 +139,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now(),
             closedAt = null,
-            status = Account.Status.FOR_REMOVAL
+            status = Account.Status.FOR_REMOVAL,
+            version = Version(0)
         )
         shouldThrowExactly<IllegalStateException> {
             account.withdraw(PositiveMoney(Currency.EUR, 10, 0))
@@ -147,7 +156,8 @@ internal class AccountTest {
             title = "title",
             openedAt = LocalDate.now().minusDays(1),
             closedAt = LocalDate.now(),
-            status = Account.Status.IN_USE
+            status = Account.Status.IN_USE,
+            version = Version(0)
         )
         shouldThrowExactly<IllegalStateException> {
             account.withdraw(PositiveMoney(Currency.EUR, 10, 0))

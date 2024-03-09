@@ -13,17 +13,11 @@ configurations {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    compileOnly("org.projectlombok:lombok")
-    runtimeOnly("org.postgresql:postgresql")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    api(project(":common:common-base"))
+    implementation("org.flywaydb:flyway-maven-plugin:10.9.1")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.2.3")
+
+    runtimeOnly("org.postgresql:postgresql:42.7.2")
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {

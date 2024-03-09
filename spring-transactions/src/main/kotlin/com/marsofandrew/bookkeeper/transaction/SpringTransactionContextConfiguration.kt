@@ -1,0 +1,6 @@
+package com.marsofandrew.bookkeeper.transaction
+
+import org.springframework.transaction.annotation.EnableTransactionManagement
+
+@EnableTransactionManagement
+internal class SpringTransactionContextConfiguration

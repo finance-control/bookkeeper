@@ -46,6 +46,8 @@ internal class SecurityContextConfiguration(
 
         httpSecurity.authorizeRequests { authHttpRequests ->
             authHttpRequests
+                .requestMatchers("/registration")
+                .permitAll()
                 .anyRequest().authenticated()
         }
 

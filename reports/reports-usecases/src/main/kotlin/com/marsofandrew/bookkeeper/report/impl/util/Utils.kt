@@ -20,7 +20,7 @@ internal fun <T : BaseMoney> List<T>.addMoney(money: BaseMoney): List<T> {
 internal val Transfer.totalMoney: List<Money>
     get() = summarize(
         listOf(Money(received.currency, received.amount)),
-        send.let { listOf(Money(it.currency, -it.amount)) } ?: emptyList()
+        send.let { listOf(Money(it.currency, -it.amount)) }
     ).toList()
 
 internal operator fun PositiveMoney.unaryMinus(): Money = Money(currency, -amount)

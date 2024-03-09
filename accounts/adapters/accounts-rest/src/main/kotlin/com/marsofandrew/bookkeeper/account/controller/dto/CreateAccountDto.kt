@@ -3,6 +3,7 @@ package com.marsofandrew.bookkeeper.account.controller.dto
 import com.marsofandrew.bookkeeper.account.Account
 import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.base.date
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import java.time.Clock
@@ -20,6 +21,7 @@ internal data class CreateAccountDto(
         title = title,
         openedAt = openedAt ?: clock.date(),
         closedAt = null,
-        status = Account.Status.IN_USE
+        status = Account.Status.IN_USE,
+        version = Version(0)
     )
 }
