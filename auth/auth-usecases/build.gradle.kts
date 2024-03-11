@@ -10,5 +10,5 @@ configurations {
 }
 
 dependencies {
-
+    api(project(":common:common-properties"))
 }

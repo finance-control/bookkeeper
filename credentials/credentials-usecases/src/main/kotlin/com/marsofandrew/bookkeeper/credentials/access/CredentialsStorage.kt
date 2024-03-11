@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.credentials.access
 
 import com.marsofandrew.bookkeeper.base.exception.orElseThrow
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
-import com.marsofandrew.bookkeeper.credentials.email.Email
+import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.credentials.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 

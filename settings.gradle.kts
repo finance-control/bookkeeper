@@ -42,7 +42,9 @@ include(
 
 include(
     "auth:auth-usecases",
-    "auth:adapters:auth-spring"
+    "auth:auth-application",
+    "auth:adapters:auth-spring",
+    "auth:adapters:auth-credentials",
 )
 
 include(
@@ -74,6 +76,15 @@ include(
 )
 
 include(
+    "users:users-domain",
+    "users:users-usecases",
+    "users:users-application",
+    "users:adapters:users-data",
+    "users:adapters:users-credentials",
+    "users:adapters:users-rest",
+)
+
+include(
     "spring-events",
-    "spring-transactions"
+    "spring-transactions",
 )

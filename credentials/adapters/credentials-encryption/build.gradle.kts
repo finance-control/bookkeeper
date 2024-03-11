@@ -15,4 +15,5 @@ dependencies {
     api(project(":credentials:credentials-usecases"))
 
     implementation("org.springframework.boot:spring-boot-starter-security:3.2.3")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.64")
 }

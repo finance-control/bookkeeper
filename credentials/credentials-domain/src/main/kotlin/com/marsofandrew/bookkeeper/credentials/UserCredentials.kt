@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.credentials
 
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
-import com.marsofandrew.bookkeeper.credentials.email.Email
+import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.credentials.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import java.time.Instant

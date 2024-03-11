@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.credentials
 
-import com.marsofandrew.bookkeeper.credentials.email.Email
+import com.marsofandrew.bookkeeper.properties.email.Email
 
 data class Credentials(
     val email: Email,

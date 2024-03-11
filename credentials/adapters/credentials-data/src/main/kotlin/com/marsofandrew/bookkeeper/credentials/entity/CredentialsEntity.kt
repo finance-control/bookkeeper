@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.credentials.entity
 
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
-import com.marsofandrew.bookkeeper.credentials.email.Email
+import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.data.BaseEntity
 import com.marsofandrew.bookkeeper.properties.id.asId
 import jakarta.persistence.Entity
@@ -11,7 +11,7 @@ import jakarta.persistence.Version
 import java.time.Instant
 
 @Entity
-@Table(name = "credentials")
+@Table(name = "credentials", schema = "bookkeeper")
 internal data class CredentialsEntity(
     @Id
     var userId: Long,

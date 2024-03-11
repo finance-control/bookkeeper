@@ -10,5 +10,7 @@ abstract class AbstractId<T>(
     override val initialized: Boolean
         get() = inner != null
 
+    override val rawValue: T? = inner
+
     override fun toString(): String = "{$inner}"
 }

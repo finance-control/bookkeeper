@@ -1,8 +1,7 @@
 package com.marsofandrew.bookkeeper.base.exception
 
-import com.marsofandrew.bookkeeper.base.model.DomainModel
-import com.marsofandrew.bookkeeper.properties.id.Id
+import com.marsofandrew.bookkeeper.properties.id.AbstractId
 
-class DomainModelNotFoundException(id: Id<*>) : RuntimeException("Domain model with id $id is not found")
+class DomainModelNotFoundException(id: AbstractId<*>) : RuntimeException("Domain model with id $id is not found")
 
-fun <T> T?.orElseThrow(id: Id<*>): T = this ?: throw DomainModelNotFoundException(id)
+fun <T> T?.orElseThrow(id: AbstractId<*>): T = this ?: throw DomainModelNotFoundException(id)

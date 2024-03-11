@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.credentials.access
 
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
-import com.marsofandrew.bookkeeper.credentials.email.Email
+import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.credentials.entity.toCredentialsEntity
 import com.marsofandrew.bookkeeper.credentials.repository.CredentialsRepository
 import com.marsofandrew.bookkeeper.credentials.user.User
@@ -22,6 +22,6 @@ internal class CredentialsStorageImpl(
 
     @Transactional
     override fun createOrUpdate(userCredentials: UserCredentials) {
-        credentialsRepository.save(userCredentials.toCredentialsEntity())
+        credentialsRepository.saveAndFlush(userCredentials.toCredentialsEntity())
     }
 }

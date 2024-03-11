@@ -15,8 +15,10 @@ dependencies {
     implementation(project(":transfers:transfers-application"))
     implementation(project(":categories:categories-application"))
     implementation(project(":accounts:accounts-application"))
+    implementation(project(":credentials:credentials-application"))
+    implementation(project(":users:users-application"))
 
-    implementation(project(":auth:adapters:auth-spring")) // TODO: remake to application
+    implementation(project(":auth:auth-application")) // TODO: remake to application
     implementation(project(":common:common-rest"))
     implementation(project(":spring-events"))
     implementation(project(":spring-transactions"))

@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.auth.security.configuration
 
-import com.marsofandrew.bookkeeper.auth.security.filter.AuthenticationFilter
 import com.marsofandrew.bookkeeper.auth.security.exception.AuthExceptionHandler
+import com.marsofandrew.bookkeeper.auth.security.filter.AuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
@@ -46,12 +46,13 @@ internal class SecurityContextConfiguration(
 
         httpSecurity.authorizeRequests { authHttpRequests ->
             authHttpRequests
-                .requestMatchers("/registration")
+                .requestMatchers("/api/v1/users/registration")
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
         }
 
-        httpSecurity.exceptionHandling{
+        httpSecurity.exceptionHandling {
             it.authenticationEntryPoint(AuthExceptionHandler())
         }
 

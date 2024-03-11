@@ -19,17 +19,17 @@ class CredentialsSettingImpl(
 
     override fun set(credential: RawUserCredentials) {
         transactionalExecution.execute {
-            val currentCredentials = credentialsStorage.findByUserIdOrThrow(credential.userId)
-            val encrypted = credential.toCredentials(clock.instant(), currentCredentials.version)
+            val currentCredentials = credentialsStorage.findByUserId(credential.userId)
+            val encrypted = credential.toCredentials(clock.instant(), currentCredentials?.version)
             credentialsStorage.createOrUpdate(encrypted)
         }
     }
 
-    private fun RawUserCredentials.toCredentials(now: Instant, version: Version) = UserCredentials(
+    private fun RawUserCredentials.toCredentials(now: Instant, version: Version?) = UserCredentials(
         userId = userId,
         email = email,
         password = credentialsEncoder.encode(password),
         updatedAt = now,
-        version = version
+        version = version ?: Version(0)
     )
 }
