@@ -4,5 +4,5 @@ import com.marsofandrew.bookkeeper.properties.email.Email
 
 interface UserIdByCredentialsProvider {
 
-    fun getIdByKey(email: Email, password: String): Long?
+    fun getIdByCredentials(email: Email, password: String): Long?
 }

@@ -23,5 +23,4 @@ internal class FakeAuthenticationProvider(
     override fun supports(authentication: Class<*>?): Boolean {
         return authentication?.isAssignableFrom(FakeAuthentication::class.java) ?: false
     }
-
 }

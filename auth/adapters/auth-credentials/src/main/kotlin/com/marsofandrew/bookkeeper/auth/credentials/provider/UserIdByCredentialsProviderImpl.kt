@@ -11,7 +11,7 @@ internal class UserIdByCredentialsProviderImpl(
     private val credentialsUserIdSelection: CredentialsUserIdSelection
 ) : UserIdByCredentialsProvider {
 
-    override fun getIdByKey(email: Email, password: String): Long? {
+    override fun getIdByCredentials(email: Email, password: String): Long? {
         return credentialsUserIdSelection.select(Credentials(email, password))?.value
     }
 }

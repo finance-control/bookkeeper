@@ -8,5 +8,4 @@ internal class FakeAuthentication(val userId: String) :
     override fun getCredentials(): Any? = null
 
     override fun getPrincipal(): Any? = null
-
 }
