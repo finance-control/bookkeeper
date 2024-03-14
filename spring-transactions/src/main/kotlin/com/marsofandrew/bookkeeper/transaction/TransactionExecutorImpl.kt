@@ -9,7 +9,6 @@ internal class TransactionExecutorImpl(
     private val transactionalTemplate: TransactionTemplate
 ) : TransactionExecutor {
 
-    // TODO: refactor it
     override fun <T> execute(block: () -> T): T = transactionalTemplate.execute {
         block()
     }!!
