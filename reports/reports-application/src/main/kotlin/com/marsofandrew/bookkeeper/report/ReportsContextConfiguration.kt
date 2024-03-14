@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.report
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
@@ -52,12 +52,12 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportEarningAdding = ReportEarningAddingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 
     @Bean
@@ -65,12 +65,12 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportEarningRemoving = ReportEarningRemovingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 
     @Bean
@@ -78,12 +78,12 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportSpendingAdding = ReportSpendingAddingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 
     @Bean
@@ -91,12 +91,12 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportSpendingRemoving = ReportSpendingRemovingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 
     @Bean
@@ -104,12 +104,12 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportTransferAdding = ReportTransferAddingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 
     @Bean
@@ -117,11 +117,11 @@ internal class ReportsContextConfiguration {
         dailyUserReportStorage: DailyUserReportStorage,
         monthlyUserReportStorage: MonthlyUserReportStorage,
         yearlyUserReportStorage: YearlyUserReportStorage,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
     ): ReportTransferRemoving = ReportTransferRemovingImpl(
         dailyUserReportStorage,
         monthlyUserReportStorage,
         yearlyUserReportStorage,
-        transactionalExecution
+        transactionExecutor
     )
 }

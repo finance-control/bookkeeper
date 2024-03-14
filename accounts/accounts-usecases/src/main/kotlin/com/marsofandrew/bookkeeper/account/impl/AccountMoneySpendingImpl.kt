@@ -4,16 +4,16 @@ import com.marsofandrew.bookkeeper.account.AccountMoneySpending
 import com.marsofandrew.bookkeeper.account.access.AccountStorage
 import com.marsofandrew.bookkeeper.account.transfer.AccountTransferAmount
 import com.marsofandrew.bookkeeper.account.user.User
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 class AccountMoneySpendingImpl(
     private val accountStorage: AccountStorage,
-    private val transactionalExecution: TransactionalExecution
+    private val transactionExecutor: TransactionExecutor
 ) : AccountMoneySpending {
 
     override fun spend(userId: NumericId<User>, from: AccountTransferAmount) {
-        transactionalExecution.execute {
+        transactionExecutor.execute {
             val account = accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).withdraw(from.money)
             accountStorage.setMoney(account.id, account.money)
         }

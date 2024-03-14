@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.user
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.user.access.UserStorage
 import com.marsofandrew.bookkeeper.user.credentials.UserCredentialsSetter
 import com.marsofandrew.bookkeeper.user.impl.UserRegistrationImpl
@@ -15,12 +15,12 @@ internal class UsersContextConfiguration {
     fun userRegistration(
         userStorage: UserStorage,
         userCredentialsSetter: UserCredentialsSetter,
-        transactionalExecution: TransactionalExecution,
+        transactionExecutor: TransactionExecutor,
         clock: Clock
     ): UserRegistration = UserRegistrationImpl(
         userStorage,
         userCredentialsSetter,
-        transactionalExecution,
+        transactionExecutor,
         clock
     )
 }

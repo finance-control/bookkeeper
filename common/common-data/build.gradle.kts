@@ -18,6 +18,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.2.3")
 
     runtimeOnly("org.postgresql:postgresql:42.7.2")
+
+    testApi("org.testcontainers:postgresql:1.19.7")
+    testApi("org.springframework.boot:spring-boot-starter-test:3.2.3")
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {

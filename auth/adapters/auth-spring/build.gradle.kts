@@ -16,9 +16,9 @@ dependencies {
     api(project(":common:user-context"))
     api(project(":common:common-base"))
 
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter:3.2.3")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.2.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("org.springframework:spring-context:6.1.4")

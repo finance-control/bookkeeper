@@ -6,7 +6,7 @@ import com.marsofandrew.bookkeeper.account.fixtures.account
 import com.marsofandrew.bookkeeper.account.transfer.AccountTransferAmount
 import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
@@ -23,7 +23,7 @@ internal class RollBackAccountMoneySpendingImplTest {
     private val userId = 5.asId<User>()
 
     private val accountStorage = mockk<AccountStorage>(relaxUnitFun = true)
-    private val transactionalExecution = object : TransactionalExecution {
+    private val transactionExecutor = object : TransactionExecutor {
         override fun <T> execute(block: () -> T): T {
             return block()
         }
@@ -33,7 +33,7 @@ internal class RollBackAccountMoneySpendingImplTest {
 
     @BeforeEach
     fun setup() {
-        rollbackAccountMoneySpendingImpl = RollbackAccountMoneySpendingImpl(accountStorage, transactionalExecution)
+        rollbackAccountMoneySpendingImpl = RollbackAccountMoneySpendingImpl(accountStorage, transactionExecutor)
     }
 
     @Test

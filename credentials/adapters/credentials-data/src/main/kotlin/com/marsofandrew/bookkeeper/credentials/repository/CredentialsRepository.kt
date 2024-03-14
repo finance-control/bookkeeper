@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 internal interface CredentialsRepository : JpaRepository<CredentialsEntity, Long> {
 
+    fun existsByEmailAndUserIdNot(email: String, userId: Long): Boolean
+    fun existsByEmail(email: String): Boolean
     fun findByEmail(email: String): CredentialsEntity?
 }

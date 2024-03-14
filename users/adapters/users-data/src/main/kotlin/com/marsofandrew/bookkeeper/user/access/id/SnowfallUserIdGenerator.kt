@@ -4,18 +4,19 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
 import java.time.Clock
+import java.util.Random
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.random.Random
 
 /**
- * Generates unique ids based on time, hostId and sequence number
- * ID has length of 64 bits that will be following:
- *  1st = 0 as Long has to be positive
+ * Generates unique ids based on time, hostId and sequence number.</br>
+ * ID has length of 64 bits that will be following:<br>
+ *  1st = 0 as Long has to be positive<br>
  *  2nd - 34th (33 bits)= seconds from 2024-03-10T00:00:00Z (it will be enough for 272 years)
  *  35th-39th (5 bits) = Host ID
  *  40th-43th (4 bits) = Thread id, for now always zero
  *  44th-57th (14 bits) = Sequence number
  *  58th-64th (7 bits) = Random number for safety
+ *
  */
 internal class SnowfallUserIdGenerator(
     private val clock: Clock,
@@ -60,7 +61,7 @@ internal class SnowfallUserIdGenerator(
         val value: Int = 0
     )
 
-    private companion object {
+    companion object {
         const val MAX_RANDOM = 128
     }
 }

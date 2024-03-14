@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.user.impl
 
 import com.marsofandrew.bookkeeper.base.model.Version
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.user.UnregisteredUser
 import com.marsofandrew.bookkeeper.user.User
@@ -13,13 +13,13 @@ import java.time.Clock
 class UserRegistrationImpl(
     private val userStorage: UserStorage,
     private val userCredentialsSetter: UserCredentialsSetter,
-    private val transactionalExecution: TransactionalExecution,
+    private val transactionExecutor: TransactionExecutor,
     private val clock: Clock
 ) : UserRegistration {
 
     override fun register(unregisteredUser: UnregisteredUser): NumericId<User> {
         val forSave = unregisteredUser.toUser()
-        return transactionalExecution.execute {
+        return transactionExecutor.execute {
             val user = userStorage.create(forSave)
             userCredentialsSetter.set(
                 userId = user.id,

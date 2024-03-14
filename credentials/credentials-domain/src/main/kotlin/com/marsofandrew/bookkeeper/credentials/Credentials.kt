@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.credentials
 
+import com.marsofandrew.bookkeeper.base.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.email.Email
 
 data class Credentials(
@@ -7,6 +8,6 @@ data class Credentials(
     val password: String,
 ) {
     init {
-        check(password.isNotBlank()) { "password is blank" }
+        validateFiled(password.isNotBlank()) { "password is blank" }
     }
 }

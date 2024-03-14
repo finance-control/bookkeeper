@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.credentials
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
 import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsSettingImpl
@@ -17,9 +17,9 @@ internal class CredentialsContextConfiguration {
         credentialsEncoder: CredentialsEncoder,
         credentialsStorage: CredentialsStorage,
         clock: Clock,
-        transactionalExecution: TransactionalExecution
+        transactionExecutor: TransactionExecutor
     ): CredentialsSetting =
-        CredentialsSettingImpl(credentialsEncoder, credentialsStorage, clock, transactionalExecution)
+        CredentialsSettingImpl(credentialsEncoder, credentialsStorage, clock, transactionExecutor)
 
     @Bean
     fun credentialsUserIdSelection(

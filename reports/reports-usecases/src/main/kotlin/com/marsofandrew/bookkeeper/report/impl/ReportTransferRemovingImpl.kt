@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.report.impl
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -24,11 +24,11 @@ class ReportTransferRemovingImpl(
     private val dailyUserReportStorage: DailyUserReportStorage,
     private val monthlyUserReportStorage: MonthlyUserReportStorage,
     private val yearlyUserReportStorage: YearlyUserReportStorage,
-    private val transactionalExecution: TransactionalExecution,
+    private val transactionExecutor: TransactionExecutor,
 ) : ReportTransferRemoving {
 
     override fun remove(transfer: Transfer) {
-        transactionalExecution.execute {
+        transactionExecutor.execute {
             val userId = transfer.userId
 
             // TODO: throw appropriate exception

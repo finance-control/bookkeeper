@@ -16,7 +16,7 @@ internal class IdGeneratorConfiguration {
         @Value("\${app.host.id}") hostId: Byte
     ): UserIdGenerator = SnowfallUserIdGenerator(
         clock,
-        Random().asKotlinRandom(),
+        Random(),
         hostId = hostId
     )
 }

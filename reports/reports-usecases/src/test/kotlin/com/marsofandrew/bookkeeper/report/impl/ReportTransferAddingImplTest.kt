@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.report.impl
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
@@ -34,7 +34,7 @@ internal class ReportTransferAddingImplTest {
     private val monthlyUserReportStorage = mockk<MonthlyUserReportStorage>(relaxUnitFun = true)
     private val yearlyUserReportStorage = mockk<YearlyUserReportStorage>(relaxUnitFun = true)
 
-    private val transactionalExecution = object : TransactionalExecution {
+    private val transactionExecutor = object : TransactionExecutor {
         override fun <T> execute(block: () -> T): T = block()
     }
 
@@ -46,7 +46,7 @@ internal class ReportTransferAddingImplTest {
             dailyUserReportStorage,
             monthlyUserReportStorage,
             yearlyUserReportStorage,
-            transactionalExecution
+            transactionExecutor
         )
     }
 

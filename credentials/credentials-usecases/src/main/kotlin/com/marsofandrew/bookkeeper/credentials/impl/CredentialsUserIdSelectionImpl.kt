@@ -10,11 +10,11 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 class CredentialsUserIdSelectionImpl(
     private val credentialsEncoder: CredentialsEncoder,
     private val credentialsStorage: CredentialsStorage,
-): CredentialsUserIdSelection {
+) : CredentialsUserIdSelection {
 
     override fun select(credentials: Credentials): NumericId<User>? {
         return credentialsStorage.findByEmail(credentials.email)
-        ?.takeIf { credentialsEncoder.matches(credentials.password, it.password) }
+            ?.takeIf { credentialsEncoder.matches(credentials.password, it.password) }
             ?.userId
     }
 }

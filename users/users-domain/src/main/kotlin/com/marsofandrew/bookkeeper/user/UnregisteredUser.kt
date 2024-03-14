@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.user
 
+import com.marsofandrew.bookkeeper.base.exception.validateFiled
 import com.marsofandrew.bookkeeper.user.credentials.UserRawCredentials
 
 data class UnregisteredUser(
@@ -8,7 +9,7 @@ data class UnregisteredUser(
     val rawCredentials: UserRawCredentials
 ) {
     init {
-        check(name.isNotBlank()) { "name is blank" }
-        check(surname.isNotBlank()) { "surname is blank" }
+        validateFiled(name.isNotBlank()) { "name is blank" }
+        validateFiled(surname.isNotBlank()) { "surname is blank" }
     }
 }

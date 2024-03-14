@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.report.impl
 
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -26,11 +26,11 @@ class ReportSpendingAddingImpl(
     private val dailyUserReportStorage: DailyUserReportStorage,
     private val monthlyUserReportStorage: MonthlyUserReportStorage,
     private val yearlyUserReportStorage: YearlyUserReportStorage,
-    private val transactionalExecution: TransactionalExecution,
+    private val transactionExecutor: TransactionExecutor,
 ) : ReportSpendingAdding {
 
     override fun add(spending: Spending) {
-        transactionalExecution.execute {
+        transactionExecutor.execute {
             val userId = spending.userId
             val date = spending.date
 

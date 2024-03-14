@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.base.transaction
 
-interface TransactionalExecution {
+interface TransactionExecutor {
 
     fun <T> execute(block: () -> T): T
 }

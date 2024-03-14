@@ -9,7 +9,7 @@ import com.marsofandrew.bookkeeper.account.impl.AccountMoneyTransferringImpl
 import com.marsofandrew.bookkeeper.account.impl.AccountSelectionImpl
 import com.marsofandrew.bookkeeper.account.impl.RollbackAccountMoneySpendingImpl
 import com.marsofandrew.bookkeeper.account.impl.RollbackAccountMoneyTransferringImpl
-import com.marsofandrew.bookkeeper.base.transaction.TransactionalExecution
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import java.time.Clock
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -35,26 +35,26 @@ internal class AccountsContextConfiguration {
     @Bean
     fun accountMoneySpending(
         accountStorage: AccountStorage,
-        transactionalExecution: TransactionalExecution,
-    ): AccountMoneySpending = AccountMoneySpendingImpl(accountStorage, transactionalExecution)
+        transactionExecutor: TransactionExecutor,
+    ): AccountMoneySpending = AccountMoneySpendingImpl(accountStorage, transactionExecutor)
 
     @Bean
     fun accountMoneyTransferring(
         accountStorage: AccountStorage,
-        transactionalExecution: TransactionalExecution,
-    ): AccountMoneyTransferring = AccountMoneyTransferringImpl(accountStorage, transactionalExecution)
+        transactionExecutor: TransactionExecutor,
+    ): AccountMoneyTransferring = AccountMoneyTransferringImpl(accountStorage, transactionExecutor)
 
     @Bean
     fun rollbackAccountMoneySpending(
         accountStorage: AccountStorage,
-        transactionalExecution: TransactionalExecution,
-    ): RollbackAccountMoneySpending = RollbackAccountMoneySpendingImpl(accountStorage, transactionalExecution)
+        transactionExecutor: TransactionExecutor,
+    ): RollbackAccountMoneySpending = RollbackAccountMoneySpendingImpl(accountStorage, transactionExecutor)
 
     @Bean
     fun rollbackAccountMoneyTransferring(
         accountStorage: AccountStorage,
-        transactionalExecution: TransactionalExecution,
-    ): RollbackAccountMoneyTransferring = RollbackAccountMoneyTransferringImpl(accountStorage, transactionalExecution)
+        transactionExecutor: TransactionExecutor,
+    ): RollbackAccountMoneyTransferring = RollbackAccountMoneyTransferringImpl(accountStorage, transactionExecutor)
 
     @Bean
     fun accountSelection(
