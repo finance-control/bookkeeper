@@ -22,7 +22,7 @@ internal data class UserEntity(
     var surname: String,
     var createdAt: Instant,
     var updatedAt: Instant
-) : BaseEntity<User, UserEntity> {
+) : BaseEntity<User> {
 
     override fun toModel() = User(
         id = requireNotNull(id).asId(),

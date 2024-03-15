@@ -1,8 +1,8 @@
 package com.marsofandrew.bookkeeper.credentials.entity
 
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
-import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.data.BaseEntity
+import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.properties.id.asId
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -20,7 +20,7 @@ internal data class CredentialsEntity(
     var updatedAt: Instant,
     @Version
     var version: Int
-) : BaseEntity<UserCredentials, CredentialsEntity> {
+) : BaseEntity<UserCredentials> {
     override fun toModel(): UserCredentials = UserCredentials(
         userId = userId.asId(),
         email = Email(email),

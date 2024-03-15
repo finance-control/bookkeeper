@@ -23,9 +23,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
 
+    testImplementation(testFixtures(project(":categories:categories-domain")))
+
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.assertj:assertj-core:3.6.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.springframework.security:spring-security-test")
