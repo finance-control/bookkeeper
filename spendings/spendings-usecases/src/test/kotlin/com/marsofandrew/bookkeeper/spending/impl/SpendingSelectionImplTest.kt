@@ -2,7 +2,8 @@ package com.marsofandrew.bookkeeper.spending.impl
 
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.fixtures.spending
+import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
+import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -83,7 +84,7 @@ internal class SpendingSelectionImplTest {
 
     @Test
     fun `select throws exception when invalid dates interval is provided`() {
-        shouldThrowExactly<IllegalArgumentException> {
+        shouldThrowExactly<InvalidDateIntervalException> {
             selectingSpendingImpl.select(
                 userId,
                 LocalDate.now(),

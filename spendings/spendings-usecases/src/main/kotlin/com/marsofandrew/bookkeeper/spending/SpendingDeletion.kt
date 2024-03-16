@@ -5,5 +5,5 @@ import com.marsofandrew.bookkeeper.spending.user.User
 
 interface SpendingDeletion {
 
-    fun delete(userId: NumericId<User>, ids: Collection<NumericId<Spending>>) //TODO: check by userId
+    fun delete(userId: NumericId<User>, ids: Collection<NumericId<Spending>>)
 }

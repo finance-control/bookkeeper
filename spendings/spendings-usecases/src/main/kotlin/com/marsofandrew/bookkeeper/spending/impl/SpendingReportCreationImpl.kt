@@ -2,11 +2,12 @@ package com.marsofandrew.bookkeeper.spending.impl
 
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingReport
+import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 
@@ -21,8 +22,8 @@ class SpendingReportCreationImpl(
         categories: Set<NumericId<SpendingCategory>>?
     ): SpendingReport {
 
-        if (startDate > endDate){
-            throw IllegalArgumentException("Start date om more than end date")
+        if (startDate > endDate) {
+            throw InvalidDateIntervalException(startDate, endDate)
         }
 
         val spendings = spendingStorage.findAllByUserIdBetween(userId, startDate, endDate)

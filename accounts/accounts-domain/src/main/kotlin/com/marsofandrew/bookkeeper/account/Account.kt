@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.account
 
 import com.marsofandrew.bookkeeper.account.user.User
+import com.marsofandrew.bookkeeper.base.exception.validateFiled
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Money
@@ -21,7 +22,7 @@ data class Account(
 ) : DomainModel {
 
     init {
-        check(title.isNotBlank()) { "title of Account $id is empty or blank" }
+        validateFiled(title.isNotBlank()) { "title of Account $id is empty or blank" }
     }
 
     enum class Status {

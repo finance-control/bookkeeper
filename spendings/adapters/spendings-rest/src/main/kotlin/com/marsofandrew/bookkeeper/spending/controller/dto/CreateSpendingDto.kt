@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.spending.controller.dto
 
 import com.marsofandrew.bookkeeper.base.date
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.Spending
@@ -15,13 +16,14 @@ internal data class CreateSpendingDto(
     val spendingCategoryId: Long,
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Spending(
-        NumericId.unidentified(),
-        userId,
-        money.money.toPositiveMoney(),
-        date,
-        description,
-        spendingCategoryId.asId(),
-        clock.date(),
-        money.accountId?.asId()
+        id = NumericId.unidentified(),
+        userId = userId,
+        money = money.money.toPositiveMoney(),
+        date = date,
+        description = description,
+        spendingCategoryId = spendingCategoryId.asId(),
+        createdAt = clock.date(),
+        fromAccount = money.accountId?.asId(),
+        version = Version(0)
     )
 }

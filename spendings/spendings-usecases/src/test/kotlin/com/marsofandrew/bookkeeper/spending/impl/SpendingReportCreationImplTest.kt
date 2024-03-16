@@ -6,7 +6,8 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
-import com.marsofandrew.bookkeeper.spending.fixtures.spending
+import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
+import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -15,13 +16,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import java.math.BigDecimal
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class CreateSpendingReportImplTest {
+internal class SpendingReportCreationImplTest {
 
     private val spendingStorage = mockk<SpendingStorage>()
     private lateinit var creatingSpendingReportImpl: SpendingReportCreationImpl;
@@ -34,8 +33,8 @@ internal class CreateSpendingReportImplTest {
     @Test
     fun `createReport when no data is available returns empty report`() {
         val userId = 5.asId<User>()
-        val endDate = LocalDate.from(Instant.now())
-        val startDate = LocalDate.from(Instant.now().minus(Duration.ofDays(1)))
+        val endDate = LocalDate.now()
+        val startDate = endDate.minusDays(2)
 
         every { spendingStorage.findAllByUserIdBetween(userId, startDate, endDate) } returns emptyList()
 
@@ -48,12 +47,11 @@ internal class CreateSpendingReportImplTest {
     @Test
     fun `createReport when data is available returns report`() {
         val userId = 5.asId<User>()
-        val category1 = NumericId<SpendingCategory>(0)
+        val category1 = NumericId<SpendingCategory>(3)
         val category2 = NumericId<SpendingCategory>(1)
         val category3 = NumericId<SpendingCategory>(2)
-        val now = Instant.now()
-        val date1 = LocalDate.from(now.minusSeconds(1000))
-        val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))
+        val date1 = LocalDate.now()
+        val date2 = date1.minusDays(2)
 
         val spendings = listOf(
             spending(1.asId(), userId) {
@@ -113,9 +111,9 @@ internal class CreateSpendingReportImplTest {
         val category1 = NumericId<SpendingCategory>(1)
         val category2 = NumericId<SpendingCategory>(2)
         val category3 = NumericId<SpendingCategory>(3)
-        val now = Instant.now()
-        val date1 = LocalDate.from(now.minusSeconds(1000))
-        val date2 = LocalDate.from(now.minus(Duration.ofDays(1)))
+        val now = LocalDate.now()
+        val date1 = now.minusDays(1)
+        val date2 = now.minusDays(2)
 
         val spendings = listOf(
             spending(1.asId(), userId) {
@@ -169,14 +167,13 @@ internal class CreateSpendingReportImplTest {
 
     @Test
     fun `createReport throws exception when invalid date interval is provided`() {
-        val now = Instant.now()
-        shouldThrowExactly<IllegalArgumentException> {
+        val now = LocalDate.now()
+        shouldThrowExactly<InvalidDateIntervalException> {
             creatingSpendingReportImpl.createReport(
                 5.asId(),
-                LocalDate.from(now),
-                LocalDate.from(now.minus(Duration.ofDays(1)))
+                now,
+                now.minusDays(1)
             )
         }
     }
-
 }

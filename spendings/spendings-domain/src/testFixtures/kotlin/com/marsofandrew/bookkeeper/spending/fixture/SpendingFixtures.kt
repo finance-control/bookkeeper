@@ -1,4 +1,4 @@
-package com.marsofandrew.bookkeeper.spending.fixtures
+package com.marsofandrew.bookkeeper.spending.fixture
 
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.Spending

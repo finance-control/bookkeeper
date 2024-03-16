@@ -16,7 +16,7 @@ class SpendingDeletionImpl(
 
     override fun delete(userId: NumericId<User>, ids: Collection<NumericId<Spending>>) {
         val spendings = spendingStorage.findAllByUserIdAndIds(userId, ids)
-        spendingStorage.delete(ids)
+        spendingStorage.delete(spendings.map { it.id })
         eventPublisher.publish(spendings.map { it.toRollbackMoneyIsSendEvent() })
     }
 }

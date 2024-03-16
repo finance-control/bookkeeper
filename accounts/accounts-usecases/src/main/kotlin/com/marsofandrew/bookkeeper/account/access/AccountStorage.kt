@@ -11,6 +11,7 @@ interface AccountStorage {
 
     fun findAllByUserId(userId: NumericId<User>): Set<Account>
     fun findByUserIdAndIdOrThrow(userId: NumericId<User>, id: StringId<Account>): Account
+    fun existsByUserIdAndAccountId(userId: NumericId<User>, id: StringId<Account>): Boolean
     fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Set<StringId<Account>>): Set<Account>
     fun findAccountsForRemoval(limit: Int): Set<Account>
 

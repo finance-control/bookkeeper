@@ -1,9 +1,10 @@
 package com.marsofandrew.bookkeeper.spending.impl
 
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.spending.SpendingSelection
 import com.marsofandrew.bookkeeper.spending.Spending
+import com.marsofandrew.bookkeeper.spending.SpendingSelection
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
+import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 
@@ -15,8 +16,8 @@ class SpendingSelectionImpl(
         return if (startDate == null) {
             spendingStorage.findAllByUserId(userId)
         } else {
-            if (startDate > endDate){
-                throw IllegalArgumentException("Start date is more than end date")
+            if (startDate > endDate) {
+                throw InvalidDateIntervalException(startDate, endDate)
             }
             spendingStorage.findAllByUserIdBetween(userId, startDate, endDate)
         }

@@ -1,5 +1,6 @@
-package com.marsofandrew.bookkeeper.spending.fixtures
+package com.marsofandrew.bookkeeper.spending.fixture
 
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -12,7 +13,7 @@ import com.marsofandrew.bookkeeper.spending.user.User
 import java.math.BigDecimal
 import java.time.LocalDate
 
-class SpendingFixture(
+data class SpendingFixture(
     val id: NumericId<Spending>,
     val userId: NumericId<User>,
 ) {
@@ -22,6 +23,7 @@ class SpendingFixture(
     var spendingCategoryId: NumericId<SpendingCategory> = 1.asId()
     var createdAt: LocalDate = LocalDate.now()
     var fromAccount: StringId<Account>? = null
+    var version: Version = Version(0)
 
     fun build() = Spending(
         id,
@@ -31,6 +33,7 @@ class SpendingFixture(
         description,
         spendingCategoryId,
         createdAt,
-        fromAccount
+        fromAccount,
+        version
     )
 }

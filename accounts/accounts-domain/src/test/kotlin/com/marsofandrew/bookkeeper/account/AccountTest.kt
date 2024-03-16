@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.account
 
 import com.marsofandrew.bookkeeper.account.user.User
+import com.marsofandrew.bookkeeper.base.exception.ObjectCreateValidationException
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
@@ -19,7 +20,7 @@ internal class AccountTest {
     @ParameterizedTest
     @ValueSource(strings = ["", " ", "\t"])
     fun `constructor throws exception when empty title is provided`(title: String) {
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<ObjectCreateValidationException> {
             Account(
                 id = StringId.unidentified(),
                 userId = 5.asId(),
@@ -63,7 +64,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `topUp when status is correct returns new account with increased money`(){
+    fun `topUp when status is correct returns new account with increased money`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),
@@ -80,7 +81,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `topUp throws exception when account is set for removal`(){
+    fun `topUp throws exception when account is set for removal`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),
@@ -97,7 +98,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `topUp throws exception when account is closed`(){
+    fun `topUp throws exception when account is closed`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),
@@ -114,7 +115,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `withdraw when status is correct returns new account with decreased money`(){
+    fun `withdraw when status is correct returns new account with decreased money`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),
@@ -131,7 +132,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `withdraw throws exception when account is set for removal`(){
+    fun `withdraw throws exception when account is set for removal`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),
@@ -148,7 +149,7 @@ internal class AccountTest {
     }
 
     @Test
-    fun `withdraw throws exception when account is closed`(){
+    fun `withdraw throws exception when account is closed`() {
         val account = Account(
             id = StringId.unidentified(),
             userId = 5.asId(),

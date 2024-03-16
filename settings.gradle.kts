@@ -18,9 +18,10 @@ include(
     "spendings:spendings-domain",
     "spendings:spendings-usecases",
     "spendings:spendings-application",
-    "spendings:spendings-fixtures",
     "spendings:adapters:spendings-data",
     "spendings:adapters:spendings-rest",
+    "spendings:adapters:spendings-category",
+    "spendings:adapters:spendings-account",
 )
 
 include(

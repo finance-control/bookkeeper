@@ -9,9 +9,7 @@ internal data class SpendingDto(
     val date: String,
     val description: String,
     val spendingCategoryId: Long,
-) {
-
-}
+)
 
 internal fun Spending.toSpendingDto() = SpendingDto(
     id.value,

@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.account.impl.AccountDeletionImpl
 import com.marsofandrew.bookkeeper.account.impl.AccountMoneySpendingImpl
 import com.marsofandrew.bookkeeper.account.impl.AccountMoneyTransferringImpl
 import com.marsofandrew.bookkeeper.account.impl.AccountSelectionImpl
+import com.marsofandrew.bookkeeper.account.impl.AccountValidationImpl
 import com.marsofandrew.bookkeeper.account.impl.RollbackAccountMoneySpendingImpl
 import com.marsofandrew.bookkeeper.account.impl.RollbackAccountMoneyTransferringImpl
 import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
@@ -60,4 +61,9 @@ internal class AccountsContextConfiguration {
     fun accountSelection(
         accountStorage: AccountStorage
     ): AccountSelection = AccountSelectionImpl(accountStorage)
+
+    @Bean
+    fun accountValidation(
+        accountStorage: AccountStorage
+    ): AccountValidation = AccountValidationImpl(accountStorage)
 }

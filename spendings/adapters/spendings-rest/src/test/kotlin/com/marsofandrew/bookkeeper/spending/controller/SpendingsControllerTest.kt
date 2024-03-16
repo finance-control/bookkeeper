@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.spending.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -15,7 +16,7 @@ import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
 import com.marsofandrew.bookkeeper.spending.controller.dto.AccountBoundedMoneyDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.CreateSpendingDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.PositiveMoneyDto
-import com.marsofandrew.bookkeeper.spending.fixtures.spending
+import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
@@ -78,7 +79,8 @@ internal class SpendingsControllerTest {
             createSpendingDto.description,
             createSpendingDto.spendingCategoryId.asId(),
             now,
-            createSpendingDto.money.accountId?.asId()
+            createSpendingDto.money.accountId?.asId(),
+            Version(0)
         )
         val identifiedSpending = spending.copy(id = 1100.asId())
 

@@ -1,11 +1,16 @@
 package com.marsofandrew.bookkeeper.spending.impl
 
+import com.marsofandrew.bookkeeper.event.RollbackMoneyIsSpendEvent
+import com.marsofandrew.bookkeeper.event.models.AccountBondedMoney
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.Spending
-import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.SpendingDeletion
+import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
+import com.marsofandrew.bookkeeper.spending.fixture.spending
+import com.marsofandrew.bookkeeper.spending.user.User
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
@@ -25,15 +30,32 @@ internal class SpendingDeletionImplTest {
 
     @Test
     fun `delete deletes spending by ids`() {
+        val userId = 5.asId<User>()
         val ids = setOf<NumericId<Spending>>(
             55.asId(),
             45.asId(),
             35.asId(),
         )
 
-        spendingDeletion.delete(1.asId(), ids)
+        val additionalIds = setOf<NumericId<Spending>>(
+            84.asId()
+        )
 
-        verify(exactly = 1) { spendingStorage.delete(ids) }
-        // verify(exactly = 1) { eventPublisher.publish() }
+        val spendings = ids.mapTo(HashSet()) { spending(it, userId) }
+
+        every { spendingStorage.findAllByUserIdAndIds(userId, ids + additionalIds) } returns spendings
+
+        spendingDeletion.delete(userId, ids + additionalIds)
+
+        verify(exactly = 1) { spendingStorage.delete(ids.toList()) }
+
+        verify(exactly = 1) { eventPublisher.publish(spendings.map { it.toRollbackMoneyIsSendEvent() }) }
     }
 }
+
+private fun Spending.toRollbackMoneyIsSendEvent() = RollbackMoneyIsSpendEvent(
+    userId = userId.value,
+    date = date,
+    money = AccountBondedMoney(money, fromAccount?.value),
+    category = spendingCategoryId.value
+)

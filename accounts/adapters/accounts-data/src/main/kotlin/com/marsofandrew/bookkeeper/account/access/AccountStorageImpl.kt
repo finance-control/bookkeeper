@@ -28,6 +28,10 @@ internal class AccountStorageImpl(
         return accountsByUserId[userId]?.singleOrNull { it.id == id }.orElseThrow(id)
     }
 
+    override fun existsByUserIdAndAccountId(userId: NumericId<User>, id: StringId<Account>): Boolean {
+        return accountsByUserId[userId]?.firstOrNull { it.id == id }?.let { true } ?: false
+    }
+
     override fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Set<StringId<Account>>): Set<Account> {
         return findAllByUserId(userId).filter {
             it.id in ids

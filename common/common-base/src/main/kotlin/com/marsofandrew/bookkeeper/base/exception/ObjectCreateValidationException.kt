@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.base.exception
 
 class ObjectCreateValidationException(
     message: String
-) : IllegalArgumentException(message)
+) : ValidationException(message)
 
 inline fun <reified T> T.validateFiled(predicate: Boolean, cause: () -> String) {
     if (!predicate) {

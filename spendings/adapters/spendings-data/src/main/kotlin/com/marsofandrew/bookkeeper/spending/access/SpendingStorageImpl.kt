@@ -1,29 +1,26 @@
 package com.marsofandrew.bookkeeper.spending.access
 
+import com.marsofandrew.bookkeeper.data.toModels
+import com.marsofandrew.bookkeeper.data.toModelsSet
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.Spending
+import com.marsofandrew.bookkeeper.spending.access.entity.toSpendingEntity
+import com.marsofandrew.bookkeeper.spending.access.repository.SpendingRepository
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
-import java.util.concurrent.atomic.AtomicLong
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Service
 
-@Repository
+@Service
 internal class SpendingStorageImpl(
-    private val spendingsByUserId: MutableMap<NumericId<User>, MutableSet<Spending>>,
-    private val spendingById: MutableMap<NumericId<Spending>, Spending>
+    private val spendingRepository: SpendingRepository
 ) : SpendingStorage {
 
-    private val counter = AtomicLong(1)
-
     override fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Collection<NumericId<Spending>>): Set<Spending> {
-        return findAllByUserId(userId)
-            .filter { it.id in ids }
-            .toSet()
+        return spendingRepository.findAllByUserIdAndIdIn(userId.value, ids.mapTo(HashSet()) { it.value }).toModelsSet()
     }
 
     override fun findAllByUserId(userId: NumericId<User>): List<Spending> {
-        return spendingsByUserId.getOrDefault(userId, setOf()).toList()
+        return spendingRepository.findAllByUserId(userId.value).toModels()
     }
 
     override fun findAllByUserIdBetween(
@@ -31,27 +28,14 @@ internal class SpendingStorageImpl(
         startDate: LocalDate,
         endDate: LocalDate
     ): List<Spending> {
-        return findAllByUserId(userId)
-            .filter { it.date in startDate..endDate }
+        return spendingRepository.findAllByUserIdAndDateBetween(userId.value, startDate, endDate).toModels()
     }
 
     override fun create(spending: Spending): Spending {
-        // TODO: check that spending does not identified
-        val id = counter.getAndIncrement().asId<Spending>()
-
-        val spendingForSave = spending.copy(id = id)
-        spendingById[id] = spendingForSave
-        spendingsByUserId.putIfAbsent(spending.userId, mutableSetOf())
-        spendingsByUserId.getValue(spending.userId).add(spendingForSave)
-        return spendingForSave
+        return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
     }
 
     override fun delete(ids: Collection<NumericId<Spending>>) {
-        ids.forEach { id ->
-            val spending = spendingById[id] ?: return
-
-            spendingById.remove(id)
-            spendingsByUserId[spending.userId]?.remove(spending)
-        }
+        spendingRepository.deleteAllById(ids.map { it.value })
     }
 }
