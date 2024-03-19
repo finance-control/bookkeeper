@@ -16,6 +16,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 import java.io.Serializable
+import java.time.LocalDate
 import java.time.YearMonth
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
@@ -40,12 +41,12 @@ internal data class MonthlyUserReportEntity(
     @Embeddable
     data class ReportId(
         val userId: Long,
-        val month: YearMonth
+        val yearMonth: LocalDate
     ) : Serializable
 
     override fun toModel(): MonthlyUserReport = MonthlyUserReport(
         userId = reportId.userId.asId(),
-        month = reportId.month,
+        month = YearMonth.from(reportId.yearMonth),
         expenses = expenses.toReport { toPositiveMoney() },
         earnings = earnings.toReport { toPositiveMoney() },
         transfers = earnings.toReport { this },
@@ -55,7 +56,7 @@ internal data class MonthlyUserReportEntity(
 }
 
 internal fun MonthlyUserReport.toMonthlyReportEntity() = MonthlyUserReportEntity(
-    reportId = MonthlyUserReportEntity.ReportId(userId.value, month),
+    reportId = MonthlyUserReportEntity.ReportId(userId.value, month.atDay(1)),
     expenses = expenses.toReportDto(),
     earnings = earnings.toReportDto(),
     transfers = transfers.toReportDto(),

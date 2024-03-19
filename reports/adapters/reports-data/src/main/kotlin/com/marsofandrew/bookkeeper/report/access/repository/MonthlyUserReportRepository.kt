@@ -14,7 +14,7 @@ internal interface MonthlyUserReportRepository : JpaRepository<MonthlyUserReport
     @Query(
         """
             SELECT * FROM bookkeeper.monthly_report
-            WHERE user_id = :userId AND month BETWEEN :startMonth AND :endMonth
+            WHERE user_id = :userId AND year_month BETWEEN :startMonth AND :endMonth
         """,
         nativeQuery = true
     )

@@ -21,7 +21,7 @@ internal class MonthlyUserReportStorageImpl(
         return monthlyUserReportRepository.findById(
             MonthlyUserReportEntity.ReportId(
                 userId = userId.value,
-                month = YearMonth.from(date)
+                yearMonth = YearMonth.from(date).atDay(1)
             )
         ).getOrNull()?.toModel()
     }
