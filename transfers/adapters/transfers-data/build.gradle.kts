@@ -1,5 +1,9 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.23"
+    id("org.springframework.boot") version "3.2.2"
+    id("io.spring.dependency-management") version "1.1.4"
 }
 
 configurations {
@@ -10,9 +14,11 @@ configurations {
 
 dependencies {
     api(project(":transfers:transfers-usecases"))
-    implementation("org.springframework:spring-context:6.1.4")
+    api(project(":common:common-data"))
 
-    testImplementation(project(":transfers:transfers-fixtures"))
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.3")
+
+    testImplementation(testFixtures(project(":transfers:transfers-domain")))
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

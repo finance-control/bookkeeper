@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.spending
 
-import com.marsofandrew.bookkeeper.base.exception.ObjectCreateValidationException
+import com.marsofandrew.bookkeeper.properties.exception.ObjectCreateValidationException
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney

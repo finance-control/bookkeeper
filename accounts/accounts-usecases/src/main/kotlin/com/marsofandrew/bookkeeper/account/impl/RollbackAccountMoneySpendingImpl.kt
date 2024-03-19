@@ -10,7 +10,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 class RollbackAccountMoneySpendingImpl(
     private val accountStorage: AccountStorage,
     private val transactionExecutor: TransactionExecutor
-): RollbackAccountMoneySpending {
+) : RollbackAccountMoneySpending {
     override fun rollbackSpending(userId: NumericId<User>, from: AccountTransferAmount) {
         transactionExecutor.execute {
             val account = accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).topUp(from.money)

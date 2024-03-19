@@ -2,8 +2,8 @@ package com.marsofandrew.bookkeeper.spending
 
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.account.AccountValidator
-import com.marsofandrew.bookkeeper.spending.category.CategoryValidator
+import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.impl.SpendingAddingImpl
 import com.marsofandrew.bookkeeper.spending.impl.SpendingDeletionImpl
 import com.marsofandrew.bookkeeper.spending.impl.SpendingReportCreationImpl
@@ -18,9 +18,9 @@ class SpendingContextConfiguration {
     fun addingSpending(
         spendingStorage: SpendingStorage,
         eventPublisher: EventPublisher,
-        spendingCategoryValidator: CategoryValidator,
-        accountValidator: AccountValidator
-    ): SpendingAdding = SpendingAddingImpl(spendingStorage, eventPublisher, spendingCategoryValidator, accountValidator)
+        spendingCategoryValidator: SpendingCategoryValidator,
+        spendingAccountValidator: SpendingAccountValidator
+    ): SpendingAdding = SpendingAddingImpl(spendingStorage, eventPublisher, spendingCategoryValidator, spendingAccountValidator)
 
     @Bean
     fun creatingSpendingReport(

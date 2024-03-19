@@ -17,10 +17,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("org.springframework.boot:spring-boot-starter-web-services:3.2.3")
-    implementation("org.springframework:spring-context:6.1.4")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
 
     testImplementation(testFixtures(project(":categories:categories-domain")))

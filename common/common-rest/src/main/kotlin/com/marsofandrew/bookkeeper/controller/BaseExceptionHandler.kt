@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.controller
 
-import com.marsofandrew.bookkeeper.base.exception.ValidationException
+import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import com.marsofandrew.bookkeeper.controller.dto.ErrorMessages
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

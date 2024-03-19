@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    id ("java-library")
+    id ("java-test-fixtures")
 }
 
 configurations {

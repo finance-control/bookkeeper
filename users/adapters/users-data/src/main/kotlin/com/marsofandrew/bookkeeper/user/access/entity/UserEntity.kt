@@ -4,15 +4,13 @@ import com.marsofandrew.bookkeeper.data.BaseEntity
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 import java.time.Instant
 
 @Entity
-@Table(name = "app_users", schema = "bookkeeper")
+@Table(name = "app_users")
 internal data class UserEntity(
     @Id
     var id: Long,

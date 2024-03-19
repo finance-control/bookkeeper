@@ -10,8 +10,10 @@ import com.marsofandrew.bookkeeper.spending.SpendingDeletion
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,7 +49,9 @@ internal class SpendingDeletionImplTest {
 
         spendingDeletion.delete(userId, ids + additionalIds)
 
-        verify(exactly = 1) { spendingStorage.delete(ids.toList()) }
+        val capturedIds = slot<Collection<NumericId<Spending>>>()
+        verify(exactly = 1) { spendingStorage.delete(capture(capturedIds)) }
+        capturedIds.captured shouldContainExactlyInAnyOrder ids
 
         verify(exactly = 1) { eventPublisher.publish(spendings.map { it.toRollbackMoneyIsSendEvent() }) }
     }

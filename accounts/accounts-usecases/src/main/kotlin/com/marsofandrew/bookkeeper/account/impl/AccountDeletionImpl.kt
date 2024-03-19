@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import java.time.Clock
 
+//TODO: Refactor
 class AccountDeletionImpl(
     private val accountStorage: AccountStorage,
     private val clock: Clock,
@@ -16,11 +17,12 @@ class AccountDeletionImpl(
 
     override fun delete(userId: NumericId<User>, ids: Set<StringId<Account>>) {
         if (ids.isEmpty()) return
+        val closedAt = clock.date()
 
         accountStorage.findAllByUserIdAndIds(userId, ids)
-            .map { it.id }
+            .map { it.close(closedAt).id }
             .toSet()
             .takeIf { it.isNotEmpty() }
-            ?.let { accountStorage.setForRemovalAndClose(it, clock.date()) }
+            ?.let { accountStorage.setForRemovalAndClose(it, closedAt) }
     }
 }

@@ -8,9 +8,13 @@ import org.springframework.stereotype.Repository
 @Repository
 internal interface SpendingRepository : JpaRepository<SpendingEntity, Long> {
 
-    fun findAllByUserIdAndIdIn(userId: Long, ids: Set<Long>): List<SpendingEntity>
+    fun findAllByUserIdAndIdInOrderByDate(userId: Long, ids: Set<Long>): List<SpendingEntity>
 
-    fun findAllByUserId(userId: Long): List<SpendingEntity>
+    fun findAllByUserIdOrderByDate(userId: Long): List<SpendingEntity>
 
-    fun findAllByUserIdAndDateBetween(userId: Long, startDate: LocalDate, endDate: LocalDate): List<SpendingEntity>
+    fun findAllByUserIdAndDateBetweenOrderByDate(
+        userId: Long,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<SpendingEntity>
 }

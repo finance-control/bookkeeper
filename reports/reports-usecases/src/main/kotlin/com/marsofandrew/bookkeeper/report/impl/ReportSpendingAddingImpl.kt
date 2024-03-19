@@ -1,104 +1,108 @@
 package com.marsofandrew.bookkeeper.report.impl
 
+import com.marsofandrew.bookkeeper.base.model.DomainModel
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.report.BaseUserReport
-import com.marsofandrew.bookkeeper.report.DailyUserReport
-import com.marsofandrew.bookkeeper.report.MonthlyUserReport
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.ReportSpendingAdding
-import com.marsofandrew.bookkeeper.report.YearlyUserReport
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.category.SpendingCategory
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.impl.util.ReportMoneyActionAdder
 import com.marsofandrew.bookkeeper.report.impl.util.aggregate
 import com.marsofandrew.bookkeeper.report.spending.Spending
 import com.marsofandrew.bookkeeper.report.user.User
-import java.time.Year
-import java.time.YearMonth
 
 
 class ReportSpendingAddingImpl(
-    private val dailyUserReportStorage: DailyUserReportStorage,
-    private val monthlyUserReportStorage: MonthlyUserReportStorage,
-    private val yearlyUserReportStorage: YearlyUserReportStorage,
-    private val transactionExecutor: TransactionExecutor,
+    dailyUserReportStorage: DailyUserReportStorage,
+    monthlyUserReportStorage: MonthlyUserReportStorage,
+    yearlyUserReportStorage: YearlyUserReportStorage,
+    transactionExecutor: TransactionExecutor,
 ) : ReportSpendingAdding {
 
+    private val reportSpendingAdder = ReportSpendingAdder(
+        dailyUserReportStorage,
+        monthlyUserReportStorage,
+        yearlyUserReportStorage,
+        transactionExecutor
+    )
+
     override fun add(spending: Spending) {
-        transactionExecutor.execute {
-            val userId = spending.userId
-            val date = spending.date
+        reportSpendingAdder.add(spending)
+    }
 
-            val dailyReport = dailyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { date }, ::DailyUserReport)
-                ?: createReport(spending, { date }, ::DailyUserReport)
-            val monthlyReport = monthlyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { month }, ::MonthlyUserReport)
-                ?: createReport(spending, { YearMonth.from(date) }, ::MonthlyUserReport)
-            val yearlyReport = yearlyUserReportStorage.findByUserIdAndDate(userId, date)
-                ?.add(spending, { year }, ::YearlyUserReport)
-                ?: createReport(spending, { Year.from(date) }, ::YearlyUserReport)
+    private class ReportSpendingAdder(
+        dailyUserReportStorage: DailyUserReportStorage,
+        monthlyUserReportStorage: MonthlyUserReportStorage,
+        yearlyUserReportStorage: YearlyUserReportStorage,
+        transactionExecutor: TransactionExecutor,
+    ) : ReportMoneyActionAdder<Spending>(
+        dailyUserReportStorage,
+        monthlyUserReportStorage,
+        yearlyUserReportStorage,
+        transactionExecutor
+    ) {
+        override fun <T, PeriodType> createReport(
+            moneyAction: Spending,
+            period: Spending.() -> PeriodType,
+            creator: (
+                userId: NumericId<User>,
+                period: PeriodType,
+                expenses: Report<SpendingCategory, PositiveMoney>,
+                earnings: Report<TransferCategory, PositiveMoney>,
+                transfers: Report<TransferCategory, Money>,
+                total: List<Money>,
+                version: Version
+            ) -> T
+        ): T where T : BaseUserReport, T : DomainModel {
+            return creator(
+                moneyAction.userId,
+                moneyAction.period(),
+                Report(
+                    byCategory = mapOf(moneyAction.categoryId to listOf(moneyAction.money)),
+                    total = listOf(moneyAction.money)
+                ),
+                Report.empty(),
+                Report.empty(),
+                listOf(Money(moneyAction.money.currency, -moneyAction.money.amount)),
+                Version(0)
+            )
+        }
 
-            dailyUserReportStorage.createOrUpdate(dailyReport)
-            monthlyUserReportStorage.createOrUpdate(monthlyReport)
-            yearlyUserReportStorage.createOrUpdate(yearlyReport)
+        override fun <T, PeriodType> T.add(
+            moneyAction: Spending,
+            period: T.() -> PeriodType,
+            creator: (
+                userId: NumericId<User>,
+                period: PeriodType,
+                expenses: Report<SpendingCategory, PositiveMoney>,
+                earnings: Report<TransferCategory, PositiveMoney>,
+                transfers: Report<TransferCategory, Money>,
+                total: List<Money>,
+                version: Version
+            ) -> T
+        ): T where T : BaseUserReport, T : DomainModel {
+            require(moneyAction.userId == userId) { "UserId of report ans spending are different" }
+
+            val spendingReport = createReport(moneyAction, { period() }, creator)
+            val aggregatedResult = aggregate(userId, listOf(this, spendingReport), period)
+
+            return creator(
+                userId,
+                period(),
+                aggregatedResult.expenses,
+                aggregatedResult.earnings,
+                aggregatedResult.transfers,
+                aggregatedResult.total,
+                version
+            )
         }
     }
-}
-
-private fun <T : BaseUserReport, PeriodType> createReport(
-    spending: Spending,
-    period: Spending.() -> PeriodType,
-    creator: (
-        userId: NumericId<User>,
-        period: PeriodType,
-        expenses: Report<SpendingCategory, PositiveMoney>,
-        earnings: Report<TransferCategory, PositiveMoney>,
-        transfers: Report<TransferCategory, Money>,
-        total: List<Money>
-    ) -> T
-): T {
-    return creator(
-        spending.userId,
-        spending.period(),
-        Report(
-            byCategory = mapOf(spending.spendingCategoryId to listOf(spending.money)),
-            total = listOf(spending.money)
-        ),
-        Report.empty(),
-        Report.empty(),
-        listOf(Money(spending.money.currency, -spending.money.amount))
-    )
-}
-
-private fun <T : BaseUserReport, PeriodType> T.add(
-    spending: Spending,
-    period: T.() -> PeriodType,
-    creator: (
-        userId: NumericId<User>,
-        period: PeriodType,
-        expenses: Report<SpendingCategory, PositiveMoney>,
-        earnings: Report<TransferCategory, PositiveMoney>,
-        transfers: Report<TransferCategory, Money>,
-        total: List<Money>
-    ) -> T
-): T {
-    require(spending.userId == userId) { "UserId of report ans spending are different" }
-
-    val spendingReport = createReport(spending, { period() }, creator)
-    val aggregatedResult = aggregate(userId, listOf(this, spendingReport), period)
-
-    return creator(
-        userId,
-        period(),
-        aggregatedResult.expenses,
-        aggregatedResult.earnings,
-        aggregatedResult.transfers,
-        aggregatedResult.total
-    )
 }

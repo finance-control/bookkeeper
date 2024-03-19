@@ -24,7 +24,7 @@ internal class AccountMoneyIsTransferredEventListener(
     }
 
     @EventListener(RollbackMoneyIsTransferredEvent::class)
-    fun onRollbackMoneyIsTransferred(event: MoneyIsTransferredEvent) {
+    fun onRollbackMoneyIsTransferred(event: RollbackMoneyIsTransferredEvent) {
         rollbackAccountMoneyTransferring.rollbackTransfer(
             userId = event.userId.asId(),
             from = event.send?.toAccountTransferAmount(),

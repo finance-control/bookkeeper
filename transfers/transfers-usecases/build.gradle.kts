@@ -12,7 +12,7 @@ dependencies {
     api(project(":transfers:transfers-domain"))
     api(project(":common:common-events"))
 
-    testImplementation(project(":transfers:transfers-fixtures"))
+    testImplementation(testFixtures(project(":transfers:transfers-domain")))
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

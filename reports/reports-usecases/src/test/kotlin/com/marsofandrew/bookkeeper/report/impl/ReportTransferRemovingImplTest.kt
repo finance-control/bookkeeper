@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
+import com.marsofandrew.bookkeeper.properties.util.toMoney
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
@@ -14,7 +15,6 @@ import com.marsofandrew.bookkeeper.report.fixture.dailyUserReport
 import com.marsofandrew.bookkeeper.report.fixture.monthlyUserReport
 import com.marsofandrew.bookkeeper.report.fixture.transfer
 import com.marsofandrew.bookkeeper.report.fixture.yearlyUserReport
-import com.marsofandrew.bookkeeper.report.impl.util.toMoney
 import com.marsofandrew.bookkeeper.report.impl.util.unaryMinus
 import com.marsofandrew.bookkeeper.report.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
@@ -79,13 +79,13 @@ internal class ReportTransferRemovingImplTest {
         }
 
         val defaultTransfersReport = Report(
-            byCategory = mapOf(transfer.transferCategoryId to listOf(transfer.received.toMoney(), -transfer.send)),
+            byCategory = mapOf(transfer.categoryId to listOf(transfer.received.toMoney(), -transfer.send)),
             total = listOf(transfer.received.toMoney(), -transfer.send)
         )
 
         val expectedTransfersReport = Report(
             byCategory = mapOf(
-                transfer.transferCategoryId to listOf(
+                transfer.categoryId to listOf(
                     Money.zero(Currency.USD),
                     Money.zero(Currency.EUR)
                 )

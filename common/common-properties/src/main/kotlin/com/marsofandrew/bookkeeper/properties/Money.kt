@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.properties
 
+import com.marsofandrew.bookkeeper.properties.util.normalize
 import java.math.BigDecimal
 import java.util.Objects
 
@@ -13,7 +14,7 @@ data class Money(
     )
 
     override fun plus(money: BaseMoney): Money {
-        check(money.currency == currency) { "you could add only money with same currency" }
+        require(money.currency == currency) { "you could add only money with same currency" }
 
         return Money(
             currency = currency,
@@ -22,7 +23,7 @@ data class Money(
     }
 
     operator fun minus(money: BaseMoney): Money {
-        check(money.currency == currency) { "you could add only money with same currency" }
+        require(money.currency == currency) { "you could add only money with same currency" }
 
         return Money(
             currency = currency,
@@ -37,7 +38,7 @@ data class Money(
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(currency, amount.movePointRight(amount.scale()).longValueExact())
+        return Objects.hash(currency, amount.normalize())
     }
 
     companion object {

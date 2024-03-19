@@ -4,6 +4,8 @@ import com.marsofandrew.bookkeeper.base.utils.summarize
 import com.marsofandrew.bookkeeper.properties.BaseMoney
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
+import com.marsofandrew.bookkeeper.properties.util.toMoney
+import com.marsofandrew.bookkeeper.properties.util.toPositiveMoney
 import com.marsofandrew.bookkeeper.report.transfer.Transfer
 import java.math.BigDecimal
 
@@ -25,10 +27,6 @@ internal val Transfer.totalMoney: List<Money>
 
 internal operator fun PositiveMoney.unaryMinus(): Money = Money(currency, -amount)
 internal operator fun Money.unaryMinus(): Money = copy(amount = -amount)
-
-internal fun PositiveMoney.toMoney() = Money(currency, amount)
-
-internal fun Money.toPositiveMoney() = PositiveMoney(currency, amount)
 
 internal fun List<PositiveMoney>.addNegative(money: Money): List<PositiveMoney> =
     map { it.toMoney() }

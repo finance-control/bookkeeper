@@ -1,3 +1,3 @@
-package com.marsofandrew.bookkeeper.spending.account
+package com.marsofandrew.bookkeeper.transfer.account
 
 class Account

@@ -6,24 +6,29 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.Spending
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 import java.math.BigDecimal
 import java.time.LocalDate
 
 @Entity
-@Table(name = "spending", schema = "bookkeeper")
+@Table(name = "spending")
 internal data class SpendingEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "spending_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, allocationSize = ALLOCATION_SIZE)
     var id: Long?,
     var userId: Long,
     var date: LocalDate,
     var description: String,
     var amount: BigDecimal,
+    @Enumerated(EnumType.STRING)
     var currency: Currency,
     val categoryId: Long,
     var createdAt: LocalDate,
@@ -43,6 +48,11 @@ internal data class SpendingEntity(
         fromAccount = fromAccount?.asId(),
         version = com.marsofandrew.bookkeeper.base.model.Version(version)
     )
+
+    companion object {
+        const val ALLOCATION_SIZE = 1000
+        const val SEQUENCE_NAME = "spending_id_seq"
+    }
 }
 
 internal fun Spending.toSpendingEntity() = SpendingEntity(

@@ -1,9 +1,11 @@
 package com.marsofandrew.bookkeeper.base.model
 
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
+
 data class Version(
     val value: Int
 ) {
     init {
-        check(value >= 0) { "Version is negative" }
+        validateFiled(value >= 0) { "Version is negative" }
     }
 }

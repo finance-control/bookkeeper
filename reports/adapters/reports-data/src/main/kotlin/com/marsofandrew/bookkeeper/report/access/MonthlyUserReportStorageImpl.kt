@@ -1,18 +1,29 @@
 package com.marsofandrew.bookkeeper.report.access
 
+import com.marsofandrew.bookkeeper.data.toModels
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.report.MonthlyUserReport
+import com.marsofandrew.bookkeeper.report.access.entity.MonthlyUserReportEntity
+import com.marsofandrew.bookkeeper.report.access.entity.toMonthlyReportEntity
+import com.marsofandrew.bookkeeper.report.access.repository.MonthlyUserReportRepository
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import java.time.YearMonth
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 internal class MonthlyUserReportStorageImpl(
-    private val reportsByUserId: MutableMap<NumericId<User>, List<MonthlyUserReport>> = mutableMapOf()
+    private val monthlyUserReportRepository: MonthlyUserReportRepository
 ) : MonthlyUserReportStorage {
     override fun findByUserIdAndDate(userId: NumericId<User>, date: LocalDate): MonthlyUserReport? {
-        return reportsByUserId[userId]?.find { it.month == YearMonth.from(date) }
+        return monthlyUserReportRepository.findById(
+            MonthlyUserReportEntity.ReportId(
+                userId = userId.value,
+                month = YearMonth.from(date)
+            )
+        ).getOrNull()?.toModel()
     }
 
     override fun findAllByUserIdBetween(
@@ -20,10 +31,11 @@ internal class MonthlyUserReportStorageImpl(
         startMonth: YearMonth,
         endMonth: YearMonth
     ): List<MonthlyUserReport> {
-        return reportsByUserId[userId]?.filter { it.month in startMonth..endMonth } ?: emptyList()
+        return monthlyUserReportRepository.findAllByUserIdAndDateBetween(userId.value, startMonth, endMonth).toModels()
     }
 
+    @Transactional
     override fun createOrUpdate(report: MonthlyUserReport) {
-        reportsByUserId[report.userId] = reportsByUserId.getOrDefault(report.userId, mutableListOf()) + report
+        monthlyUserReportRepository.saveAndFlush(report.toMonthlyReportEntity())
     }
 }

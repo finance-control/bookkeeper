@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":accounts:accounts-application"))
     implementation(project(":credentials:credentials-application"))
     implementation(project(":users:users-application"))
+    implementation(project(":reports:reports-application"))
 
     implementation(project(":auth:auth-application"))
     implementation(project(":common:common-rest"))
@@ -28,4 +29,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
+
 }

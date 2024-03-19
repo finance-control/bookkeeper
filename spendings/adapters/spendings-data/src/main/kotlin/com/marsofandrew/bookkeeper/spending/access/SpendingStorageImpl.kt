@@ -16,11 +16,12 @@ internal class SpendingStorageImpl(
 ) : SpendingStorage {
 
     override fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Collection<NumericId<Spending>>): Set<Spending> {
-        return spendingRepository.findAllByUserIdAndIdIn(userId.value, ids.mapTo(HashSet()) { it.value }).toModelsSet()
+        return spendingRepository.findAllByUserIdAndIdInOrderByDate(userId.value, ids.mapTo(HashSet()) { it.value })
+            .toModelsSet()
     }
 
     override fun findAllByUserId(userId: NumericId<User>): List<Spending> {
-        return spendingRepository.findAllByUserId(userId.value).toModels()
+        return spendingRepository.findAllByUserIdOrderByDate(userId.value).toModels()
     }
 
     override fun findAllByUserIdBetween(
@@ -28,7 +29,7 @@ internal class SpendingStorageImpl(
         startDate: LocalDate,
         endDate: LocalDate
     ): List<Spending> {
-        return spendingRepository.findAllByUserIdAndDateBetween(userId.value, startDate, endDate).toModels()
+        return spendingRepository.findAllByUserIdAndDateBetweenOrderByDate(userId.value, startDate, endDate).toModels()
     }
 
     override fun create(spending: Spending): Spending {

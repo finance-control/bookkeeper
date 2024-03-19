@@ -6,24 +6,24 @@ import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingAdding
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.account.AccountValidator
-import com.marsofandrew.bookkeeper.spending.category.CategoryValidator
+import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.spending.exception.InvalidCategoryException
 
 class SpendingAddingImpl(
     private val spendingStorage: SpendingStorage,
     private val eventPublisher: EventPublisher,
-    private val categoryValidator: CategoryValidator,
-    private val accountValidator: AccountValidator
+    private val spendingCategoryValidator: SpendingCategoryValidator,
+    private val spendingAccountValidator: SpendingAccountValidator
 ) : SpendingAdding {
 
     override fun add(spending: Spending): Spending {
-        if (!categoryValidator.validate(spending.userId, spending.spendingCategoryId)) {
+        if (!spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId)) {
             throw InvalidCategoryException(spending.spendingCategoryId)
         }
 
-        if (spending.fromAccount?.let { accountValidator.validate(spending.userId, it) } == false) {
+        if (spending.fromAccount?.let { spendingAccountValidator.validate(spending.userId, it) } == false) {
             throw InvalidAccountException(spending.fromAccount!!)
         }
 

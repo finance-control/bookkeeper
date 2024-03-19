@@ -1,11 +1,13 @@
 package com.marsofandrew.bookkeeper.properties.id
 
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
+
 data class NumericId<T>(
     private val inner: Long?
 ) : AbstractId<Long>(inner) {
 
     init {
-        check(inner == null || inner > 0) { "id should be either null or positive" }
+        validateFiled(inner == null || inner > 0) { "id should be either null or positive" }
     }
 
     companion object {

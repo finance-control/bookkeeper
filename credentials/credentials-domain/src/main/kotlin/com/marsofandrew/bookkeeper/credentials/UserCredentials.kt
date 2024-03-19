@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.credentials
 
-import com.marsofandrew.bookkeeper.base.exception.validateFiled
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.credentials.user.User

@@ -6,10 +6,14 @@ enum class Currency(
 ) {
     EUR("Euro", "EUR"),
     RUB("Russian Ruble", "RUB"),
-    USD("US Dollar", "USD");
+    USD("US Dollar", "USD"),
+    GBP("GB Pound", "GBP"),
+    GEL("Georgian Lari", "GEL"),
+    AED("Arab Emirates Dirham", "AED"),
+    RSD("Republic of Serbia Dinar", "RSD");
 
     companion object {
         fun byCodeOrThrow(code: String): Currency = entries
-            .firstOrNull { currency -> currency.code == code } ?: throw Exception("WTF 1") // TODO: fix it
+            .firstOrNull { currency -> currency.code == code } ?: throw IllegalArgumentException(code)
     }
 }

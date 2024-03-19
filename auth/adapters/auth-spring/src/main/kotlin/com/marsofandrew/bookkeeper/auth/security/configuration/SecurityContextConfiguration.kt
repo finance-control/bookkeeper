@@ -46,7 +46,12 @@ internal class SecurityContextConfiguration(
 
         httpSecurity.authorizeRequests { authHttpRequests ->
             authHttpRequests
-                .requestMatchers("/api/v1/users/registration")
+                .requestMatchers(
+                    "/api/v1/users/registration",
+                    "/swagger-ui/**",
+                    "/api/openapi.json",
+                    "/api/openapi.json/**",
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()

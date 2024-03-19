@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.user
 
-import com.marsofandrew.bookkeeper.base.exception.validateFiled
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.user.credentials.UserRawCredentials
 
 data class UnregisteredUser(

@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.transfer.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.id.NumericId
@@ -44,7 +45,8 @@ import org.springframework.test.web.servlet.post
 @ContextConfiguration(
     classes = [
         TransferControllerTest.TestContextConfiguration::class,
-        AuthArgumentContextConfiguration::class]
+        AuthArgumentContextConfiguration::class
+    ]
 )
 internal class TransferControllerTest {
 
@@ -78,7 +80,8 @@ internal class TransferControllerTest {
             createTransferDto.received.toAccountMoney(),
             createTransferDto.description,
             createTransferDto.transferCategoryId.asId(),
-            LocalDate.ofInstant(clock.instant(), ZoneId.of("Z"))
+            LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
+            Version(0)
         )
         val identifiedTransfer = transfer.copy(id = 100.asId())
 

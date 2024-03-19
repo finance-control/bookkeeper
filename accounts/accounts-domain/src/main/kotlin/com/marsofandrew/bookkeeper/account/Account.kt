@@ -1,11 +1,11 @@
 package com.marsofandrew.bookkeeper.account
 
 import com.marsofandrew.bookkeeper.account.user.User
-import com.marsofandrew.bookkeeper.base.exception.validateFiled
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import java.time.LocalDate
@@ -40,5 +40,11 @@ data class Account(
         check(closedAt == null) { "Account $id is already closed" }
         check(status != Status.FOR_REMOVAL) { "Account $id is for removal" }
         return copy(money = this.money - money)
+    }
+
+    fun close(closedAt: LocalDate): Account {
+        check(money == Money.zero(money.currency)) { "Account $id either have non zero balance" }
+
+        return copy(status = Status.FOR_REMOVAL, closedAt = closedAt)
     }
 }

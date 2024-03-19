@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 internal class ReportsContextConfiguration {
 
-
     @Bean
     fun dailyUserReportAggregation(
         dailyUserReportStorage: DailyUserReportStorage

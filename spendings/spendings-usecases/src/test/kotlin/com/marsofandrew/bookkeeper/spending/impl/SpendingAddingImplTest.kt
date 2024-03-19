@@ -6,8 +6,8 @@ import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.account.AccountValidator
-import com.marsofandrew.bookkeeper.spending.category.CategoryValidator
+import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.spending.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.spending.fixture.spending
@@ -21,8 +21,8 @@ import org.junit.jupiter.api.Test
 internal class SpendingAddingImplTest {
 
     private val spendingStorage = mockk<SpendingStorage>()
-    private val categoryValidator = mockk<CategoryValidator>()
-    private val accountValidator = mockk<AccountValidator>()
+    private val spendingCategoryValidator = mockk<SpendingCategoryValidator>()
+    private val spendingAccountValidator = mockk<SpendingAccountValidator>()
 
     private val eventPublisher = mockk<EventPublisher>(relaxUnitFun = true)
 
@@ -30,7 +30,7 @@ internal class SpendingAddingImplTest {
 
     @BeforeEach
     fun setup() {
-        addingSpendingImpl = SpendingAddingImpl(spendingStorage, eventPublisher, categoryValidator, accountValidator)
+        addingSpendingImpl = SpendingAddingImpl(spendingStorage, eventPublisher, spendingCategoryValidator, spendingAccountValidator)
     }
 
     @Test
@@ -40,8 +40,8 @@ internal class SpendingAddingImplTest {
             userId = 5.asId(),
         )
 
-        every { accountValidator.validate(spending.userId, any()) } returns true
-        every { categoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
+        every { spendingAccountValidator.validate(spending.userId, any()) } returns true
+        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
         every { spendingStorage.create(spending) } returns spending
 
         addingSpendingImpl.add(spending)
@@ -66,7 +66,7 @@ internal class SpendingAddingImplTest {
             userId = 5.asId(),
         )
 
-        every { categoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns false
+        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns false
 
         shouldThrowExactly<InvalidCategoryException> {
             addingSpendingImpl.add(spending)
@@ -78,10 +78,12 @@ internal class SpendingAddingImplTest {
         val spending = spending(
             id = NumericId.unidentified(),
             userId = 5.asId(),
-        )
+        ) {
+            fromAccount = "hh".asId()
+        }
 
-        every { categoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
-        every { accountValidator.validate(spending.userId, any()) } returns false
+        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
+        every { spendingAccountValidator.validate(spending.userId, any()) } returns false
 
         shouldThrowExactly<InvalidAccountException> {
             addingSpendingImpl.add(spending)

@@ -13,6 +13,7 @@ class MonthlyUserReportSelectionImpl(
 
     override fun select(userId: NumericId<User>, startMonth: YearMonth, endMonth: YearMonth): List<MonthlyUserReport> {
         require(startMonth <= endMonth) { "endMonth less than startMonth" }
+
         return monthlyUserReportStorage.findAllByUserIdBetween(userId, startMonth, endMonth)
     }
 }

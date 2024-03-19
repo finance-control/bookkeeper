@@ -28,7 +28,6 @@ internal class AccountsController(
 ) {
 
     @GetMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
     fun get(
         @UserId userId: Long
     ): List<AccountDto> {
@@ -36,6 +35,7 @@ internal class AccountsController(
     }
 
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     fun create(
         @UserId userId: Long,
         @RequestBody body: CreateAccountDto
@@ -44,7 +44,7 @@ internal class AccountsController(
     }
 
     @PostMapping("/{id}/close")
-    fun delete(
+    fun close(
         @UserId userId: Long,
         @PathVariable("id") id: String
     ) {

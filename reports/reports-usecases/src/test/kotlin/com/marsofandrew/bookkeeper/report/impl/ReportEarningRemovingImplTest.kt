@@ -75,7 +75,7 @@ internal class ReportEarningRemovingImplTest {
         }
 
         val expectedEarningsReport = Report(
-            byCategory = mapOf(earning.transferCategoryId to listOf(earning.money)),
+            byCategory = mapOf(earning.categoryId to listOf(earning.money)),
             total = listOf(earning.money)
         )
 

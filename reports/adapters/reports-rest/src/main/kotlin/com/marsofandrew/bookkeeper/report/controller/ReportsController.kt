@@ -64,7 +64,7 @@ internal class ReportsController(
         return dailyUserReportAggregation.makeReport(userId.asId(), startDate, endDate).toAggregatedReportDto()
     }
 
-    @GetMapping("/montly/aggregation")
+    @GetMapping("/monthly/aggregation")
     fun aggregateMonthly(
         @UserId userId: Long,
         startMonth: YearMonth,

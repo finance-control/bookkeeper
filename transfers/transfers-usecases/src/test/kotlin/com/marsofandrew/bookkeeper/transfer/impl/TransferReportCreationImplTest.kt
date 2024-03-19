@@ -79,8 +79,8 @@ internal class TransferReportCreationImplTest {
         val report = creatingTransfersReportImpl.createReport(userId, startDate, endDate)
 
         report.total shouldContainExactlyInAnyOrder listOf(
-            Money(Currency.RUB, BigDecimal(30025).movePointLeft(2)),
-            Money(Currency.USD, BigDecimal(-1)),
+            Money(Currency.RUB, 30050, 2),
+            Money(Currency.USD, -1, 0),
             Money(Currency.EUR, 86, 1)
         )
     }

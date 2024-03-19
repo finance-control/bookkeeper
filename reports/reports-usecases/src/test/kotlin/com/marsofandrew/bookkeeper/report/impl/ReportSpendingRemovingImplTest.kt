@@ -75,7 +75,7 @@ internal class ReportSpendingRemovingImplTest {
         }
 
         val expectedExpensesReport = Report(
-            byCategory = mapOf(spending.spendingCategoryId to listOf(spending.money)),
+            byCategory = mapOf(spending.categoryId to listOf(spending.money)),
             total = listOf(spending.money)
         )
 

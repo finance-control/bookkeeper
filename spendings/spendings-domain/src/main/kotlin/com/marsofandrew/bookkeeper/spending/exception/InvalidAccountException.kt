@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.spending.exception
 
-import com.marsofandrew.bookkeeper.base.exception.ValidationException
+import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.spending.account.Account
 

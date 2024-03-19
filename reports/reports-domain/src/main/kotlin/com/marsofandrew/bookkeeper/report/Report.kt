@@ -24,6 +24,7 @@ data class Report<Category, MoneyType : BaseMoney>(
             total = summarize(total, other.total).toList()
         )
     }
+
     companion object {
 
         fun <Category, MoneyType : BaseMoney> empty() = Report<Category, MoneyType>(

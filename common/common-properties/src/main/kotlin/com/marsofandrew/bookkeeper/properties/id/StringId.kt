@@ -1,11 +1,13 @@
 package com.marsofandrew.bookkeeper.properties.id
 
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
+
 data class StringId<T>(
     private val inner: String?
 ) : AbstractId<String>(inner) {
 
     init {
-        check(inner == null || inner.isNotBlank()) { "StringId could not be blank or empty" }
+        validateFiled(inner == null || inner.isNotBlank()) { "StringId could not be blank or empty" }
     }
 
     companion object {

@@ -11,7 +11,7 @@ import jakarta.persistence.Version
 import java.time.Instant
 
 @Entity
-@Table(name = "credentials", schema = "bookkeeper")
+@Table(name = "credentials")
 internal data class CredentialsEntity(
     @Id
     var userId: Long,

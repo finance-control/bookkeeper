@@ -1,10 +1,12 @@
 package com.marsofandrew.bookkeeper.properties.email
 
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
+
 data class Email(
     val value: String
 ) {
     init {
-        check(emailRegex.matches(value)) { "provided value does not match email pattern" }
+        validateFiled(emailRegex.matches(value)) { "provided value does not match email pattern" }
     }
 
     companion object {

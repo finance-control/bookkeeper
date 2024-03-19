@@ -21,7 +21,7 @@ internal class ReportMoneyIsSpendEventListener(
             userId = event.userId.asId(),
             money = event.money.money,
             date = event.date,
-            spendingCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         )
 
         reportSpendingAdding.add(spending)
@@ -33,7 +33,7 @@ internal class ReportMoneyIsSpendEventListener(
             userId = event.userId.asId(),
             money = event.money.money,
             date = event.date,
-            spendingCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         )
 
         reportSpendingRemoving.remove(spending)

@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.transfer.controller.dto
 
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfer.Transfer
@@ -16,13 +17,14 @@ internal data class CreateTransferDto(
     val transferCategoryId: Long,
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Transfer(
-        NumericId.unidentified(),
-        userId,
-        date,
-        send?.toAccountMoney(),
-        received.toAccountMoney(),
-        description,
-        transferCategoryId.asId(),
-        LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
+        id = NumericId.unidentified(),
+        userId = userId,
+        date = date,
+        send = send?.toAccountMoney(),
+        received = received.toAccountMoney(),
+        description = description,
+        transferCategoryId = transferCategoryId.asId(),
+        createdAt = LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
+        version = Version(0)
     )
 }

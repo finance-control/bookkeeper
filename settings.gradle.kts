@@ -28,9 +28,10 @@ include(
     "transfers:transfers-domain",
     "transfers:transfers-usecases",
     "transfers:transfers-application",
-    "transfers:transfers-fixtures",
     "transfers:adapters:transfers-data",
     "transfers:adapters:transfers-rest",
+    "transfers:adapters:transfers-account",
+    "transfers:adapters:transfers-category",
 )
 
 include(
@@ -52,7 +53,6 @@ include(
     "accounts:accounts-domain",
     "accounts:accounts-application",
     "accounts:accounts-usecases",
-    "accounts:accounts-fixtures",
     "accounts:adapters:accounts-data",
     "accounts:adapters:accounts-rest",
     "accounts:adapters:accounts-events",
@@ -62,7 +62,6 @@ include(
     "reports:reports-domain",
     "reports:reports-application",
     "reports:reports-usecases",
-    "reports:reports-fixtures",
     "reports:adapters:reports-data",
     "reports:adapters:reports-events",
     "reports:adapters:reports-rest",

@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.credentials
 
-import com.marsofandrew.bookkeeper.base.exception.ObjectCreateValidationException
+import com.marsofandrew.bookkeeper.properties.exception.ObjectCreateValidationException
 import com.marsofandrew.bookkeeper.properties.email.Email
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe

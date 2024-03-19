@@ -14,6 +14,7 @@ configurations {
 
 dependencies {
     api(project(":common:common-base"))
+
     implementation("org.flywaydb:flyway-maven-plugin:10.9.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.2.3")
 

@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.user.credentials
 
-import com.marsofandrew.bookkeeper.base.exception.validateFiled
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.email.Email
 
 data class UserRawCredentials(

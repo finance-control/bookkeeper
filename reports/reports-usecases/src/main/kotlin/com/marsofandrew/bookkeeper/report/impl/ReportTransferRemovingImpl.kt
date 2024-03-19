@@ -1,70 +1,80 @@
 package com.marsofandrew.bookkeeper.report.impl
 
+import com.marsofandrew.bookkeeper.base.model.DomainModel
+import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.report.BaseUserReport
-import com.marsofandrew.bookkeeper.report.DailyUserReport
-import com.marsofandrew.bookkeeper.report.MonthlyUserReport
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.ReportTransferRemoving
-import com.marsofandrew.bookkeeper.report.YearlyUserReport
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.category.SpendingCategory
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.impl.util.ReportMoneyActionRemover
 import com.marsofandrew.bookkeeper.report.impl.util.addMoney
 import com.marsofandrew.bookkeeper.report.impl.util.unaryMinus
 import com.marsofandrew.bookkeeper.report.transfer.Transfer
 import com.marsofandrew.bookkeeper.report.user.User
 
 class ReportTransferRemovingImpl(
-    private val dailyUserReportStorage: DailyUserReportStorage,
-    private val monthlyUserReportStorage: MonthlyUserReportStorage,
-    private val yearlyUserReportStorage: YearlyUserReportStorage,
-    private val transactionExecutor: TransactionExecutor,
+    dailyUserReportStorage: DailyUserReportStorage,
+    monthlyUserReportStorage: MonthlyUserReportStorage,
+    yearlyUserReportStorage: YearlyUserReportStorage,
+    transactionExecutor: TransactionExecutor,
 ) : ReportTransferRemoving {
 
+    private val reportTransferRemover = ReportTransferRemover(
+        dailyUserReportStorage,
+        monthlyUserReportStorage,
+        yearlyUserReportStorage,
+        transactionExecutor
+    )
+
     override fun remove(transfer: Transfer) {
-        transactionExecutor.execute {
-            val userId = transfer.userId
+        reportTransferRemover.remove(transfer)
+    }
 
-            // TODO: throw appropriate exception
-            val dailyReport = requireNotNull(dailyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
-            val monthlyReport = requireNotNull(monthlyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
-            val yearlyReport = requireNotNull(yearlyUserReportStorage.findByUserIdAndDate(userId, transfer.date))
+    private class ReportTransferRemover(
+        dailyUserReportStorage: DailyUserReportStorage,
+        monthlyUserReportStorage: MonthlyUserReportStorage,
+        yearlyUserReportStorage: YearlyUserReportStorage,
+        transactionExecutor: TransactionExecutor,
+    ) : ReportMoneyActionRemover<Transfer>(
+        dailyUserReportStorage,
+        monthlyUserReportStorage,
+        yearlyUserReportStorage,
+        transactionExecutor
+    ) {
+        override fun <T, PeriodType> T.remove(
+            moneyAction: Transfer,
+            period: T.() -> PeriodType,
+            creator: (
+                userId: NumericId<User>,
+                period: PeriodType,
+                expenses: Report<SpendingCategory, PositiveMoney>,
+                earnings: Report<TransferCategory, PositiveMoney>,
+                transfers: Report<TransferCategory, Money>,
+                total: List<Money>,
+                version: Version
+            ) -> T
+        ): T where T : BaseUserReport, T : DomainModel {
+            require(moneyAction.userId == userId) { "UserId of report ans spending are different" }
 
-            dailyUserReportStorage.createOrUpdate(dailyReport.remove(transfer, { date }, ::DailyUserReport))
-            monthlyUserReportStorage.createOrUpdate(monthlyReport.remove(transfer, { month }, ::MonthlyUserReport))
-            yearlyUserReportStorage.createOrUpdate(yearlyReport.remove(transfer, { year }, ::YearlyUserReport))
+            return creator(
+                userId,
+                period(),
+                expenses,
+                earnings,
+                updateTransfers(transfers, moneyAction),
+                total.removeTransfer(moneyAction),
+                version
+            )
         }
     }
-}
-
-private fun <T : BaseUserReport, PeriodType> T.remove(
-    transfer: Transfer,
-    period: T.() -> PeriodType,
-    creator: (
-        userId: NumericId<User>,
-        period: PeriodType,
-        expenses: Report<SpendingCategory, PositiveMoney>,
-        earnings: Report<TransferCategory, PositiveMoney>,
-        transfers: Report<TransferCategory, Money>,
-        total: List<Money>
-    ) -> T
-): T {
-    require(transfer.userId == userId) { "UserId of report ans spending are different" }
-
-    return creator(
-        userId,
-        period(),
-        expenses,
-        earnings,
-        updateTransfers(transfers, transfer),
-        total.removeTransfer(transfer)
-    )
 }
 
 private fun updateTransfers(
@@ -72,8 +82,8 @@ private fun updateTransfers(
     transfer: Transfer
 ): Report<TransferCategory, Money> {
     val byCategory = transfersReport.byCategory.toMutableMap()
-    byCategory[transfer.transferCategoryId] =
-        requireNotNull(byCategory[transfer.transferCategoryId]).removeTransfer(transfer)
+    byCategory[transfer.categoryId] =
+        requireNotNull(byCategory[transfer.categoryId]).removeTransfer(transfer)
 
     return Report(
         byCategory = byCategory,

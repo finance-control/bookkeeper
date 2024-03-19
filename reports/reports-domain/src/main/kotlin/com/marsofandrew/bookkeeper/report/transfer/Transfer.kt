@@ -1,19 +1,23 @@
 package com.marsofandrew.bookkeeper.report.transfer
 
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.common.WithDate
+import com.marsofandrew.bookkeeper.report.common.WithUserId
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 
 data class Transfer(
-    val userId: NumericId<User>,
-    val date: LocalDate,
+    override val userId: NumericId<User>,
+    override val date: LocalDate,
     val send: PositiveMoney,
     val received: PositiveMoney,
-    val transferCategoryId: NumericId<TransferCategory>,
-) {
+    val categoryId: NumericId<TransferCategory>,
+) : WithUserId, WithDate {
+
     init {
-        check(date >= LocalDate.of(2022, 1, 1)) { "Dates before 2022-01-01 are not supported" }
+        validateFiled(date >= LocalDate.of(2022, 1, 1)) { "Dates before 2022-01-01 are not supported" }
     }
 }

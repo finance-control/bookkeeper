@@ -15,8 +15,7 @@ configurations {
 dependencies {
     api(project(":spendings:spendings-usecases"))
     api(project(":common:common-data"))
-
-    implementation("org.springframework:spring-context:6.1.4")
+    
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.3")
 
     testImplementation(testFixtures(project(":spendings:spendings-domain")))

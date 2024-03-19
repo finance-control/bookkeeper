@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS account
 (
     id        varchar(64) PRIMARY KEY,
     user_id   BIGINT              NOT NULL REFERENCES app_users,
-    money     DECIMAL             NOT NULL,
+    amount    DECIMAL             NOT NULL,
     currency  currency_type       NOT NULL,
     title     varchar(128)        NOT NULL,
     opened_at DATE                NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS spending
     user_id      BIGINT        NOT NULL REFERENCES app_users,
     date         DATE          NOT NULL,
     description  varchar(128)  NOT NULL,
-    amount        DECIMAL       NOT NULL,
+    amount       DECIMAL       NOT NULL,
     currency     currency_type NOT NULL,
     category_id  BIGINT        NOT NULL REFERENCES spending_category,
     created_at   DATE          NOT NULL,
@@ -48,3 +48,4 @@ CREATE TABLE IF NOT EXISTS spending
 
 CREATE INDEX i_spending_user_id ON spending (user_id);
 CREATE INDEX i_spending_user_id_date ON spending (user_id, date);
+ALTER SEQUENCE spending_id_seq INCREMENT BY 1000;

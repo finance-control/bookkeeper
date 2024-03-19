@@ -13,6 +13,7 @@ class DailyUserReportSelectionImpl(
 
     override fun select(userId: NumericId<User>, startDate: LocalDate, endDate: LocalDate): List<DailyUserReport> {
         require(startDate <= endDate) { "endDate less than start date" }
+
         return dailyUserReportStorage.findAllByUserIdBetween(userId, startDate, endDate)
     }
 }

@@ -45,7 +45,7 @@ internal class ReportMoneyIsTransferredEventListener(
                 date = date,
                 send = it.money,
                 received = received.money,
-                transferCategoryId = category.asId()
+                categoryId = category.asId()
             )
         }
 
@@ -55,7 +55,7 @@ internal class ReportMoneyIsTransferredEventListener(
                 userId = userId.asId(),
                 date = date,
                 money = received.money,
-                transferCategoryId = category.asId()
+                categoryId = category.asId()
             )
         } else null
 
@@ -66,7 +66,7 @@ internal class ReportMoneyIsTransferredEventListener(
                 date = date,
                 send = it.money,
                 received = received.money,
-                transferCategoryId = category.asId()
+                categoryId = category.asId()
             )
         }
 
@@ -76,7 +76,7 @@ internal class ReportMoneyIsTransferredEventListener(
                 userId = userId.asId(),
                 date = date,
                 money = received.money,
-                transferCategoryId = category.asId()
+                categoryId = category.asId()
             )
         } else null
 }

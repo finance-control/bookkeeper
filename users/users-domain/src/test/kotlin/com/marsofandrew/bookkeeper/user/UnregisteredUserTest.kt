@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.user
 
-import com.marsofandrew.bookkeeper.base.exception.ObjectCreateValidationException
+import com.marsofandrew.bookkeeper.properties.exception.ObjectCreateValidationException
 import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.user.credentials.UserRawCredentials
 import io.kotest.assertions.throwables.shouldThrowExactly

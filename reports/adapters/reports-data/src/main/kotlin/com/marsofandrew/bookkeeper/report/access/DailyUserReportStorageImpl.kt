@@ -1,18 +1,25 @@
 package com.marsofandrew.bookkeeper.report.access
 
+import com.marsofandrew.bookkeeper.data.toModels
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.report.DailyUserReport
+import com.marsofandrew.bookkeeper.report.access.entity.DailyUserReportEntity
+import com.marsofandrew.bookkeeper.report.access.entity.toDailyReportEntity
+import com.marsofandrew.bookkeeper.report.access.repository.DailyUserReportRepository
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 internal class DailyUserReportStorageImpl(
-    private val reportsByUserId: MutableMap<NumericId<User>, List<DailyUserReport>> = mutableMapOf()
+    private val dailyUserReportRepository: DailyUserReportRepository,
 ) : DailyUserReportStorage {
 
     override fun findByUserIdAndDate(userId: NumericId<User>, date: LocalDate): DailyUserReport? {
-        return reportsByUserId[userId]?.find { it.date == date }
+        return dailyUserReportRepository.findById(DailyUserReportEntity.ReportId(userId.value, date)).getOrNull()
+            ?.toModel()
     }
 
     override fun findAllByUserIdBetween(
@@ -20,10 +27,11 @@ internal class DailyUserReportStorageImpl(
         startDate: LocalDate,
         endDate: LocalDate
     ): List<DailyUserReport> {
-        return reportsByUserId[userId]?.filter { it.date in startDate..endDate } ?: emptyList()
+        return dailyUserReportRepository.findAllByUserIdAndDateBetween(userId.value, startDate, endDate).toModels()
     }
 
+    @Transactional
     override fun createOrUpdate(report: DailyUserReport) {
-        reportsByUserId[report.userId] = reportsByUserId.getOrDefault(report.userId, mutableListOf()) + report
+        dailyUserReportRepository.saveAndFlush(report.toDailyReportEntity())
     }
 }
