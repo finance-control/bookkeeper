@@ -17,7 +17,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
 
-    runtimeOnly("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
 

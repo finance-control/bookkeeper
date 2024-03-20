@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.account.RollbackAccountMoneyTransferring
 import com.marsofandrew.bookkeeper.event.MoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.event.RollbackMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.properties.id.asId
+import org.apache.logging.log4j.LogManager
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
@@ -14,6 +15,8 @@ internal class AccountMoneyIsTransferredEventListener(
     private val rollbackAccountMoneyTransferring: RollbackAccountMoneyTransferring
 ) {
 
+    private val logger = LogManager.getLogger()
+
     @EventListener(MoneyIsTransferredEvent::class)
     fun onMoneyIsTransferred(event: MoneyIsTransferredEvent) {
         accountMoneyTransferring.transfer(
@@ -21,6 +24,7 @@ internal class AccountMoneyIsTransferredEventListener(
             from = event.send?.toAccountTransferAmount(),
             to = event.received.toAccountTransferAmount()
         )
+        logger.info("MoneyIsTransferredEvent $event has been handled by accounts")
     }
 
     @EventListener(RollbackMoneyIsTransferredEvent::class)
@@ -30,5 +34,6 @@ internal class AccountMoneyIsTransferredEventListener(
             from = event.send?.toAccountTransferAmount(),
             to = event.received.toAccountTransferAmount()
         )
+        logger.info("RollbackMoneyIsTransferredEvent $event has been handled by accounts")
     }
 }

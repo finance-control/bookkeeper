@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":common:common-events"))
 
     implementation("org.springframework:spring-context:6.1.4")
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
 
     testImplementation(testFixtures(project(":accounts:accounts-domain")))
 
