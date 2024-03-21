@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  bookkeeper-db:
+    container_name: bookkeeper-db
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgresql
+    expose:
+      - 5432
+    ports:
+      - '5432:5432'
+
+  bookkeeper-backend:
+    container_name: bookkeeper-backend
+    restart: always
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - bookkeeper-db
+    network_mode: host

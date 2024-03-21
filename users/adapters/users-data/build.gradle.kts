@@ -2,10 +2,8 @@ plugins {
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.23"
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.2.2" apply false
     id("io.spring.dependency-management") version "1.1.4"
-    id("java-library")
-    id("java-test-fixtures")
 }
 
 configurations {
@@ -29,5 +27,5 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.19.7")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
 
-    testFixturesApi(testFixtures(project(":users:users-domain")))
+    testImplementation(testFixtures(project(":users:users-domain")))
 }
