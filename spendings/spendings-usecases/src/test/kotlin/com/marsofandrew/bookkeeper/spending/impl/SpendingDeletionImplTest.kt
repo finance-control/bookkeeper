@@ -60,6 +60,6 @@ internal class SpendingDeletionImplTest {
 private fun Spending.toRollbackMoneyIsSendEvent() = RollbackMoneyIsSpendEvent(
     userId = userId.value,
     date = date,
-    money = AccountBondedMoney(money, fromAccount?.value),
+    money = AccountBondedMoney(money, sourceAccountId?.value),
     category = spendingCategoryId.value
 )

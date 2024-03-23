@@ -23,7 +23,7 @@ internal data class CreateSpendingDto(
         description = description,
         spendingCategoryId = spendingCategoryId.asId(),
         createdAt = clock.date(),
-        fromAccount = money.accountId?.asId(),
+        sourceAccountId = money.accountId?.asId(),
         version = Version(0)
     )
 }

@@ -34,8 +34,8 @@ internal data class TransferEntity(
     var sendCurrency: Currency?,
     @Enumerated(EnumType.STRING)
     var receivedCurrency: Currency,
-    var fromAccount: String?,
-    var toAccount: String?,
+    var sourceAccountId: String?,
+    var destinationAccountId: String?,
     val categoryId: Long,
     var createdAt: LocalDate,
     @Version
@@ -49,12 +49,12 @@ internal data class TransferEntity(
         send = sendAmount?.let {
             AccountMoney(
                 money = PositiveMoney(requireNotNull(sendCurrency) { "sendCurrency is null" }, it),
-                accountId = fromAccount?.asId()
+                accountId = sourceAccountId?.asId()
             )
         },
         received = AccountMoney(
             money = PositiveMoney(receivedCurrency, receivedAmount),
-            accountId = toAccount?.asId()
+            accountId = destinationAccountId?.asId()
         ),
         description = description,
         transferCategoryId = categoryId.asId(),
@@ -77,8 +77,8 @@ internal fun Transfer.toTransferEntity() = TransferEntity(
     receivedAmount = received.money.amount,
     sendCurrency = send?.money?.currency,
     receivedCurrency = received.money.currency,
-    fromAccount = send?.accountId?.value,
-    toAccount = received.accountId?.value,
+    sourceAccountId = send?.accountId?.value,
+    destinationAccountId = received.accountId?.value,
     categoryId = transferCategoryId.value,
     createdAt = createdAt,
     version = version.value

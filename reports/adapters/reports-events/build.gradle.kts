@@ -12,6 +12,8 @@ dependencies {
     api(project(":reports:reports-usecases"))
     implementation(project(":common:common-events"))
 
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.springframework:spring-context:6.1.4")
 
     testImplementation(testFixtures(project(":reports:reports-domain")))

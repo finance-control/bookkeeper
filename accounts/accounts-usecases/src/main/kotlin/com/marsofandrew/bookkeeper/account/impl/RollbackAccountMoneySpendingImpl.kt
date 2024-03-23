@@ -11,9 +11,9 @@ class RollbackAccountMoneySpendingImpl(
     private val accountStorage: AccountStorage,
     private val transactionExecutor: TransactionExecutor
 ) : RollbackAccountMoneySpending {
-    override fun rollbackSpending(userId: NumericId<User>, from: AccountTransferAmount) {
+    override fun rollbackSpending(userId: NumericId<User>, source: AccountTransferAmount) {
         transactionExecutor.execute {
-            val account = accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).topUp(from.money)
+            val account = accountStorage.findByUserIdAndIdOrThrow(userId, source.accountId).topUp(source.money)
             accountStorage.setMoney(account.id, account.money)
         }
     }

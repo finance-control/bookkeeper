@@ -6,5 +6,5 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 interface RollbackAccountMoneyTransferring {
 
-    fun rollbackTransfer(userId: NumericId<User>, from: AccountTransferAmount?, to: AccountTransferAmount?)
+    fun rollbackTransfer(userId: NumericId<User>, source: AccountTransferAmount?, destination: AccountTransferAmount?)
 }

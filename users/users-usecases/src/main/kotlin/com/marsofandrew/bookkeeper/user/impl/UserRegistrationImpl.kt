@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.user.UserRegistration
 import com.marsofandrew.bookkeeper.user.access.UserStorage
 import com.marsofandrew.bookkeeper.user.credentials.UserCredentialsSetter
 import java.time.Clock
+import org.apache.logging.log4j.LogManager
 
 class UserRegistrationImpl(
     private val userStorage: UserStorage,
@@ -16,6 +17,8 @@ class UserRegistrationImpl(
     private val transactionExecutor: TransactionExecutor,
     private val clock: Clock
 ) : UserRegistration {
+
+    private val logger = LogManager.getLogger()
 
     override fun register(unregisteredUser: UnregisteredUser): NumericId<User> {
         val forSave = unregisteredUser.toUser()
@@ -26,6 +29,8 @@ class UserRegistrationImpl(
                 userRawCredentials = unregisteredUser.rawCredentials
             )
             user.id
+        }.also {
+            logger.info("User with id $it was created")
         }
     }
 

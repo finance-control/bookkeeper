@@ -19,7 +19,7 @@ data class Spending(
     val description: String,
     val spendingCategoryId: NumericId<SpendingCategory>,
     val createdAt: LocalDate,
-    val fromAccount: StringId<Account>?,
+    val sourceAccountId: StringId<Account>?,
     override val version: Version
 ) : DomainModel {
     init {

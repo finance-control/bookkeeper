@@ -63,7 +63,7 @@ internal class TransferSelectionImplTest {
     }
 
     @Test
-    fun `select when start date and end date are provided returns transfers from between that dates`() {
+    fun `select when start date and end date are provided returns transfers between that dates`() {
         val now = LocalDate.now()
         val date1 = now.minusDays(1)
 

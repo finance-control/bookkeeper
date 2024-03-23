@@ -38,15 +38,15 @@ internal class RollbackAccountMoneyTransferringImplTest {
     }
 
     @Test
-    fun `rollbackTransfer then from is null then withdraws from 'to' account`() {
+    fun `rollbackTransfer then source is null then withdraws from destination account`() {
         val account = account("5".asId(), userId) { money = Money(Currency.EUR, 5, 0) }
 
         every { accountStorage.findByUserIdAndIdOrThrow(userId, account.id) } returns account
 
         rollbackAccountMoneyTransferringImpl.rollbackTransfer(
             userId = userId,
-            from = null,
-            to = AccountTransferAmount(
+            source = null,
+            destination = AccountTransferAmount(
                 accountId = account.id,
                 money = PositiveMoney(Currency.EUR, 10, 1)
             )
@@ -57,18 +57,18 @@ internal class RollbackAccountMoneyTransferringImplTest {
     }
 
     @Test
-    fun `rollbackTransfer then to is null then topUps 'from' account`() {
+    fun `rollbackTransfer then destination is null then topUps source account`() {
         val account = account("5".asId(), userId) { money = Money(Currency.EUR, 5, 0) }
 
         every { accountStorage.findByUserIdAndIdOrThrow(userId, account.id) } returns account
 
         rollbackAccountMoneyTransferringImpl.rollbackTransfer(
             userId = userId,
-            from = AccountTransferAmount(
+            source = AccountTransferAmount(
                 accountId = account.id,
                 money = PositiveMoney(Currency.EUR, 10, 1)
             ),
-            to = null
+            destination = null
         )
 
         verify(exactly = 1) { accountStorage.findByUserIdAndIdOrThrow(userId, account.id) }
@@ -76,44 +76,44 @@ internal class RollbackAccountMoneyTransferringImplTest {
     }
 
     @Test
-    fun `rollbackTransfer when 'to' and 'from' arguments are null then do nothing`() {
+    fun `rollbackTransfer when destination and source arguments are null then do nothing`() {
         rollbackAccountMoneyTransferringImpl.rollbackTransfer(
             userId = userId,
-            from = null,
-            to = null
+            source = null,
+            destination = null
         )
 
         verify { accountStorage wasNot Called }
     }
 
     @Test
-    fun `rollbackTransfer when all parameters are set then topUps 'from' account and withdraws from 'to' account`() {
-        val fromAccount = account("5".asId(), userId) { money = Money(Currency.EUR, 5, 0) }
-        val toAccount = account("6".asId(), userId) { money = Money(Currency.USD, 5, 0) }
+    fun `rollbackTransfer when all parameters are set then topUps source account and withdraws from destination account`() {
+        val sourceAccount = account("5".asId(), userId) { money = Money(Currency.EUR, 5, 0) }
+        val destinationAccount = account("6".asId(), userId) { money = Money(Currency.USD, 5, 0) }
 
-        every { accountStorage.findByUserIdAndIdOrThrow(userId, fromAccount.id) } returns fromAccount
-        every { accountStorage.findByUserIdAndIdOrThrow(userId, toAccount.id) } returns toAccount
+        every { accountStorage.findByUserIdAndIdOrThrow(userId, sourceAccount.id) } returns sourceAccount
+        every { accountStorage.findByUserIdAndIdOrThrow(userId, destinationAccount.id) } returns destinationAccount
 
         rollbackAccountMoneyTransferringImpl.rollbackTransfer(
             userId = userId,
-            from = AccountTransferAmount(
-                accountId = fromAccount.id,
+            source = AccountTransferAmount(
+                accountId = sourceAccount.id,
                 money = PositiveMoney(Currency.EUR, 10, 1)
             ),
-            to =  AccountTransferAmount(
-                accountId = toAccount.id,
+            destination =  AccountTransferAmount(
+                accountId = destinationAccount.id,
                 money = PositiveMoney(Currency.USD, 11, 1)
             )
         )
 
-        verify(exactly = 1) { accountStorage.findByUserIdAndIdOrThrow(userId, fromAccount.id) }
-        verify(exactly = 1) { accountStorage.setMoney(fromAccount.id, Money(Currency.EUR, 6, 0)) }
-        verify(exactly = 1) { accountStorage.findByUserIdAndIdOrThrow(userId, toAccount.id) }
-        verify(exactly = 1) { accountStorage.setMoney(toAccount.id, Money(Currency.USD, 39, 1)) }
+        verify(exactly = 1) { accountStorage.findByUserIdAndIdOrThrow(userId, sourceAccount.id) }
+        verify(exactly = 1) { accountStorage.setMoney(sourceAccount.id, Money(Currency.EUR, 6, 0)) }
+        verify(exactly = 1) { accountStorage.findByUserIdAndIdOrThrow(userId, destinationAccount.id) }
+        verify(exactly = 1) { accountStorage.setMoney(destinationAccount.id, Money(Currency.USD, 39, 1)) }
     }
 
     @Test
-    fun `rollbackTransfer throws exception when account from 'to' account is absent`() {
+    fun `rollbackTransfer throws exception when destination account is absent`() {
         val id = "ss".asId<Account>()
 
         every { accountStorage.findByUserIdAndIdOrThrow(userId, id) } throws DomainModelNotFoundException(id)
@@ -121,8 +121,8 @@ internal class RollbackAccountMoneyTransferringImplTest {
         shouldThrowExactly<DomainModelNotFoundException> {
             rollbackAccountMoneyTransferringImpl.rollbackTransfer(
                 userId = userId,
-                from = null,
-                to = AccountTransferAmount(
+                source = null,
+                destination = AccountTransferAmount(
                     accountId = id,
                     money = PositiveMoney(Currency.EUR, 10, 1)
                 )
@@ -133,7 +133,7 @@ internal class RollbackAccountMoneyTransferringImplTest {
     }
 
     @Test
-    fun `rollbackTransfer throws exception when account from 'from' account is absent`() {
+    fun `rollbackTransfer throws exception when source account is absent`() {
         val id = "ss".asId<Account>()
 
         every { accountStorage.findByUserIdAndIdOrThrow(userId, id) } throws DomainModelNotFoundException(id)
@@ -141,11 +141,11 @@ internal class RollbackAccountMoneyTransferringImplTest {
         shouldThrowExactly<DomainModelNotFoundException> {
             rollbackAccountMoneyTransferringImpl.rollbackTransfer(
                 userId = userId,
-                from = AccountTransferAmount(
+                source = AccountTransferAmount(
                     accountId = id,
                     money = PositiveMoney(Currency.EUR, 10, 1)
                 ),
-                to = null
+                destination = null
             )
         }
 

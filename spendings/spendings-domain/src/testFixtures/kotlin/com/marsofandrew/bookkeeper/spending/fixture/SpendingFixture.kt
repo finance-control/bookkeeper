@@ -22,7 +22,7 @@ data class SpendingFixture(
     var description: String = "test"
     var spendingCategoryId: NumericId<SpendingCategory> = 1.asId()
     var createdAt: LocalDate = LocalDate.now()
-    var fromAccount: StringId<Account>? = null
+    var sourceAccountId: StringId<Account>? = null
     var version: Version = Version(0)
 
     fun build() = Spending(
@@ -33,7 +33,7 @@ data class SpendingFixture(
         description,
         spendingCategoryId,
         createdAt,
-        fromAccount,
+        sourceAccountId,
         version
     )
 }

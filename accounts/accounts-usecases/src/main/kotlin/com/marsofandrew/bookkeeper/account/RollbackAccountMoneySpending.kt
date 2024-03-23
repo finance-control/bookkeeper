@@ -6,5 +6,5 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 interface RollbackAccountMoneySpending {
 
-    fun rollbackSpending(userId: NumericId<User>, from: AccountTransferAmount)
+    fun rollbackSpending(userId: NumericId<User>, source: AccountTransferAmount)
 }

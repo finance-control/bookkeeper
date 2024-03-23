@@ -10,6 +10,7 @@ import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
 import com.marsofandrew.bookkeeper.credentials.exception.EmailAlreadyInUseException
 import java.time.Clock
 import java.time.Instant
+import org.apache.logging.log4j.LogManager
 
 class CredentialsSettingImpl(
     private val credentialsEncoder: CredentialsEncoder,
@@ -17,6 +18,8 @@ class CredentialsSettingImpl(
     private val clock: Clock,
     private val transactionExecutor: TransactionExecutor
 ) : CredentialsSetting {
+
+    private val logger = LogManager.getLogger()
 
     override fun set(credential: RawUserCredentials) {
         transactionExecutor.execute {
@@ -26,6 +29,8 @@ class CredentialsSettingImpl(
             }
             val encrypted = credential.toCredentials(clock.instant(), currentCredentials?.version)
             credentialsStorage.createOrUpdate(encrypted)
+        }.also {
+            logger.info("Credentials for user ${credential.userId} were updated")
         }
     }
 

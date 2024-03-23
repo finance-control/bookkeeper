@@ -21,8 +21,8 @@ internal class AccountMoneyIsTransferredEventListener(
     fun onMoneyIsTransferred(event: MoneyIsTransferredEvent) {
         accountMoneyTransferring.transfer(
             userId = event.userId.asId(),
-            from = event.send?.toAccountTransferAmount(),
-            to = event.received.toAccountTransferAmount()
+            source = event.send?.toAccountTransferAmount(),
+            destination = event.received.toAccountTransferAmount()
         )
         logger.info("MoneyIsTransferredEvent $event has been handled by accounts")
     }
@@ -31,8 +31,8 @@ internal class AccountMoneyIsTransferredEventListener(
     fun onRollbackMoneyIsTransferred(event: RollbackMoneyIsTransferredEvent) {
         rollbackAccountMoneyTransferring.rollbackTransfer(
             userId = event.userId.asId(),
-            from = event.send?.toAccountTransferAmount(),
-            to = event.received.toAccountTransferAmount()
+            source = event.send?.toAccountTransferAmount(),
+            destination = event.received.toAccountTransferAmount()
         )
         logger.info("RollbackMoneyIsTransferredEvent $event has been handled by accounts")
     }

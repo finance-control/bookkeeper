@@ -34,16 +34,16 @@ CREATE INDEX i_account_user_id ON account (user_id);
 
 CREATE TABLE IF NOT EXISTS spending
 (
-    id           BIGSERIAL PRIMARY KEY,
-    user_id      BIGINT        NOT NULL REFERENCES app_users,
-    date         DATE          NOT NULL,
-    description  varchar(128)  NOT NULL,
-    amount       DECIMAL       NOT NULL,
-    currency     currency_type NOT NULL,
-    category_id  BIGINT        NOT NULL REFERENCES spending_category,
-    created_at   DATE          NOT NULL,
-    from_account varchar(64) REFERENCES account,
-    version      INT           NOT NULL
+    id                BIGSERIAL PRIMARY KEY,
+    user_id           BIGINT        NOT NULL REFERENCES app_users,
+    date              DATE          NOT NULL,
+    description       varchar(128)  NOT NULL,
+    amount            DECIMAL       NOT NULL,
+    currency          currency_type NOT NULL,
+    category_id       BIGINT        NOT NULL REFERENCES spending_category,
+    created_at        DATE          NOT NULL,
+    source_account_id varchar(64) REFERENCES account,
+    version           INT           NOT NULL
 );
 
 CREATE INDEX i_spending_user_id ON spending (user_id);

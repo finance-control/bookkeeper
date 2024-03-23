@@ -6,6 +6,7 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.report.ReportSpendingAdding
 import com.marsofandrew.bookkeeper.report.ReportSpendingRemoving
 import com.marsofandrew.bookkeeper.report.spending.Spending
+import org.apache.logging.log4j.LogManager
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
@@ -14,6 +15,8 @@ internal class ReportMoneyIsSpendEventListener(
     private val reportSpendingAdding: ReportSpendingAdding,
     private val reportSpendingRemoving: ReportSpendingRemoving
 ) {
+
+    private val logger = LogManager.getLogger()
 
     @EventListener(MoneyIsSpendEvent::class)
     fun onMoneyIsSpent(event: MoneyIsSpendEvent) {
@@ -25,6 +28,7 @@ internal class ReportMoneyIsSpendEventListener(
         )
 
         reportSpendingAdding.add(spending)
+        logger.info("MoneyIsSpendEvent $event was handled by Reports")
     }
 
     @EventListener(RollbackMoneyIsSpendEvent::class)
@@ -37,5 +41,7 @@ internal class ReportMoneyIsSpendEventListener(
         )
 
         reportSpendingRemoving.remove(spending)
+
+        logger.info("RollbackMoneyIsSpendEvent $event was handled by Reports")
     }
 }

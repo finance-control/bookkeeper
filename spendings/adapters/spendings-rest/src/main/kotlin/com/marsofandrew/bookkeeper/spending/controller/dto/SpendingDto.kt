@@ -14,7 +14,7 @@ internal data class SpendingDto(
 internal fun Spending.toSpendingDto() = SpendingDto(
     id.value,
     userId.value,
-    AccountBoundedMoneyDto(money.toPositiveMoneyDto(), fromAccount?.value),
+    AccountBoundedMoneyDto(money.toPositiveMoneyDto(), sourceAccountId?.value),
     date.toString(),
     description,
     spendingCategoryId.value,

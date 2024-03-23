@@ -27,7 +27,7 @@ internal class SpendingTest {
                 description = "dsd",
                 spendingCategoryId = 465.asId(),
                 createdAt = LocalDate.of(2023, 12, 20),
-                fromAccount = null,
+                sourceAccountId = null,
                 version = Version(0)
             )
         }
@@ -44,7 +44,7 @@ internal class SpendingTest {
                 description = "dsd",
                 spendingCategoryId = 465.asId(),
                 createdAt = LocalDate.of(2024, 12, 20),
-                fromAccount = null,
+                sourceAccountId = null,
                 version = Version(0)
             )
         }
@@ -59,7 +59,7 @@ internal class SpendingTest {
         val description = "dhjw"
         val categoryId = 465.asId<SpendingCategory>()
         val createdAt = LocalDate.of(2024, 12, 20)
-        val fromAccount = "test".asId<Account>()
+        val sourceAccountId = "test".asId<Account>()
 
         val result = Spending(
             id = id,
@@ -69,7 +69,7 @@ internal class SpendingTest {
             description = description,
             spendingCategoryId = categoryId,
             createdAt = createdAt,
-            fromAccount = fromAccount,
+            sourceAccountId = sourceAccountId,
             version = Version(0)
         )
 
@@ -80,6 +80,6 @@ internal class SpendingTest {
         result.description shouldBe description
         result.spendingCategoryId shouldBe categoryId
         result.createdAt shouldBe createdAt
-        result.fromAccount shouldBe fromAccount
+        result.sourceAccountId shouldBe sourceAccountId
     }
 }

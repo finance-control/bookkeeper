@@ -10,6 +10,7 @@ import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.spending.exception.InvalidCategoryException
+import org.apache.logging.log4j.LogManager
 
 class SpendingAddingImpl(
     private val spendingStorage: SpendingStorage,
@@ -18,16 +19,20 @@ class SpendingAddingImpl(
     private val spendingAccountValidator: SpendingAccountValidator
 ) : SpendingAdding {
 
+    private val logger = LogManager.getLogger()
+
     override fun add(spending: Spending): Spending {
         if (!spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId)) {
             throw InvalidCategoryException(spending.spendingCategoryId)
         }
 
-        if (spending.fromAccount?.let { spendingAccountValidator.validate(spending.userId, it) } == false) {
-            throw InvalidAccountException(spending.fromAccount!!)
+        if (spending.sourceAccountId?.let { spendingAccountValidator.validate(spending.userId, it) } == false) {
+            throw InvalidAccountException(spending.sourceAccountId!!)
         }
 
         val createdSpending = spendingStorage.create(spending)
+        logger.info("Spending with id ${createdSpending.id} was created")
+
         eventPublisher.publish(createdSpending.toMoneyIsSpendEvent())
         return createdSpending
     }
@@ -36,6 +41,6 @@ class SpendingAddingImpl(
 private fun Spending.toMoneyIsSpendEvent() = MoneyIsSpendEvent(
     userId = userId.value,
     date = date,
-    money = AccountBondedMoney(money, fromAccount?.value),
+    money = AccountBondedMoney(money, sourceAccountId?.value),
     category = spendingCategoryId.value
 )

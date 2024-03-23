@@ -52,7 +52,7 @@ internal class SpendingAddingImplTest {
                 MoneyIsSpendEvent(
                     spending.userId.value,
                     spending.date,
-                    AccountBondedMoney(spending.money, spending.fromAccount?.value),
+                    AccountBondedMoney(spending.money, spending.sourceAccountId?.value),
                     spending.spendingCategoryId.value
                 )
             )
@@ -79,7 +79,7 @@ internal class SpendingAddingImplTest {
             id = NumericId.unidentified(),
             userId = 5.asId(),
         ) {
-            fromAccount = "hh".asId()
+            sourceAccountId = "hh".asId()
         }
 
         every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true

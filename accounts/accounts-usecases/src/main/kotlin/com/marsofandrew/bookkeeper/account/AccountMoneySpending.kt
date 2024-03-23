@@ -6,5 +6,5 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 interface AccountMoneySpending {
 
-    fun spend(userId: NumericId<User>, from: AccountTransferAmount)
+    fun spend(userId: NumericId<User>, source: AccountTransferAmount)
 }

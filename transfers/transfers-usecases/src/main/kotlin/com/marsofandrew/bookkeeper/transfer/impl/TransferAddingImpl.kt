@@ -13,6 +13,7 @@ import com.marsofandrew.bookkeeper.transfer.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfer.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfer.impl.utils.toAccountBoundedMoney
 import com.marsofandrew.bookkeeper.transfer.user.User
+import org.apache.logging.log4j.LogManager
 
 class TransferAddingImpl(
     private val transferStorage: TransferStorage,
@@ -20,6 +21,8 @@ class TransferAddingImpl(
     private val transferAccountValidator: TransferAccountValidator,
     private val transferCategoryValidator: TransferCategoryValidator
 ) : TransferAdding {
+
+    private val logger = LogManager.getLogger()
 
     override fun add(transfer: Transfer): Transfer {
         if (!transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId)) {
@@ -29,6 +32,8 @@ class TransferAddingImpl(
         transfer.send?.let { transferAccountValidator.validate(transfer.userId, it) }
 
         val createdTransfer = transferStorage.create(transfer)
+        logger.info("Transfer with id ${createdTransfer.id} was created")
+
         eventPublisher.publish(createdTransfer.toMoneyIsTransferredEvent())
         return createdTransfer
     }

@@ -12,13 +12,19 @@ class RollbackAccountMoneyTransferringImpl(
     private val transactionExecutor: TransactionExecutor
 ) : RollbackAccountMoneyTransferring {
 
-    override fun rollbackTransfer(userId: NumericId<User>, from: AccountTransferAmount?, to: AccountTransferAmount?) {
+    override fun rollbackTransfer(
+        userId: NumericId<User>,
+        source: AccountTransferAmount?,
+        destination: AccountTransferAmount?
+    ) {
         transactionExecutor.execute {
-            val toAccount = to?.let { accountStorage.findByUserIdAndIdOrThrow(userId, to.accountId).withdraw(to.money) }
-            val fromAccount =
-                from?.let { accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).topUp(from.money) }
+            val destinationAccount = destination?.let {
+                accountStorage.findByUserIdAndIdOrThrow(userId, destination.accountId).withdraw(destination.money)
+            }
+            val sourceAccount =
+                source?.let { accountStorage.findByUserIdAndIdOrThrow(userId, source.accountId).topUp(source.money) }
 
-            listOf(toAccount, fromAccount)
+            listOf(destinationAccount, sourceAccount)
                 .forEach { account ->
                     account?.let {
                         accountStorage.setMoney(it.id, it.money)

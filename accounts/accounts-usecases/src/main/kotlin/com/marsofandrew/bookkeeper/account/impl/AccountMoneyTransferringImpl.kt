@@ -12,13 +12,19 @@ class AccountMoneyTransferringImpl(
     private val transactionExecutor: TransactionExecutor
 ) : AccountMoneyTransferring {
 
-    override fun transfer(userId: NumericId<User>, from: AccountTransferAmount?, to: AccountTransferAmount?) {
+    override fun transfer(
+        userId: NumericId<User>,
+        source: AccountTransferAmount?,
+        destination: AccountTransferAmount?
+    ) {
         transactionExecutor.execute {
-            val toAccount = to?.let { accountStorage.findByUserIdAndIdOrThrow(userId, to.accountId).topUp(to.money) }
-            val fromAccount =
-                from?.let { accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).withdraw(from.money) }
+            val destinationAccount = destination?.let {
+                accountStorage.findByUserIdAndIdOrThrow(userId, destination.accountId).topUp(destination.money)
+            }
+            val sourceAccount =
+                source?.let { accountStorage.findByUserIdAndIdOrThrow(userId, source.accountId).withdraw(source.money) }
 
-            listOf(toAccount, fromAccount)
+            listOf(destinationAccount, sourceAccount)
                 .forEach { account ->
                     account?.let {
                         accountStorage.setMoney(it.id, it.money)

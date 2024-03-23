@@ -32,7 +32,7 @@ internal data class SpendingEntity(
     var currency: Currency,
     val categoryId: Long,
     var createdAt: LocalDate,
-    var fromAccount: String?,
+    var sourceAccountId: String?,
     @Version
     var version: Int
 ) : BaseEntity<Spending> {
@@ -45,7 +45,7 @@ internal data class SpendingEntity(
         money = PositiveMoney(currency, amount),
         spendingCategoryId = categoryId.asId(),
         createdAt = createdAt,
-        fromAccount = fromAccount?.asId(),
+        sourceAccountId = sourceAccountId?.asId(),
         version = com.marsofandrew.bookkeeper.base.model.Version(version)
     )
 
@@ -64,6 +64,6 @@ internal fun Spending.toSpendingEntity() = SpendingEntity(
     currency = money.currency,
     categoryId = spendingCategoryId.value,
     createdAt = createdAt,
-    fromAccount = fromAccount?.value,
+    sourceAccountId = sourceAccountId?.value,
     version = version.value
 )

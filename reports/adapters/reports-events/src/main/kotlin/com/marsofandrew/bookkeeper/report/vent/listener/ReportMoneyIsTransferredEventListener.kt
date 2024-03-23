@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.report.ReportTransferAdding
 import com.marsofandrew.bookkeeper.report.ReportTransferRemoving
 import com.marsofandrew.bookkeeper.report.earning.Earning
 import com.marsofandrew.bookkeeper.report.transfer.Transfer
+import org.apache.logging.log4j.LogManager
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
@@ -20,6 +21,8 @@ internal class ReportMoneyIsTransferredEventListener(
     private val reportEarningRemoving: ReportEarningRemoving
 ) {
 
+    private val logger = LogManager.getLogger()
+
     @EventListener(MoneyIsTransferredEvent::class)
     fun onMoneyIsTransferred(event: MoneyIsTransferredEvent) {
         val transfer = event.toTransfer()
@@ -27,6 +30,8 @@ internal class ReportMoneyIsTransferredEventListener(
 
         transfer?.let { reportTransferAdding.add(it) }
         earning?.let { reportEarningAdding.add(it) }
+
+        logger.info("MoneyIsTransferredEvent $event was handled by Reports")
     }
 
     @EventListener(RollbackMoneyIsTransferredEvent::class)
@@ -36,6 +41,8 @@ internal class ReportMoneyIsTransferredEventListener(
 
         transfer?.let { reportTransferRemoving.remove(it) }
         earning?.let { reportEarningRemoving.remove(it) }
+
+        logger.info("RollbackMoneyIsTransferredEvent $event was handled by Reports")
     }
 
     private fun MoneyIsTransferredEvent.toTransfer(): Transfer? =

@@ -15,6 +15,9 @@ dependencies {
     testImplementation(testFixtures(project(":common:common-base")))
     testImplementation(testFixtures(project(":users:users-domain")))
 
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core:3.6.1")

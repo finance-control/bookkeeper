@@ -12,9 +12,9 @@ class AccountMoneySpendingImpl(
     private val transactionExecutor: TransactionExecutor
 ) : AccountMoneySpending {
 
-    override fun spend(userId: NumericId<User>, from: AccountTransferAmount) {
+    override fun spend(userId: NumericId<User>, source: AccountTransferAmount) {
         transactionExecutor.execute {
-            val account = accountStorage.findByUserIdAndIdOrThrow(userId, from.accountId).withdraw(from.money)
+            val account = accountStorage.findByUserIdAndIdOrThrow(userId, source.accountId).withdraw(source.money)
             accountStorage.setMoney(account.id, account.money)
         }
     }

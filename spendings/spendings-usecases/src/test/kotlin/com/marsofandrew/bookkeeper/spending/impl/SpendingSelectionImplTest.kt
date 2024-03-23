@@ -64,7 +64,7 @@ internal class SpendingSelectionImplTest {
     }
 
     @Test
-    fun `select when start date and end date are provided returns spendings from between that dates`() {
+    fun `select when start date and end date are provided returns spendings between that dates`() {
         val now = LocalDate.now()
         val date1 = now.minusDays(1)
 
