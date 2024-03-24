@@ -85,6 +85,12 @@ include(
 )
 
 include(
+    "assets:assets-usecases",
+    "assets:assets-application",
+    "assets:adapters:assets-rest",
+)
+
+include(
     "spring-events",
     "spring-transactions",
 )

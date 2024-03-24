@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":credentials:credentials-application"))
     implementation(project(":users:users-application"))
     implementation(project(":reports:reports-application"))
+    implementation(project(":assets:assets-application"))
 
     implementation(project(":auth:auth-application"))
     implementation(project(":common:common-rest"))

@@ -51,6 +51,7 @@ internal class SecurityContextConfiguration(
                     "/swagger-ui/**",
                     "/api/openapi.json",
                     "/api/openapi.json/**",
+                    "/api/v1/assets/currency"
                 )
                 .permitAll()
                 .anyRequest()

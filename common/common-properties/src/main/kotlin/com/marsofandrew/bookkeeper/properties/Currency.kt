@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.properties
 
 enum class Currency(
-    val fullName: String,
+    val title: String,
     val code: String
 ) {
     EUR("Euro", "EUR"),
