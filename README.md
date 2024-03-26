@@ -19,5 +19,5 @@ Allows to restart application without affecting DB
 cd docker
 docker compose up -d
 cd ..
-./gradlew runBoot
+./gradlew bootRun
 ```
