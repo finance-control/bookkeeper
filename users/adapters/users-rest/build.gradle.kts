@@ -18,6 +18,9 @@ dependencies {
     implementation(project(":common:common-rest"))
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+    testImplementation(testFixtures(project(":users:users-domain")))
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

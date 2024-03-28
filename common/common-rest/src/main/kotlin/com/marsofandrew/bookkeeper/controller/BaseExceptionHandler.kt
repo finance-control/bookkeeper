@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.controller
 
+import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
 import com.marsofandrew.bookkeeper.controller.dto.ErrorMessages
 import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import org.apache.logging.log4j.LogManager
@@ -24,6 +25,13 @@ class BaseExceptionHandler {
     fun onValidationError(exception: ValidationException): ResponseEntity<*> {
         logger.error("ValidationException: ${exception.message}", exception)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ErrorMessages(listOf(exception.message ?: "")))
+    }
+
+    @ExceptionHandler(DomainModelNotFoundException::class)
+    fun onDomainModelNotFoundError(exception: DomainModelNotFoundException): ResponseEntity<*> {
+        logger.error("DomainModelNotFoundException: ${exception.message}", exception)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(ErrorMessages(listOf(exception.message ?: "")))
     }
 }

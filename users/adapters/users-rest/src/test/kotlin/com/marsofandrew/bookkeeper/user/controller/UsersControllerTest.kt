@@ -5,12 +5,15 @@ import com.marsofandrew.bookkeeper.controller.BaseExceptionHandler
 import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
+import com.marsofandrew.bookkeeper.user.UserLogin
 import com.marsofandrew.bookkeeper.user.UserRegistration
 import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
 import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
 import com.marsofandrew.bookkeeper.user.controller.exception.UsersExceptionHandler
 import com.marsofandrew.bookkeeper.user.exception.UserEmailIsAlreadyInUseException
+import com.marsofandrew.bookkeeper.user.fixture.user
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
+import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -21,8 +24,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @WebMvcTest
@@ -44,6 +49,9 @@ internal class UsersControllerTest {
 
     @Autowired
     private lateinit var userRegistration: UserRegistration
+
+    @Autowired
+    private lateinit var userLogin: UserLogin
 
     @BeforeEach
     fun setup() {
@@ -92,6 +100,19 @@ internal class UsersControllerTest {
         }
     }
 
+    @Test
+    fun `signin when user exists returns userId`() {
+        val user = user(5.asId())
+        every { userLogin.login(user.id) } returns user
+
+        SecurityContextHolder.getContext().authentication = UserIdToken(user.id.value)
+
+        mockMvc.get("/api/v1/users/signing").andExpect {
+            status { isOk() }
+            jsonPath("id") { value(user.id.value) }
+        }
+    }
+
 
     @ContextConfiguration
     class TestContextConfiguration {
@@ -102,8 +123,13 @@ internal class UsersControllerTest {
 
         @Primary
         @Bean
+        fun userLogin(): UserLogin = mockk()
+
+        @Primary
+        @Bean
         fun transfersController(
-            userRegistration: UserRegistration
-        ) = UsersController(userRegistration)
+            userRegistration: UserRegistration,
+            userLogin: UserLogin
+        ) = UsersController(userRegistration, userLogin)
     }
 }
