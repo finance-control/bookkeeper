@@ -3,11 +3,10 @@ package com.marsofandrew.bookkeeper.user.controller
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.UserLogin
 import com.marsofandrew.bookkeeper.user.UserRegistration
-import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
-import com.marsofandrew.bookkeeper.user.controller.dto.UserIdDto
-import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
+import com.marsofandrew.bookkeeper.user.UserSelection
+import com.marsofandrew.bookkeeper.user.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -15,7 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/users")
 internal class UsersController(
     private val userRegistration: UserRegistration,
-    private val userLogin: UserLogin
+    private val userLogin: UserLogin,
+    private val userSelection: UserSelection
 ) {
 
     @PostMapping("/registration")
@@ -29,9 +29,16 @@ internal class UsersController(
 
     @GetMapping("/signing")
     fun login(
-        @ApiParam(hidden = true) @UserId userId: Long
+        @Parameter(hidden = true) @UserId userId: Long
     ): UserIdDto {
         val user = userLogin.login(userId.asId())
         return UserIdDto(id = user.id.value)
+    }
+
+    @GetMapping("/current")
+    fun select(
+        @Parameter(hidden = true) @UserId userId: Long
+    ): UserDto {
+        return userSelection.select(userId.asId()).toUserDto()
     }
 }

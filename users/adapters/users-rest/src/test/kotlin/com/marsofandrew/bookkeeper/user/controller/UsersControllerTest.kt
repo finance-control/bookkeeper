@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
 import com.marsofandrew.bookkeeper.user.UserLogin
 import com.marsofandrew.bookkeeper.user.UserRegistration
+import com.marsofandrew.bookkeeper.user.UserSelection
 import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
 import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
 import com.marsofandrew.bookkeeper.user.controller.exception.UsersExceptionHandler
@@ -52,6 +53,9 @@ internal class UsersControllerTest {
 
     @Autowired
     private lateinit var userLogin: UserLogin
+
+    @Autowired
+    private lateinit var userSelection: UserSelection
 
     @BeforeEach
     fun setup() {
@@ -101,7 +105,7 @@ internal class UsersControllerTest {
     }
 
     @Test
-    fun `signin when user exists returns userId`() {
+    fun `signing when user exists returns userId`() {
         val user = user(5.asId())
         every { userLogin.login(user.id) } returns user
 
@@ -110,6 +114,21 @@ internal class UsersControllerTest {
         mockMvc.get("/api/v1/users/signing").andExpect {
             status { isOk() }
             jsonPath("id") { value(user.id.value) }
+        }
+    }
+
+    @Test
+    fun `select when user is present return user`() {
+        val user = user(5.asId())
+        every { userSelection.select(user.id) } returns user
+
+        SecurityContextHolder.getContext().authentication = UserIdToken(user.id.value)
+
+        mockMvc.get("/api/v1/users/current").andExpect {
+            status { isOk() }
+            jsonPath("id") { value(user.id.value) }
+            jsonPath("name") { value(user.name) }
+            jsonPath("surname") { value(user.surname) }
         }
     }
 
@@ -127,9 +146,14 @@ internal class UsersControllerTest {
 
         @Primary
         @Bean
+        fun userSelection(): UserSelection = mockk()
+
+        @Primary
+        @Bean
         fun transfersController(
             userRegistration: UserRegistration,
-            userLogin: UserLogin
-        ) = UsersController(userRegistration, userLogin)
+            userLogin: UserLogin,
+            userSelection: UserSelection
+        ) = UsersController(userRegistration, userLogin, userSelection)
     }
 }
