@@ -8,6 +8,7 @@ import com.marsofandrew.bookkeeper.account.controller.dto.CreateAccountDto
 import com.marsofandrew.bookkeeper.account.controller.dto.toAccountDto
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.UserId
+import io.swagger.v3.oas.annotations.Parameter
 import java.time.Clock
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,7 +30,7 @@ internal class AccountsController(
 
     @GetMapping
     fun get(
-        @UserId userId: Long
+        @Parameter(hidden = true) @UserId userId: Long
     ): List<AccountDto> {
         return accountSelection.select(userId.asId()).map { it.toAccountDto() }
     }
@@ -37,7 +38,7 @@ internal class AccountsController(
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     fun create(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @RequestBody body: CreateAccountDto
     ): AccountDto {
         return accountCreation.create(body.toAccount(userId.asId(), clock)).toAccountDto()
@@ -45,7 +46,7 @@ internal class AccountsController(
 
     @PostMapping("/{id}/close")
     fun close(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @PathVariable("id") id: String
     ) {
         accountDeletion.delete(userId.asId(), setOf(id.asId()))

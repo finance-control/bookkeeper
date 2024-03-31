@@ -16,8 +16,10 @@ dependencies {
     api(project(":spendings:spendings-usecases"))
     api(project(":common:user-context"))
     api(project(":common:common-base"))
+
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springdoc:springdoc-openapi-starter-common:2.4.0")
 
     testImplementation(testFixtures(project(":spendings:spendings-domain")))
 

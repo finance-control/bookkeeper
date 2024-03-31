@@ -11,6 +11,7 @@ import com.marsofandrew.bookkeeper.report.controller.dto.UserReportDto
 import com.marsofandrew.bookkeeper.report.controller.dto.toAggregatedReportDto
 import com.marsofandrew.bookkeeper.report.controller.dto.toUserReportDto
 import com.marsofandrew.bookkeeper.userContext.UserId
+import io.swagger.v3.oas.annotations.Parameter
 import java.time.LocalDate
 import java.time.YearMonth
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,7 +30,7 @@ internal class ReportsController(
 
     @GetMapping("/daily")
     fun selectDailyReports(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         startDate: LocalDate,
         endDate: LocalDate
     ): List<UserReportDto> {
@@ -39,7 +40,7 @@ internal class ReportsController(
 
     @GetMapping("/monthly")
     fun selectMonthlyReports(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         startMonth: YearMonth,
         endMonth: YearMonth
     ): List<UserReportDto> {
@@ -49,7 +50,7 @@ internal class ReportsController(
 
     @GetMapping("/yearly")
     fun selectYearlyReports(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
     ): List<UserReportDto> {
         return yearlyUserReportSelection.select(userId.asId())
             .map { it.toUserReportDto { year.toString() } }
@@ -57,7 +58,7 @@ internal class ReportsController(
 
     @GetMapping("/daily/aggregation")
     fun aggregateDaily(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         startDate: LocalDate,
         endDate: LocalDate
     ): AggregatedReportDto {
@@ -66,7 +67,7 @@ internal class ReportsController(
 
     @GetMapping("/monthly/aggregation")
     fun aggregateMonthly(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         startMonth: YearMonth,
         endMonth: YearMonth
     ): AggregatedReportDto {

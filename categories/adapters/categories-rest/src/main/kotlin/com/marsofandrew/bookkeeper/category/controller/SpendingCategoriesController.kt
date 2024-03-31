@@ -9,16 +9,9 @@ import com.marsofandrew.bookkeeper.category.controller.dto.SpendingCategoryDto
 import com.marsofandrew.bookkeeper.category.controller.dto.toSpendingCategoryDto
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.UserId
+import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/spendings/categories")
@@ -30,7 +23,7 @@ internal class SpendingCategoriesController(
 
     @GetMapping
     fun get(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @RequestParam("ids", required = false) ids: Set<Long>?
     ): List<SpendingCategoryDto> {
         val categories = if (ids == null) {
@@ -44,7 +37,7 @@ internal class SpendingCategoriesController(
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     fun create(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @RequestBody body: CreateSpendingCategoryDto
     ): SpendingCategoryDto {
         return spendingCategoryAdding.add(body.toSpendingCategory(userId.asId())).toSpendingCategoryDto()
@@ -53,7 +46,7 @@ internal class SpendingCategoriesController(
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @PathVariable("id") id: Long
     ) {
         spendingCategoryDeletion.delete(userId.asId(), setOf(id.asId()))

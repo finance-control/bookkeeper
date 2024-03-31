@@ -19,6 +19,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
+    implementation("org.springdoc:springdoc-openapi-starter-common:2.4.0")
 
     testImplementation(testFixtures(project(":reports:reports-domain")))
     testImplementation(platform("org.junit:junit-bom:5.9.1"))

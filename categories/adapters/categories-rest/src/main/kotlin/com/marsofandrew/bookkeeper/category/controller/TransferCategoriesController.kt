@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.category.controller.dto.TransferCategoryDto
 import com.marsofandrew.bookkeeper.category.controller.dto.toTransferCategoryDto
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.UserId
+import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,7 +31,7 @@ internal class TransferCategoriesController(
 
     @GetMapping
     fun get(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @RequestParam("ids", required = false) ids: Set<Long>?
     ): List<TransferCategoryDto> {
         val categories = if (ids == null) {
@@ -44,7 +45,7 @@ internal class TransferCategoriesController(
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     fun create(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @RequestBody body: CreateTransferCategoryDto
     ): TransferCategoryDto {
         return transferCategoryAdding.add(body.toTransferUserCategory(userId.asId())).toTransferCategoryDto()
@@ -53,7 +54,7 @@ internal class TransferCategoriesController(
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     fun delete(
-        @UserId userId: Long,
+        @Parameter(hidden = true) @UserId userId: Long,
         @PathVariable("id") id: Long
     ) {
         transferCategoryDeletion.delete(userId.asId(), setOf(id.asId()))
