@@ -10,9 +10,14 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.CrossOriginOpenerPolicyConfig
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 @Configuration
 @Order(Ordered.LOWEST_PRECEDENCE)
@@ -27,7 +32,15 @@ internal class SecurityContextConfiguration(
     @Order(Ordered.LOWEST_PRECEDENCE)
     fun apiFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity.csrf { it.disable() }
-        httpSecurity.cors { it.disable() }
+        httpSecurity.cors {
+            val configuration = CorsConfiguration()
+            configuration.allowedOrigins = mutableListOf("*")
+            configuration.allowedMethods = mutableListOf("*")
+            configuration.allowedHeaders = mutableListOf("*")
+            val source = UrlBasedCorsConfigurationSource()
+            source.registerCorsConfiguration("/**", configuration)
+            it.configurationSource(source)
+        }
         httpSecurity.logout { it.disable() }
 
         authenticationProviders.forEach {

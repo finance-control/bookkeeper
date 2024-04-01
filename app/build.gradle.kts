@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":common:common-rest"))
     implementation(project(":spring-events"))
     implementation(project(":spring-transactions"))
+    implementation(project(":logging"))
 
     implementation(project(":common:common-data"))
 

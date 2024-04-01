@@ -90,6 +90,8 @@ include(
     "assets:adapters:assets-rest",
 )
 
+include("logging")
+
 include(
     "spring-events",
     "spring-transactions",
