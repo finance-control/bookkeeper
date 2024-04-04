@@ -10,12 +10,10 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.CrossOriginOpenerPolicyConfig
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
@@ -32,16 +30,8 @@ internal class SecurityContextConfiguration(
     @Order(Ordered.LOWEST_PRECEDENCE)
     fun apiFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity.csrf { it.disable() }
-        httpSecurity.cors {
-            val configuration = CorsConfiguration()
-            configuration.allowedOrigins = mutableListOf("*")
-            configuration.allowedMethods = mutableListOf("*")
-            configuration.allowedHeaders = mutableListOf("*")
-            val source = UrlBasedCorsConfigurationSource()
-            source.registerCorsConfiguration("/**", configuration)
-            it.configurationSource(source)
-        }
-        httpSecurity.logout { it.disable() }
+            .configureCors()
+            .logout { it.disable() }
 
         authenticationProviders.forEach {
             httpSecurity.authenticationProvider(it)
@@ -50,31 +40,45 @@ internal class SecurityContextConfiguration(
             httpSecurity.addFilterBefore(filter, AnonymousAuthenticationFilter::class.java)
         }
 
-
-        httpSecurity.sessionManagement { sessionManagement ->
-            sessionManagement.sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS
-            )
-        }
-
-        httpSecurity.authorizeRequests { authHttpRequests ->
-            authHttpRequests
-                .requestMatchers(
-                    "/api/v1/users/registration",
-                    "/swagger-ui/**",
-                    "/api/openapi.json",
-                    "/api/openapi.json/**",
-                    "/api/v1/assets/currency"
-                )
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-        }
-
-        httpSecurity.exceptionHandling {
-            it.authenticationEntryPoint(AuthExceptionHandler())
-        }
+        httpSecurity.configureSession()
+            .configureAuthorizeRequests()
+            .configureExceptionHandling()
 
         return httpSecurity.build()
     }
+
+    private fun HttpSecurity.configureCors() = cors {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = mutableListOf("*")
+        configuration.allowedMethods = mutableListOf("*")
+        configuration.allowedHeaders = mutableListOf("*")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        it.configurationSource(source)
+    }
+
+    private fun HttpSecurity.configureSession() = sessionManagement { sessionManagement ->
+        sessionManagement.sessionCreationPolicy(
+            SessionCreationPolicy.STATELESS
+        )
+    }
+
+    private fun HttpSecurity.configureAuthorizeRequests() = authorizeRequests { authHttpRequests ->
+        authHttpRequests
+            .requestMatchers(
+                "/api/v1/users/registration",
+                "/swagger-ui/**",
+                "/api/openapi.json",
+                "/api/openapi.json/**",
+                "/api/v1/assets/currency"
+            )
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+    }
+
+    private fun HttpSecurity.configureExceptionHandling() = exceptionHandling {
+        it.authenticationEntryPoint(AuthExceptionHandler())
+    }
 }
+
