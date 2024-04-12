@@ -8,7 +8,7 @@ import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.account.Account
-import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -20,7 +20,7 @@ data class SpendingFixture(
     var money: PositiveMoney = PositiveMoney(Currency.RUB, BigDecimal.valueOf(10))
     var date: LocalDate = LocalDate.now()
     var description: String = "test"
-    var spendingCategoryId: NumericId<SpendingCategory> = 1.asId()
+    var categoryId: NumericId<Category> = 1.asId()
     var createdAt: LocalDate = LocalDate.now()
     var sourceAccountId: StringId<Account>? = null
     var version: Version = Version(0)
@@ -31,7 +31,7 @@ data class SpendingFixture(
         money,
         date,
         description,
-        spendingCategoryId,
+        categoryId,
         createdAt,
         sourceAccountId,
         version

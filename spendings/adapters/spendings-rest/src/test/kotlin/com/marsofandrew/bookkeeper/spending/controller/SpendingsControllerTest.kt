@@ -12,7 +12,7 @@ import com.marsofandrew.bookkeeper.spending.SpendingDeletion
 import com.marsofandrew.bookkeeper.spending.SpendingReport
 import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spending.SpendingSelection
-import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.controller.dto.AccountBoundedMoneyDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.CreateSpendingDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.PositiveMoneyDto
@@ -69,7 +69,7 @@ internal class SpendingsControllerTest {
             money = AccountBoundedMoneyDto(PositiveMoneyDto(200, 2, "EUR"), null),
             date = now,
             description = "",
-            spendingCategoryId = 1
+            categoryId = 1
         )
         val spending = Spending(
             NumericId.unidentified(),
@@ -77,7 +77,7 @@ internal class SpendingsControllerTest {
             createSpendingDto.money.money.toPositiveMoney(),
             createSpendingDto.date,
             createSpendingDto.description,
-            createSpendingDto.spendingCategoryId.asId(),
+            createSpendingDto.categoryId.asId(),
             now,
             createSpendingDto.money.accountId?.asId(),
             Version(0)
@@ -149,8 +149,8 @@ internal class SpendingsControllerTest {
         val endDate = now.plusDays(1)
         val spendingReport = SpendingReport(
             spendingByCategory = mapOf(
-                1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 5, 0)),
-                2.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.USD, 5, 0)),
+                1.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 5, 0)),
+                2.asId<Category>() to listOf(PositiveMoney(Currency.USD, 5, 0)),
             ),
             total = listOf(PositiveMoney(Currency.EUR, 5, 0), PositiveMoney(Currency.USD, 5, 0))
         )

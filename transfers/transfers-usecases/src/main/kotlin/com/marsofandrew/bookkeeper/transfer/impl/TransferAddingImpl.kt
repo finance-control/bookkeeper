@@ -25,8 +25,8 @@ class TransferAddingImpl(
     private val logger = LogManager.getLogger()
 
     override fun add(transfer: Transfer): Transfer {
-        if (!transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId)) {
-            throw InvalidCategoryException(transfer.transferCategoryId)
+        if (!transferCategoryValidator.validate(transfer.userId, transfer.categoryId)) {
+            throw InvalidCategoryException(transfer.categoryId)
         }
         transferAccountValidator.validate(transfer.userId, transfer.received)
         transfer.send?.let { transferAccountValidator.validate(transfer.userId, it) }
@@ -44,7 +44,7 @@ private fun Transfer.toMoneyIsTransferredEvent() = MoneyIsTransferredEvent(
     date = date,
     send = send?.toAccountBoundedMoney(),
     received = received.toAccountBoundedMoney(),
-    category = transferCategoryId.value
+    category = categoryId.value
 )
 
 private fun TransferAccountValidator.validate(userId: NumericId<User>, accountMoney: AccountMoney) {

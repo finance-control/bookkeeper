@@ -6,7 +6,7 @@ import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingReport
 import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
@@ -19,7 +19,7 @@ class SpendingReportCreationImpl(
         userId: NumericId<User>,
         startDate: LocalDate,
         endDate: LocalDate,
-        categories: Set<NumericId<SpendingCategory>>?
+        categories: Set<NumericId<Category>>?
     ): SpendingReport {
 
         if (startDate > endDate) {
@@ -27,7 +27,7 @@ class SpendingReportCreationImpl(
         }
 
         val spendings = spendingStorage.findAllByUserIdBetween(userId, startDate, endDate)
-            .filter { categories == null || it.spendingCategoryId in categories }
+            .filter { categories == null || it.categoryId in categories }
 
         return SpendingReport(
             spendingByCategory = spendings.byCategories(),
@@ -35,8 +35,8 @@ class SpendingReportCreationImpl(
         )
     }
 
-    private fun Collection<Spending>.byCategories(): Map<NumericId<SpendingCategory>, List<PositiveMoney>> =
-        groupBy { it.spendingCategoryId }
+    private fun Collection<Spending>.byCategories(): Map<NumericId<Category>, List<PositiveMoney>> =
+        groupBy { it.categoryId }
             .mapValues { (_, values) -> values.total() }
 
 

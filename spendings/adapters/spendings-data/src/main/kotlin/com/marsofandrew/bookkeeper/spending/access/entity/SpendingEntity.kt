@@ -43,7 +43,7 @@ internal data class SpendingEntity(
         date = date,
         description = description,
         money = PositiveMoney(currency, amount),
-        spendingCategoryId = categoryId.asId(),
+        categoryId = categoryId.asId(),
         createdAt = createdAt,
         sourceAccountId = sourceAccountId?.asId(),
         version = com.marsofandrew.bookkeeper.base.model.Version(version)
@@ -62,7 +62,7 @@ internal fun Spending.toSpendingEntity() = SpendingEntity(
     description = description,
     amount = money.amount,
     currency = money.currency,
-    categoryId = spendingCategoryId.value,
+    categoryId = categoryId.value,
     createdAt = createdAt,
     sourceAccountId = sourceAccountId?.value,
     version = version.value

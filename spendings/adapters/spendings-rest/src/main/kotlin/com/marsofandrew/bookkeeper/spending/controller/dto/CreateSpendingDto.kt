@@ -13,7 +13,7 @@ internal data class CreateSpendingDto(
     val money: AccountBoundedMoneyDto,
     val date: LocalDate,
     val description: String,
-    val spendingCategoryId: Long,
+    val categoryId: Long,
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Spending(
         id = NumericId.unidentified(),
@@ -21,7 +21,7 @@ internal data class CreateSpendingDto(
         money = money.money.toPositiveMoney(),
         date = date,
         description = description,
-        spendingCategoryId = spendingCategoryId.asId(),
+        categoryId = categoryId.asId(),
         createdAt = clock.date(),
         sourceAccountId = money.accountId?.asId(),
         version = Version(0)

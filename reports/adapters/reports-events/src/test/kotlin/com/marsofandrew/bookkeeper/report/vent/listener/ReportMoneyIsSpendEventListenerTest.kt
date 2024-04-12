@@ -50,7 +50,7 @@ internal class ReportMoneyIsSpendEventListenerTest {
         val expectedSpending = spending(event.userId.asId()) {
             date = event.date
             money = event.money.money
-            spendingCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)
@@ -70,7 +70,7 @@ internal class ReportMoneyIsSpendEventListenerTest {
         val expectedSpending = spending(event.userId.asId()) {
             date = event.date
             money = event.money.money
-            spendingCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)

@@ -4,12 +4,12 @@ import com.marsofandrew.bookkeeper.category.UserCategory
 import com.marsofandrew.bookkeeper.category.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 
-interface CategoryStorage<T : UserCategory<T>> {
-    fun findAllByUserId(userId: NumericId<User>): List<T>
-    fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Set<NumericId<T>>): List<T>
+interface CategoryStorage {
+    fun findAllByUserId(userId: NumericId<User>): List<UserCategory>
+    fun findAllByUserIdAndIds(userId: NumericId<User>, ids: Set<NumericId<UserCategory>>): List<UserCategory>
 
-    fun existsByUserIdAndCategoryId(userId: NumericId<User>, id: NumericId<T>): Boolean
+    fun existsByUserIdAndCategoryId(userId: NumericId<User>, id: NumericId<UserCategory>): Boolean
 
-    fun create(userCategory: T): T
-    fun delete(ids: Set<NumericId<T>>)
+    fun create(userCategory: UserCategory): UserCategory
+    fun delete(ids: Set<NumericId<UserCategory>>)
 }

@@ -3,7 +3,7 @@ package com.marsofandrew.bookkeeper.report.spending
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.report.category.SpendingCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.common.WithDate
 import com.marsofandrew.bookkeeper.report.common.WithUserId
 import com.marsofandrew.bookkeeper.report.user.User
@@ -13,7 +13,7 @@ data class Spending(
     override val userId: NumericId<User>,
     val money: PositiveMoney,
     override val date: LocalDate,
-    val categoryId: NumericId<SpendingCategory>,
+    val categoryId: NumericId<Category>,
 ): WithUserId, WithDate {
 
     init {

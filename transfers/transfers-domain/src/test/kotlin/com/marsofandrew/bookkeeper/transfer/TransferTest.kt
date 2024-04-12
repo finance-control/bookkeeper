@@ -22,7 +22,7 @@ internal class TransferTest {
                 send = null,
                 received = AccountMoney(money = PositiveMoney(Currency.EUR, 15, 1), accountId = null),
                 description = "tes",
-                transferCategoryId = 875.asId(),
+                categoryId = 875.asId(),
                 createdAt = LocalDate.now(),
                 version = Version(0)
             )
@@ -39,7 +39,7 @@ internal class TransferTest {
                 send = null,
                 received = AccountMoney(money = PositiveMoney(Currency.EUR, 15, 1), accountId = null),
                 description = "tes",
-                transferCategoryId = 875.asId(),
+                categoryId = 875.asId(),
                 createdAt = LocalDate.of(2023, 12, 30),
                 version = Version(0)
             )
@@ -63,7 +63,7 @@ internal class TransferTest {
             send = null,
             received = received,
             description = description,
-            transferCategoryId = categoryId.asId(),
+            categoryId = categoryId.asId(),
             createdAt = date,
             version = Version(0)
         )
@@ -74,7 +74,7 @@ internal class TransferTest {
         transfer.send shouldBe null
         transfer.received shouldBe received
         transfer.description shouldBe description
-        transfer.transferCategoryId.value shouldBe categoryId
+        transfer.categoryId.value shouldBe categoryId
         transfer.createdAt shouldBe date
     }
 }

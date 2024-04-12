@@ -1,14 +1,10 @@
 package com.marsofandrew.bookkeeper.category
 
 import com.marsofandrew.bookkeeper.category.access.CategoryStorage
-import com.marsofandrew.bookkeeper.category.impl.spending.SpendingCategoryAddingImpl
-import com.marsofandrew.bookkeeper.category.impl.spending.SpendingCategoryDeletionImpl
-import com.marsofandrew.bookkeeper.category.impl.spending.SpendingCategorySelectionImpl
-import com.marsofandrew.bookkeeper.category.impl.spending.SpendingCategoryValidationImpl
-import com.marsofandrew.bookkeeper.category.impl.transfer.TransferCategoryAddingImpl
-import com.marsofandrew.bookkeeper.category.impl.transfer.TransferCategoryDeletionImpl
-import com.marsofandrew.bookkeeper.category.impl.transfer.TransferCategorySelectionImpl
-import com.marsofandrew.bookkeeper.category.impl.transfer.TransferCategoryValidationImpl
+import com.marsofandrew.bookkeeper.category.impl.CategoryAddingImpl
+import com.marsofandrew.bookkeeper.category.impl.CategoryDeletionImpl
+import com.marsofandrew.bookkeeper.category.impl.CategorySelectionImpl
+import com.marsofandrew.bookkeeper.category.impl.CategoryValidationImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -16,44 +12,23 @@ import org.springframework.context.annotation.Configuration
 internal class CategoriesContextConfiguration {
 
     @Bean
-    fun spendingCategoryAdding(
-        spendingCategoryStorage: CategoryStorage<SpendingUserCategory>
-    ): CategoryAdding<SpendingUserCategory> = SpendingCategoryAddingImpl(spendingCategoryStorage)
+    fun categoryAdding(
+        categoryStorage: CategoryStorage
+    ): CategoryAdding = CategoryAddingImpl(categoryStorage)
 
 
     @Bean
-    fun spendingCategoryDeletion(
-        spendingCategoryStorage: CategoryStorage<SpendingUserCategory>
-    ): CategoryDeletion<SpendingUserCategory> = SpendingCategoryDeletionImpl(spendingCategoryStorage)
+    fun categoryDeletion(
+        categoryStorage: CategoryStorage
+    ): CategoryDeletion = CategoryDeletionImpl(categoryStorage)
 
     @Bean
-    fun spendingCategorySelection(
-        spendingCategoryStorage: CategoryStorage<SpendingUserCategory>
-    ): CategorySelection<SpendingUserCategory> = SpendingCategorySelectionImpl(spendingCategoryStorage)
+    fun categorySelection(
+        categoryStorage: CategoryStorage
+    ): CategorySelection = CategorySelectionImpl(categoryStorage)
 
     @Bean
-    fun spendingCategoryValidation(
-        spendingCategoryStorage: CategoryStorage<SpendingUserCategory>
-    ): CategoryValidation<SpendingUserCategory> = SpendingCategoryValidationImpl(spendingCategoryStorage)
-
-    @Bean
-    fun transferCategoryAdding(
-        spendingCategoryStorage: CategoryStorage<TransferUserCategory>
-    ): CategoryAdding<TransferUserCategory> = TransferCategoryAddingImpl(spendingCategoryStorage)
-
-
-    @Bean
-    fun transferCategoryDeletion(
-        spendingCategoryStorage: CategoryStorage<TransferUserCategory>
-    ): CategoryDeletion<TransferUserCategory> = TransferCategoryDeletionImpl(spendingCategoryStorage)
-
-    @Bean
-    fun transferCategorySelection(
-        spendingCategoryStorage: CategoryStorage<TransferUserCategory>
-    ): CategorySelection<TransferUserCategory> = TransferCategorySelectionImpl(spendingCategoryStorage)
-
-    @Bean
-    fun transferCategoryValidation(
-        transferCategoryStorage: CategoryStorage<TransferUserCategory>
-    ): CategoryValidation<TransferUserCategory> = TransferCategoryValidationImpl(transferCategoryStorage)
+    fun categoryValidation(
+        categoryStorage: CategoryStorage
+    ): CategoryValidation = CategoryValidationImpl(categoryStorage)
 }

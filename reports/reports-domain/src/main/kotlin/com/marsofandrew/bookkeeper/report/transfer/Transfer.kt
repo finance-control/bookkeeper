@@ -3,7 +3,7 @@ package com.marsofandrew.bookkeeper.report.transfer
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.common.WithDate
 import com.marsofandrew.bookkeeper.report.common.WithUserId
 import com.marsofandrew.bookkeeper.report.user.User
@@ -14,7 +14,7 @@ data class Transfer(
     override val date: LocalDate,
     val send: PositiveMoney,
     val received: PositiveMoney,
-    val categoryId: NumericId<TransferCategory>,
+    val categoryId: NumericId<Category>,
 ) : WithUserId, WithDate {
 
     init {

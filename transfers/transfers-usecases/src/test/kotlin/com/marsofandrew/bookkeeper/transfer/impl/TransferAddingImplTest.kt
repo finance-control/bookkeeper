@@ -49,10 +49,10 @@ internal class TransferAddingImplTest {
             send = null
             received = AccountMoney.create(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)))
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns true
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         every { transferStorage.create(transfer) } returns transfer
 
@@ -66,12 +66,12 @@ internal class TransferAddingImplTest {
                     date = transfer.date,
                     send = transfer.send?.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
-                    category = transfer.transferCategoryId.value
+                    category = transfer.categoryId.value
                 )
             )
         }
 
-        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) }
+        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) }
         verify { transferAccountValidator wasNot Called }
     }
 
@@ -85,11 +85,11 @@ internal class TransferAddingImplTest {
             send = null
             received = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc".asId())
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns true
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns true
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         every { transferStorage.create(transfer) } returns transfer
 
@@ -103,12 +103,12 @@ internal class TransferAddingImplTest {
                     date = transfer.date,
                     send = transfer.send?.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
-                    category = transfer.transferCategoryId.value
+                    category = transfer.categoryId.value
                 )
             )
         }
 
-        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) }
+        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) }
         verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) }
     }
 
@@ -122,12 +122,12 @@ internal class TransferAddingImplTest {
             send = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc2".asId())
             received = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc".asId())
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns true
         every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns true
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns true
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         every { transferStorage.create(transfer) } returns transfer
 
@@ -141,12 +141,12 @@ internal class TransferAddingImplTest {
                     date = transfer.date,
                     send = transfer.send?.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
-                    category = transfer.transferCategoryId.value
+                    category = transfer.categoryId.value
                 )
             )
         }
 
-        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) }
+        verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) }
         verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) }
         verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) }
     }
@@ -161,12 +161,12 @@ internal class TransferAddingImplTest {
             send = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc2".asId())
             received = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc".asId())
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns false
         every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns true
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns true
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         shouldThrowExactly<InvalidAccountException> {
             addingTransferImpl.add(transfer)
@@ -186,12 +186,12 @@ internal class TransferAddingImplTest {
             send = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc2".asId())
             received = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc".asId())
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns true
         every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns false
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns true
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         shouldThrowExactly<InvalidAccountException> {
             addingTransferImpl.add(transfer)
@@ -211,10 +211,10 @@ internal class TransferAddingImplTest {
             send = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc2".asId())
             received = AccountMoney(PositiveMoney(Currency.EUR, BigDecimal.valueOf(10)), "acc".asId())
             description = ""
-            transferCategoryId = 1.asId()
+            categoryId = 1.asId()
         }
 
-        every { transferCategoryValidator.validate(transfer.userId, transfer.transferCategoryId) } returns false
+        every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns false
 
         shouldThrowExactly<InvalidCategoryException> {
             addingTransferImpl.add(transfer)

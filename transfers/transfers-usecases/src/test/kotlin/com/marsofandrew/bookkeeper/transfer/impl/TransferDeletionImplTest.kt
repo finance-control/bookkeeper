@@ -62,5 +62,5 @@ private fun Transfer.toRollbackMoneyIsTransferredEvent() = RollbackMoneyIsTransf
     date = date,
     send = send?.toAccountBoundedMoney(),
     received = received.toAccountBoundedMoney(),
-    category = transferCategoryId.value
+    category = categoryId.value
 )

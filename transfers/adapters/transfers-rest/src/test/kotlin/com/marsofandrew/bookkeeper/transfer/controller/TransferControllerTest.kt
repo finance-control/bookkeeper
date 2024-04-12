@@ -70,7 +70,7 @@ internal class TransferControllerTest {
             send = AccountMoneyDto(PositiveMoneyDto(5, 0, "USD")),
             received = AccountMoneyDto(PositiveMoneyDto(4, 0, "EUR")),
             description = "",
-            transferCategoryId = 1
+            categoryId = 1
         )
         val transfer = Transfer(
             NumericId.unidentified(),
@@ -79,7 +79,7 @@ internal class TransferControllerTest {
             requireNotNull(createTransferDto.send).toAccountMoney(),
             createTransferDto.received.toAccountMoney(),
             createTransferDto.description,
-            createTransferDto.transferCategoryId.asId(),
+            createTransferDto.categoryId.asId(),
             LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
             Version(0)
         )

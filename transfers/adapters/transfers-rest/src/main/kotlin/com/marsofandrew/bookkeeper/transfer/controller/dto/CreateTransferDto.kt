@@ -14,7 +14,7 @@ internal data class CreateTransferDto(
     val send: AccountMoneyDto? = null,
     val received: AccountMoneyDto,
     val description: String,
-    val transferCategoryId: Long,
+    val categoryId: Long,
 ) {
     fun toSpending(userId: NumericId<User>, clock: Clock) = Transfer(
         id = NumericId.unidentified(),
@@ -23,7 +23,7 @@ internal data class CreateTransferDto(
         send = send?.toAccountMoney(),
         received = received.toAccountMoney(),
         description = description,
-        transferCategoryId = transferCategoryId.asId(),
+        categoryId = categoryId.asId(),
         createdAt = LocalDate.ofInstant(clock.instant(), ZoneId.of("Z")),
         version = Version(0)
     )

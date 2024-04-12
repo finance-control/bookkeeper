@@ -4,8 +4,7 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.report.category.SpendingCategory
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
@@ -44,11 +43,11 @@ internal class AggregateUserReportTest {
             userId = 1.asId(),
             periods = listOf(now),
             expenses = Report(
-                byCategory = mapOf(1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
+                byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
                 total = listOf(PositiveMoney(Currency.EUR, 10, 0))
             ),
             earnings = Report(
-                byCategory = mapOf(1.asId<TransferCategory>() to listOf(PositiveMoney(Currency.EUR, 8, 0))),
+                byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 8, 0))),
                 total = listOf(PositiveMoney(Currency.EUR, 10, 0))
             ),
             transfers = Report.empty(),
@@ -59,13 +58,13 @@ internal class AggregateUserReportTest {
             userId = 1.asId(),
             periods = listOf(now.minusDays(1)),
             expenses = Report(
-                byCategory = mapOf(1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.USD, 10, 0))),
+                byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.USD, 10, 0))),
                 total = listOf(PositiveMoney(Currency.USD, 10, 0))
             ),
             earnings = Report.empty(),
             transfers = Report(
                 byCategory = mapOf(
-                    1.asId<TransferCategory>() to listOf(
+                    1.asId<Category>() to listOf(
                         Money(Currency.EUR, -10, 0),
                         Money(Currency.USD, 11, 0)
                     )

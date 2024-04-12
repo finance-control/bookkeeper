@@ -54,7 +54,7 @@ internal class ReportMoneyIsTransferredEventListenerTest {
         val expectedEarning = earning(event.userId.asId()) {
             date = event.date
             money = event.received.money
-            transferCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)
@@ -75,7 +75,7 @@ internal class ReportMoneyIsTransferredEventListenerTest {
         val expectedEarning = earning(event.userId.asId()) {
             date = event.date
             money = event.received.money
-            transferCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)
@@ -97,7 +97,7 @@ internal class ReportMoneyIsTransferredEventListenerTest {
             date = event.date
             send = event.send!!.money
             received = event.received.money
-            transferCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)
@@ -119,7 +119,7 @@ internal class ReportMoneyIsTransferredEventListenerTest {
             date = event.date
             send = event.send!!.money
             received = event.received.money
-            transferCategoryId = event.category.asId()
+            categoryId = event.category.asId()
         }
 
         applicationEventPublisher.publishEvent(event)

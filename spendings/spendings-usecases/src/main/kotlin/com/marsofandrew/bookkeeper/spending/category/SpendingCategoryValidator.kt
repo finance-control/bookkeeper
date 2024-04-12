@@ -5,5 +5,5 @@ import com.marsofandrew.bookkeeper.spending.user.User
 
 interface SpendingCategoryValidator {
 
-    fun validate(userId: NumericId<User>, categoryId: NumericId<SpendingCategory>): Boolean
+    fun validate(userId: NumericId<User>, categoryId: NumericId<Category>): Boolean
 }

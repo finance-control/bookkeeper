@@ -4,16 +4,15 @@ import com.marsofandrew.bookkeeper.base.utils.summarize
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.report.category.SpendingCategory
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.user.User
 
 data class AggregatedUserReport<PeriodType>(
     override val userId: NumericId<User>,
     val periods: List<PeriodType>,
-    override val expenses: Report<SpendingCategory, PositiveMoney>,
-    override val earnings: Report<TransferCategory, PositiveMoney>,
-    override val transfers: Report<TransferCategory, Money>,
+    override val expenses: Report<Category, PositiveMoney>,
+    override val earnings: Report<Category, PositiveMoney>,
+    override val transfers: Report<Category, Money>,
     override val total: List<Money>
 ) : BaseUserReport {
 

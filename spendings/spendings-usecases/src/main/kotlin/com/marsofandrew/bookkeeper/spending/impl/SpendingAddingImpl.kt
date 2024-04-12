@@ -22,8 +22,8 @@ class SpendingAddingImpl(
     private val logger = LogManager.getLogger()
 
     override fun add(spending: Spending): Spending {
-        if (!spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId)) {
-            throw InvalidCategoryException(spending.spendingCategoryId)
+        if (!spendingCategoryValidator.validate(spending.userId, spending.categoryId)) {
+            throw InvalidCategoryException(spending.categoryId)
         }
 
         if (spending.sourceAccountId?.let { spendingAccountValidator.validate(spending.userId, it) } == false) {
@@ -42,5 +42,5 @@ private fun Spending.toMoneyIsSpendEvent() = MoneyIsSpendEvent(
     userId = userId.value,
     date = date,
     money = AccountBondedMoney(money, sourceAccountId?.value),
-    category = spendingCategoryId.value
+    category = categoryId.value
 )

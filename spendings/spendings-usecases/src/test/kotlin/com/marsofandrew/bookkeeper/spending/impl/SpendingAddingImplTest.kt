@@ -41,7 +41,7 @@ internal class SpendingAddingImplTest {
         )
 
         every { spendingAccountValidator.validate(spending.userId, any()) } returns true
-        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
+        every { spendingCategoryValidator.validate(spending.userId, spending.categoryId) } returns true
         every { spendingStorage.create(spending) } returns spending
 
         addingSpendingImpl.add(spending)
@@ -53,7 +53,7 @@ internal class SpendingAddingImplTest {
                     spending.userId.value,
                     spending.date,
                     AccountBondedMoney(spending.money, spending.sourceAccountId?.value),
-                    spending.spendingCategoryId.value
+                    spending.categoryId.value
                 )
             )
         }
@@ -66,7 +66,7 @@ internal class SpendingAddingImplTest {
             userId = 5.asId(),
         )
 
-        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns false
+        every { spendingCategoryValidator.validate(spending.userId, spending.categoryId) } returns false
 
         shouldThrowExactly<InvalidCategoryException> {
             addingSpendingImpl.add(spending)
@@ -82,7 +82,7 @@ internal class SpendingAddingImplTest {
             sourceAccountId = "hh".asId()
         }
 
-        every { spendingCategoryValidator.validate(spending.userId, spending.spendingCategoryId) } returns true
+        every { spendingCategoryValidator.validate(spending.userId, spending.categoryId) } returns true
         every { spendingAccountValidator.validate(spending.userId, any()) } returns false
 
         shouldThrowExactly<InvalidAccountException> {

@@ -12,8 +12,7 @@ import com.marsofandrew.bookkeeper.report.ReportTransferAdding
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
-import com.marsofandrew.bookkeeper.report.category.SpendingCategory
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.impl.util.ReportMoneyActionAdder
 import com.marsofandrew.bookkeeper.report.impl.util.aggregate
 import com.marsofandrew.bookkeeper.report.impl.util.totalMoney
@@ -55,9 +54,9 @@ class ReportTransferAddingImpl(
             creator: (
                 userId: NumericId<User>,
                 period: PeriodType,
-                expenses: Report<SpendingCategory, PositiveMoney>,
-                earnings: Report<TransferCategory, PositiveMoney>,
-                transfers: Report<TransferCategory, Money>,
+                expenses: Report<Category, PositiveMoney>,
+                earnings: Report<Category, PositiveMoney>,
+                transfers: Report<Category, Money>,
                 total: List<Money>,
                 version: Version
             ) -> T
@@ -84,9 +83,9 @@ class ReportTransferAddingImpl(
             creator: (
                 userId: NumericId<User>,
                 period: PeriodType,
-                expenses: Report<SpendingCategory, PositiveMoney>,
-                earnings: Report<TransferCategory, PositiveMoney>,
-                transfers: Report<TransferCategory, Money>,
+                expenses: Report<Category, PositiveMoney>,
+                earnings: Report<Category, PositiveMoney>,
+                transfers: Report<Category, Money>,
                 total: List<Money>,
                 version: Version
             ) -> T

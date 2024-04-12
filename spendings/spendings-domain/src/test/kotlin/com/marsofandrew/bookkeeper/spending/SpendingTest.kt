@@ -7,7 +7,7 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.account.Account
-import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
@@ -25,7 +25,7 @@ internal class SpendingTest {
                 money = PositiveMoney(Currency.EUR, 10),
                 date = LocalDate.now(),
                 description = "dsd",
-                spendingCategoryId = 465.asId(),
+                categoryId = 465.asId(),
                 createdAt = LocalDate.of(2023, 12, 20),
                 sourceAccountId = null,
                 version = Version(0)
@@ -42,7 +42,7 @@ internal class SpendingTest {
                 money = PositiveMoney(Currency.EUR, 10),
                 date = LocalDate.of(2021, 12, 20),
                 description = "dsd",
-                spendingCategoryId = 465.asId(),
+                categoryId = 465.asId(),
                 createdAt = LocalDate.of(2024, 12, 20),
                 sourceAccountId = null,
                 version = Version(0)
@@ -57,7 +57,7 @@ internal class SpendingTest {
         val money = PositiveMoney(Currency.EUR, 10)
         val date = LocalDate.of(2023, 12, 20)
         val description = "dhjw"
-        val categoryId = 465.asId<SpendingCategory>()
+        val categoryId = 465.asId<Category>()
         val createdAt = LocalDate.of(2024, 12, 20)
         val sourceAccountId = "test".asId<Account>()
 
@@ -67,7 +67,7 @@ internal class SpendingTest {
             money = money,
             date = date,
             description = description,
-            spendingCategoryId = categoryId,
+            categoryId = categoryId,
             createdAt = createdAt,
             sourceAccountId = sourceAccountId,
             version = Version(0)
@@ -78,7 +78,7 @@ internal class SpendingTest {
         result.money shouldBe money
         result.date shouldBe date
         result.description shouldBe description
-        result.spendingCategoryId shouldBe categoryId
+        result.categoryId shouldBe categoryId
         result.createdAt shouldBe createdAt
         result.sourceAccountId shouldBe sourceAccountId
     }

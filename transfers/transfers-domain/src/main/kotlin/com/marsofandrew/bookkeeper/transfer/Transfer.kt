@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.transfer.category.TransferCategory
+import com.marsofandrew.bookkeeper.transfer.category.Category
 import com.marsofandrew.bookkeeper.transfer.user.User
 import java.time.LocalDate
 
@@ -15,7 +15,7 @@ data class Transfer(
     val send: AccountMoney?,
     val received: AccountMoney,
     val description: String,
-    val transferCategoryId: NumericId<TransferCategory>,
+    val categoryId: NumericId<Category>,
     val createdAt: LocalDate,
     override val version: Version,
 ): DomainModel {

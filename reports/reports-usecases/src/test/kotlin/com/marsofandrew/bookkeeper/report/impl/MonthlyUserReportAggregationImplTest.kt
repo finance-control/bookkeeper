@@ -6,8 +6,7 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
-import com.marsofandrew.bookkeeper.report.category.SpendingCategory
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.fixture.monthlyUserReport
 import com.marsofandrew.bookkeeper.report.user.User
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -56,12 +55,12 @@ internal class MonthlyUserReportAggregationImplTest {
         val userId = 5.asId<User>()
 
         val expectedExpenses = Report(
-            byCategory = mapOf(1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
+            byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
             total = listOf(PositiveMoney(Currency.EUR, 10, 0))
         )
 
         val expectedEarnings = Report(
-            byCategory = mapOf(2.asId<TransferCategory>() to listOf(PositiveMoney(Currency.EUR, 5, 0))),
+            byCategory = mapOf(2.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 5, 0))),
             total = listOf(PositiveMoney(Currency.EUR, 5, 0))
         )
 
@@ -92,13 +91,13 @@ internal class MonthlyUserReportAggregationImplTest {
         val userId = 5.asId<User>()
 
         val expectedEarnings = Report(
-            byCategory = mapOf(2.asId<TransferCategory>() to listOf(PositiveMoney(Currency.EUR, 5, 0))),
+            byCategory = mapOf(2.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 5, 0))),
             total = listOf(PositiveMoney(Currency.EUR, 5, 0))
         )
 
         val expectedTransfers = Report(
             byCategory = mapOf(
-                2.asId<TransferCategory>() to
+                2.asId<Category>() to
                         listOf(Money(Currency.EUR, -9, 0), Money(Currency.USD, 11, 0))
             ),
             total = listOf(Money(Currency.EUR, -9, 0), Money(Currency.USD, 11, 0))
@@ -107,7 +106,7 @@ internal class MonthlyUserReportAggregationImplTest {
         every { monthlyUserReportStorage.findAllByUserIdBetween(userId, startDate, endDate) } returns listOf(
             monthlyUserReport(userId, startDate) {
                 expenses = Report(
-                    byCategory = mapOf(1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
+                    byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 10, 0))),
                     total = listOf(PositiveMoney(Currency.EUR, 10, 0))
                 )
                 earnings = expectedEarnings
@@ -115,7 +114,7 @@ internal class MonthlyUserReportAggregationImplTest {
             },
             monthlyUserReport(userId, endDate) {
                 expenses = Report(
-                    byCategory = mapOf(1.asId<SpendingCategory>() to listOf(PositiveMoney(Currency.USD, 10, 0))),
+                    byCategory = mapOf(1.asId<Category>() to listOf(PositiveMoney(Currency.USD, 10, 0))),
                     total = listOf(PositiveMoney(Currency.USD, 10, 0))
                 )
                 transfers = expectedTransfers
@@ -130,7 +129,7 @@ internal class MonthlyUserReportAggregationImplTest {
         result.earnings shouldBe expectedEarnings
         result.expenses shouldBe Report(
             byCategory = mapOf(
-                1.asId<SpendingCategory>() to listOf(
+                1.asId<Category>() to listOf(
                     PositiveMoney(Currency.EUR, 10, 0),
                     PositiveMoney(Currency.USD, 10, 0)
                 )

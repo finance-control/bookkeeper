@@ -57,7 +57,7 @@ internal data class TransferEntity(
             accountId = destinationAccountId?.asId()
         ),
         description = description,
-        transferCategoryId = categoryId.asId(),
+        categoryId = categoryId.asId(),
         createdAt = createdAt,
         version = com.marsofandrew.bookkeeper.base.model.Version(version)
     )
@@ -79,7 +79,7 @@ internal fun Transfer.toTransferEntity() = TransferEntity(
     receivedCurrency = received.money.currency,
     sourceAccountId = send?.accountId?.value,
     destinationAccountId = received.accountId?.value,
-    categoryId = transferCategoryId.value,
+    categoryId = categoryId.value,
     createdAt = createdAt,
     version = version.value
 )

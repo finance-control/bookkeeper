@@ -1,6 +1,6 @@
 package com.marsofandrew.bookkeeper.category
 
-interface CategoryAdding<T : UserCategory<T>> {
+interface CategoryAdding {
 
-    fun add(category: T): T
+    fun add(category: UserCategory): UserCategory
 }

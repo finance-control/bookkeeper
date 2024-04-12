@@ -9,7 +9,7 @@ import com.marsofandrew.bookkeeper.report.Report
 import com.marsofandrew.bookkeeper.report.access.DailyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.MonthlyUserReportStorage
 import com.marsofandrew.bookkeeper.report.access.YearlyUserReportStorage
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.fixture.dailyUserReport
 import com.marsofandrew.bookkeeper.report.fixture.monthlyUserReport
 import com.marsofandrew.bookkeeper.report.fixture.spending
@@ -103,7 +103,7 @@ internal class ReportSpendingAddingImplTest {
         )
 
         val defaultEarningsReport = Report(
-            byCategory = mapOf(5.asId<TransferCategory>() to listOf(PositiveMoney(Currency.EUR, 10))),
+            byCategory = mapOf(5.asId<Category>() to listOf(PositiveMoney(Currency.EUR, 10))),
             total = listOf(PositiveMoney(Currency.EUR, 9, 0))
         )
 

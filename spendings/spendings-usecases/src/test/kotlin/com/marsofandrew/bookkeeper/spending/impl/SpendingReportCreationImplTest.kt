@@ -5,7 +5,7 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.category.SpendingCategory
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
@@ -47,35 +47,35 @@ internal class SpendingReportCreationImplTest {
     @Test
     fun `createReport when data is available returns report`() {
         val userId = 5.asId<User>()
-        val category1 = NumericId<SpendingCategory>(3)
-        val category2 = NumericId<SpendingCategory>(1)
-        val category3 = NumericId<SpendingCategory>(2)
+        val category1 = NumericId<Category>(3)
+        val category2 = NumericId<Category>(1)
+        val category3 = NumericId<Category>(2)
         val date1 = LocalDate.now()
         val date2 = date1.minusDays(2)
 
         val spendings = listOf(
             spending(1.asId(), userId) {
-                spendingCategoryId = category1
+                categoryId = category1
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(15))
             },
             spending(2.asId(), userId) {
-                spendingCategoryId = category1
+                categoryId = category1
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal(15))
             },
             spending(3.asId(), userId) {
-                spendingCategoryId = category2
+                categoryId = category2
                 date = date1
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(50.5))
             },
             spending(4.asId(), userId) {
-                spendingCategoryId = category2
+                categoryId = category2
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(42.25))
             },
             spending(5.asId(), userId) {
-                spendingCategoryId = category3
+                categoryId = category3
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(30.5))
             },
@@ -108,36 +108,36 @@ internal class SpendingReportCreationImplTest {
     @Test
     fun `createReport when data is available and categories are provided returns report only with provided categories`() {
         val userId = 5.asId<User>()
-        val category1 = NumericId<SpendingCategory>(1)
-        val category2 = NumericId<SpendingCategory>(2)
-        val category3 = NumericId<SpendingCategory>(3)
+        val category1 = NumericId<Category>(1)
+        val category2 = NumericId<Category>(2)
+        val category3 = NumericId<Category>(3)
         val now = LocalDate.now()
         val date1 = now.minusDays(1)
         val date2 = now.minusDays(2)
 
         val spendings = listOf(
             spending(1.asId(), userId) {
-                spendingCategoryId = category1
+                categoryId = category1
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(15))
             },
             spending(2.asId(), userId) {
-                spendingCategoryId = category1
+                categoryId = category1
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal(15))
             },
             spending(3.asId(), userId) {
-                spendingCategoryId = category2
+                categoryId = category2
                 date = date1
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(50.5))
             },
             spending(4.asId(), userId) {
-                spendingCategoryId = category2
+                categoryId = category2
                 date = date2
                 money = PositiveMoney(Currency.EUR, BigDecimal.valueOf(42.25))
             },
             spending(5.asId(), userId) {
-                spendingCategoryId = category3
+                categoryId = category3
                 date = date1
                 money = PositiveMoney(Currency.USD, BigDecimal(30.5))
             },

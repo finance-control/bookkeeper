@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.report.category.TransferCategory
+import com.marsofandrew.bookkeeper.report.category.Category
 import com.marsofandrew.bookkeeper.report.earning.Earning
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
@@ -14,12 +14,12 @@ data class EarningFixture(
 ) {
     var money: PositiveMoney = PositiveMoney(Currency.EUR, 100)
     var date: LocalDate = LocalDate.now()
-    var transferCategoryId: NumericId<TransferCategory> = 5.asId()
+    var categoryId: NumericId<Category> = 5.asId()
 
     fun build() = Earning(
         userId = userId,
         money = money,
         date = date,
-        categoryId = transferCategoryId
+        categoryId = categoryId
     )
 }

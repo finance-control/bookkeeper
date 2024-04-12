@@ -5,5 +5,5 @@ import com.marsofandrew.bookkeeper.transfer.user.User
 
 interface TransferCategoryValidator {
 
-    fun validate(userId: NumericId<User>, categoryId: NumericId<TransferCategory>): Boolean
+    fun validate(userId: NumericId<User>, categoryId: NumericId<Category>): Boolean
 }

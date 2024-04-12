@@ -61,5 +61,5 @@ private fun Spending.toRollbackMoneyIsSendEvent() = RollbackMoneyIsSpendEvent(
     userId = userId.value,
     date = date,
     money = AccountBondedMoney(money, sourceAccountId?.value),
-    category = spendingCategoryId.value
+    category = categoryId.value
 )

@@ -9,7 +9,7 @@ internal data class TransferDto(
     val send: AccountMoneyDto?,
     val received: AccountMoneyDto,
     val description: String,
-    val transferCategoryId: Long,
+    val categoryId: Long,
 )
 
 internal fun Transfer.toTransferDto() = TransferDto(
@@ -19,5 +19,5 @@ internal fun Transfer.toTransferDto() = TransferDto(
     send?.toAccountsMoneyDto(),
     received.toAccountsMoneyDto(),
     description,
-    transferCategoryId.value,
+    categoryId.value,
 )
