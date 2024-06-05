@@ -5,5 +5,5 @@ import com.marsofandrew.bookkeeper.user.User
 
 interface UserSelection {
 
-    fun select(id: NumericId<User>): User
+    fun select(id: NumericId<User>): UserWithEmail
 }

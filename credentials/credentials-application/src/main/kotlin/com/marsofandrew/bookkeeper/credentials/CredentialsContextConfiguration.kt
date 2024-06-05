@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
 import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsSettingImpl
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsUserIdSelectionImpl
+import com.marsofandrew.bookkeeper.credentials.impl.UserEmailSelectionImpl
 import java.time.Clock
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,4 +27,8 @@ internal class CredentialsContextConfiguration {
         credentialsEncoder: CredentialsEncoder,
         credentialsStorage: CredentialsStorage
     ): CredentialsUserIdSelection = CredentialsUserIdSelectionImpl(credentialsEncoder, credentialsStorage)
+
+    @Bean
+    fun userEmailSelection(credentialsStorage: CredentialsStorage): UserEmailSelection =
+        UserEmailSelectionImpl(credentialsStorage)
 }

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.marsofandrew.bookkeeper.controller.BaseExceptionHandler
 import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.user.User
-import com.marsofandrew.bookkeeper.user.UserLogin
-import com.marsofandrew.bookkeeper.user.UserRegistration
-import com.marsofandrew.bookkeeper.user.UserSelection
+import com.marsofandrew.bookkeeper.user.*
 import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
 import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
 import com.marsofandrew.bookkeeper.user.controller.exception.UsersExceptionHandler
@@ -120,7 +117,8 @@ internal class UsersControllerTest {
     @Test
     fun `select when user is present return user`() {
         val user = user(5.asId())
-        every { userSelection.select(user.id) } returns user
+        val email = Email("yy@uu.com")
+        every { userSelection.select(user.id) } returns UserWithEmail(user, email)
 
         SecurityContextHolder.getContext().authentication = UserIdToken(user.id.value)
 
@@ -129,6 +127,7 @@ internal class UsersControllerTest {
             jsonPath("id") { value(user.id.value) }
             jsonPath("name") { value(user.name) }
             jsonPath("surname") { value(user.surname) }
+            jsonPath("email") { value(email.value) }
         }
     }
 
