@@ -1,7 +1,6 @@
 FROM gradle:jdk21 AS build
 WORKDIR /app
 COPY ./ /app
-RUN echo ls -la
 RUN ./gradlew :app:bootJar --no-daemon
 
 FROM openjdk:21
