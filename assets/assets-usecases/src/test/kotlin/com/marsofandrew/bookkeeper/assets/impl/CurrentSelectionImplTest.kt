@@ -19,6 +19,6 @@ internal class CurrentSelectionImplTest {
     fun `select returns all Currencies`() {
         val result = currencySelectionImpl.select()
 
-        result shouldContainExactlyInAnyOrder Currency.entries
+        result.map { it.currency } shouldContainExactlyInAnyOrder Currency.entries
     }
 }

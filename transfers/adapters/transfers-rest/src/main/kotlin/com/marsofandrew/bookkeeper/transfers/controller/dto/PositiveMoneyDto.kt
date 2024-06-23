@@ -12,11 +12,11 @@ internal data class PositiveMoneyDto(
         check(amount > 0) { "amount is zero or negative" }
     }
 
-    fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.byCodeOrThrow(currencyCode), amount, digits)
+    fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.valueOf(currencyCode), amount, digits)
 }
 
 internal fun PositiveMoney.toPositiveMoneyDto() = PositiveMoneyDto(
     amount = amount.movePointRight(amount.scale()).longValueExact(),
     digits = amount.scale(),
-    currencyCode = currency.code
+    currencyCode = currency.name
 )

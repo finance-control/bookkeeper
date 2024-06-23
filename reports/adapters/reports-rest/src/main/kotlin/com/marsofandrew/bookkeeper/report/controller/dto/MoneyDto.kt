@@ -11,5 +11,5 @@ internal data class MoneyDto(
 internal fun BaseMoney.toMoneyDto() = MoneyDto(
     amount = amount.movePointRight(amount.scale()).longValueExact(),
     digits = amount.scale(),
-    currencyCode = currency.code
+    currencyCode = currency.name
 )

@@ -14,5 +14,5 @@ dependencies {
     api(project(":accounts:adapters:accounts-rest"))
     api(project(":accounts:adapters:accounts-events"))
 
-    implementation("org.springframework:spring-context:6.1.4")
+    implementation("org.springframework:spring-context:${rootProject.extra["springframework_version"]}")
 }

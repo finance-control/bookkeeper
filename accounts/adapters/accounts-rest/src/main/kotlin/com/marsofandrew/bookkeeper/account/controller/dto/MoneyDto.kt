@@ -11,7 +11,7 @@ internal data class MoneyDto(
 ) {
 
     fun toMoney() = Money(
-        currency = Currency.byCodeOrThrow(currencyCode),
+        currency = Currency.valueOf(currencyCode),
         amount = BigDecimal(amount).movePointLeft(digits)
     )
 }
@@ -19,5 +19,5 @@ internal data class MoneyDto(
 internal fun Money.toMoneyDto() = MoneyDto(
     amount = amount.movePointRight(amount.scale()).longValueExact(),
     digits = amount.scale(),
-    currencyCode = currency.code
+    currencyCode = currency.name
 )

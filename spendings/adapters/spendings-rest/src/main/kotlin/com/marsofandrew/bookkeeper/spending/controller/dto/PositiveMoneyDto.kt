@@ -8,11 +8,11 @@ internal data class PositiveMoneyDto(
     val digits: Int = 2,
     val currencyCode: String
 ) {
-    fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.byCodeOrThrow(currencyCode), amount, digits)
+    fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.valueOf(currencyCode), amount, digits)
 }
 
 internal fun PositiveMoney.toPositiveMoneyDto() = PositiveMoneyDto(
     amount = amount.movePointRight(amount.scale()).longValueExact(),
     digits = amount.scale(),
-    currencyCode = currency.code
+    currencyCode = currency.name
 )

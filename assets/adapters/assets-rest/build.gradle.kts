@@ -15,8 +15,7 @@ dependencies {
     api(project(":assets:assets-usecases"))
     api(project(":common:user-context"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
-    implementation("org.springframework:spring-web")
+    implementation("org.springframework:spring-web:${rootProject.extra["springframework_version"]}")
     implementation("org.springframework.boot:spring-boot-starter-web-services:3.2.3")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -25,5 +24,5 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
-    testImplementation("org.springframework.security:spring-security-test:6.1.4")
+    testImplementation("org.springframework.security:spring-security-test:${rootProject.extra["springframework_version"]}")
 }

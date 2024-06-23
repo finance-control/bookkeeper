@@ -87,6 +87,7 @@ include(
 include(
     "assets:assets-usecases",
     "assets:assets-application",
+    "assets:assets-domain",
     "assets:adapters:assets-rest",
 )
 

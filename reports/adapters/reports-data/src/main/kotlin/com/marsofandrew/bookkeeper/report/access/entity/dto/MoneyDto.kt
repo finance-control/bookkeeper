@@ -13,11 +13,11 @@ internal data class MoneyDto(
 internal fun BaseMoney.toMoneyDto() = MoneyDto(
     amount = amount.movePointRight(amount.scale()).longValueExact(),
     digits = amount.scale(),
-    currencyCode = currency.code
+    currencyCode = currency.name
 )
 
 internal fun MoneyDto.toMoney() = Money(
-    currency = Currency.byCodeOrThrow(currencyCode),
+    currency = Currency.valueOf(currencyCode),
     amount = amount,
     decimals = digits
 )

@@ -7,6 +7,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.22"
 }
 
+extra.set("springframework_version", "6.1.4")
+extra.set("mockk_version", "1.13.9")
 
 allprojects {
     group = "com.marsofandrew"
