@@ -1,0 +1,3 @@
+FROM openjdk:21
+COPY app/build/libs/*.jar bookkeeper.jar
+ENTRYPOINT ["java", "-jar", "bookkeeper.jar", "--spring.profiles.active=production"]
