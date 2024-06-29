@@ -28,7 +28,7 @@ dependencies {
 
     implementation(project(":common:common-data"))
 
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter:3.2.3")
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")

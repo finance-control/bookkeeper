@@ -15,7 +15,6 @@ dependencies {
     api(project(":assets:assets-usecases"))
     api(project(":common:user-context"))
 
-    implementation("org.springframework:spring-web:${rootProject.extra["springframework_version"]}")
     implementation("org.springframework.boot:spring-boot-starter-web-services:3.2.3")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
