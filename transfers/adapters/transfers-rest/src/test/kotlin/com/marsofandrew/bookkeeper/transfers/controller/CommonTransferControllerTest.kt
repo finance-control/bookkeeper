@@ -110,8 +110,8 @@ internal class CommonTransferControllerTest {
         mockMvc.get("/api/v1/common-transfers/report?end_date=${endDate}&start_date=${startDate}")
             .andExpect {
                 status { isOk() }
-                jsonPath("total[0].currencyCode") { value(Currency.EUR.code) }
-                jsonPath("total[1].currencyCode") { value(Currency.USD.code) }
+                jsonPath("total[0].currencyCode") { value(Currency.EUR.name) }
+                jsonPath("total[1].currencyCode") { value(Currency.USD.name) }
                 jsonPath("total[1].amount") { value(-5) }
             }
 

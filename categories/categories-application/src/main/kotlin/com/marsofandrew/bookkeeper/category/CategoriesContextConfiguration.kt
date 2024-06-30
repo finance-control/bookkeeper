@@ -1,10 +1,8 @@
 package com.marsofandrew.bookkeeper.category
 
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.category.access.CategoryStorage
-import com.marsofandrew.bookkeeper.category.impl.CategoryAddingImpl
-import com.marsofandrew.bookkeeper.category.impl.CategoryDeletionImpl
-import com.marsofandrew.bookkeeper.category.impl.CategorySelectionImpl
-import com.marsofandrew.bookkeeper.category.impl.CategoryValidationImpl
+import com.marsofandrew.bookkeeper.category.impl.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -31,4 +29,10 @@ internal class CategoriesContextConfiguration {
     fun categoryValidation(
         categoryStorage: CategoryStorage
     ): CategoryValidation = CategoryValidationImpl(categoryStorage)
+
+    @Bean
+    fun categoryModification(
+        categoryStorage: CategoryStorage,
+        transactionExecutor: TransactionExecutor
+    ): CategoryModification = CategoryModificationImpl(categoryStorage, transactionExecutor)
 }

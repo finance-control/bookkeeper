@@ -101,7 +101,7 @@ internal class SpendingsControllerTest {
                 )
             }
             jsonPath("money.money.digits") { value(2) }
-            jsonPath("money.money.currencyCode") { value(identifiedSpending.money.currency.code) }
+            jsonPath("money.money.currencyCode") { value(identifiedSpending.money.currency.name) }
             jsonPath("date") { value(now.toString()) }
         }
 
@@ -160,14 +160,14 @@ internal class SpendingsControllerTest {
         mockMvc.get("/api/v1/spendings/report?end_date=${endDate}&start_date=${startDate}")
             .andExpect {
                 status { isOk() }
-                jsonPath("spendingByCategory.1[0].currencyCode") { value(Currency.EUR.code) }
-                jsonPath("spendingByCategory.2[0].currencyCode") { value(Currency.USD.code) }
+                jsonPath("spendingByCategory.1[0].currencyCode") { value(Currency.EUR.name) }
+                jsonPath("spendingByCategory.2[0].currencyCode") { value(Currency.USD.name) }
                 jsonPath("spendingByCategory.1[0].amount") { value(5) }
                 jsonPath("spendingByCategory.2[0].amount") { value(5) }
                 jsonPath("spendingByCategory.1[0].digits") { value(0) }
                 jsonPath("spendingByCategory.2[0].digits") { value(0) }
-                jsonPath("total[0].currencyCode") { value(Currency.EUR.code) }
-                jsonPath("total[1].currencyCode") { value(Currency.USD.code) }
+                jsonPath("total[0].currencyCode") { value(Currency.EUR.name) }
+                jsonPath("total[1].currencyCode") { value(Currency.USD.name) }
             }
 
         verify(exactly = 1) { spendingReportCreation.createReport(userId.asId(), startDate, endDate) }

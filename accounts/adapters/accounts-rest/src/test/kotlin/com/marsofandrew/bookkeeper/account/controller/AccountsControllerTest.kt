@@ -77,7 +77,7 @@ internal class AccountsControllerTest {
                 value(identifiedAccount.money.amount.movePointRight(identifiedAccount.money.amount.scale()))
             }
             jsonPath("money.digits") { value(identifiedAccount.money.amount.scale()) }
-            jsonPath("money.currencyCode") { value(identifiedAccount.money.currency.code) }
+            jsonPath("money.currencyCode") { value(identifiedAccount.money.currency.name) }
             jsonPath("userId") { value(USER_ID) }
         }
     }
@@ -110,7 +110,7 @@ internal class AccountsControllerTest {
                     value(identifiedAccount.money.amount.movePointRight(identifiedAccount.money.amount.scale()))
                 }
                 jsonPath("[0].money.digits") { value(identifiedAccount.money.amount.scale()) }
-                jsonPath("[0].money.currencyCode") { value(identifiedAccount.money.currency.code) }
+                jsonPath("[0].money.currencyCode") { value(identifiedAccount.money.currency.name) }
                 jsonPath("[0].userId") { value(USER_ID) }
             }
     }

@@ -1,11 +1,13 @@
 package com.marsofandrew.bookkeeper.category.access
 
+import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
 import com.marsofandrew.bookkeeper.category.UserCategory
 import com.marsofandrew.bookkeeper.category.access.entity.toSpendingUserCategoryEntity
 import com.marsofandrew.bookkeeper.category.access.repository.UserCategoryRepository
 import com.marsofandrew.bookkeeper.category.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class CategoryStorageImpl(
@@ -29,11 +31,26 @@ internal class CategoryStorageImpl(
             .map { it.toModel() }
     }
 
+    override fun findByUserIdAndId(userId: NumericId<User>, id: NumericId<UserCategory>): UserCategory? {
+        return userCategoryRepository.findById(id.value)
+            .filter { it.userId == userId.value }
+            .map { it.toModel() }
+            .orElse(null)
+    }
+
     override fun delete(ids: Set<NumericId<UserCategory>>) {
         userCategoryRepository.deleteAllById(ids.map { it.value })
     }
 
     override fun create(userCategory: UserCategory): UserCategory {
+        return userCategoryRepository.saveAndFlush(userCategory.toSpendingUserCategoryEntity()).toModel()
+    }
+
+    @Transactional
+    override fun update(userCategory: UserCategory): UserCategory {
+        if (!userCategoryRepository.existsById(userCategory.id.value)) {
+            throw DomainModelNotFoundException(userCategory.id)
+        }
         return userCategoryRepository.saveAndFlush(userCategory.toSpendingUserCategoryEntity()).toModel()
     }
 }

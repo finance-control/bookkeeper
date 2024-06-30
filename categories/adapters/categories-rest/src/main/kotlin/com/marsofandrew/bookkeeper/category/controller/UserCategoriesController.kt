@@ -2,13 +2,16 @@ package com.marsofandrew.bookkeeper.category.controller
 
 import com.marsofandrew.bookkeeper.category.CategoryAdding
 import com.marsofandrew.bookkeeper.category.CategoryDeletion
+import com.marsofandrew.bookkeeper.category.CategoryModification
 import com.marsofandrew.bookkeeper.category.CategorySelection
 import com.marsofandrew.bookkeeper.category.controller.dto.CreateUserCategoryDto
 import com.marsofandrew.bookkeeper.category.controller.dto.UserCategoryDto
+import com.marsofandrew.bookkeeper.category.controller.dto.toUserCategory
 import com.marsofandrew.bookkeeper.category.controller.dto.toUserCategoryDto
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.UserId
 import io.swagger.v3.oas.annotations.Parameter
+import org.apache.catalina.mapper.Mapper
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -18,6 +21,7 @@ internal class UserCategoriesController(
     private val categoryAdding: CategoryAdding,
     private val categoryDeletion: CategoryDeletion,
     private val categorySelection: CategorySelection,
+    private val categoryModification: CategoryModification
 ) {
 
     @GetMapping
@@ -49,5 +53,13 @@ internal class UserCategoriesController(
         @PathVariable("id") id: Long
     ) {
         categoryDeletion.delete(userId.asId(), setOf(id.asId()))
+    }
+
+    @PutMapping
+    fun modify(
+        @Parameter(hidden = true) @UserId userId: Long,
+        @RequestBody body: UserCategoryDto
+    ): UserCategoryDto {
+        return categoryModification.modify(userId.asId(), body.toUserCategory()).toUserCategoryDto()
     }
 }

@@ -1,11 +1,9 @@
 package com.marsofandrew.bookkeeper.category.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.marsofandrew.bookkeeper.category.CategoryAdding
-import com.marsofandrew.bookkeeper.category.CategoryDeletion
-import com.marsofandrew.bookkeeper.category.CategorySelection
-import com.marsofandrew.bookkeeper.category.UserCategory
+import com.marsofandrew.bookkeeper.category.*
 import com.marsofandrew.bookkeeper.category.controller.dto.CreateUserCategoryDto
+import com.marsofandrew.bookkeeper.category.controller.dto.toUserCategoryDto
 import com.marsofandrew.bookkeeper.category.fixture.userCategory
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
@@ -24,10 +22,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.*
 
 @WebMvcTest
 @ContextConfiguration(
@@ -132,6 +127,24 @@ internal class UserCategoriesControllerTest {
             }
     }
 
+    @Test
+    fun `modify when everything is ok returns modified category`() {
+        val category = userCategory(1.asId()) {
+            userId = providedUserId.asId()
+        }
+
+        every { categoryModification.modify(providedUserId.asId(), category) } returns category
+
+        mockMvc.put("/api/v1/categories"){
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(category.toUserCategoryDto())
+        }.andExpect {
+            status { isOk() }
+            jsonPath("id") { value(category.id.value) }
+            jsonPath("title") { value(category.title) }
+        }
+    }
+
     @ContextConfiguration
     class TestContextConfiguration {
 
@@ -140,7 +153,8 @@ internal class UserCategoriesControllerTest {
         fun spendingsController() = UserCategoriesController(
             categoryAdding,
             categoryDeletion,
-            categorySelection
+            categorySelection,
+            categoryModification
         )
     }
 
@@ -150,5 +164,6 @@ internal class UserCategoriesControllerTest {
         val categoryAdding = mockk<CategoryAdding>()
         val categoryDeletion = mockk<CategoryDeletion>()
         val categorySelection = mockk<CategorySelection>()
+        val categoryModification = mockk<CategoryModification>()
     }
 }
