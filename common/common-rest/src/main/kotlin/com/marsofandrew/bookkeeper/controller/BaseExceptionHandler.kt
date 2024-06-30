@@ -6,9 +6,11 @@ import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
+// OPen for test purposes
 @ControllerAdvice
 class BaseExceptionHandler {
 
@@ -18,6 +20,14 @@ class BaseExceptionHandler {
     fun onInternalError(exception: Exception): ResponseEntity<*> {
         logger.error("InternalError: ${exception.message}", exception)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ErrorMessages(listOf(exception.message ?: "")))
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun onHttpMessageNotReadableException(exception: HttpMessageNotReadableException): ResponseEntity<*> {
+        logger.error("Invalid input: ${exception.message}", exception)
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorMessages(listOf(exception.message ?: "")))
     }
 

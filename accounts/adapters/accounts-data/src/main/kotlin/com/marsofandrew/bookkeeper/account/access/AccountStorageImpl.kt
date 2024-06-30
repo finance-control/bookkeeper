@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.base.exception.orElseThrow
 import com.marsofandrew.bookkeeper.data.toModelsSet
 import com.marsofandrew.bookkeeper.properties.Money
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
@@ -48,7 +49,7 @@ internal class AccountStorageImpl(
     }
 
     override fun create(account: Account): Account {
-        check(!account.id.initialized) { "Attempt to create identified account" }
+        validateFiled(!account.id.initialized) { "Attempt to create identified account" }
         val accountForSaving = account.identify()
 
         return accountRepository.saveAndFlush(accountForSaving.toAccountEntity()).toModel()

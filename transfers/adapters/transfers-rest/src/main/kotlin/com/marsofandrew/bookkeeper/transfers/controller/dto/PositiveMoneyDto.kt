@@ -2,6 +2,7 @@ package com.marsofandrew.bookkeeper.transfers.controller.dto
 
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
+import com.marsofandrew.bookkeeper.properties.exception.validateFiled
 
 internal data class PositiveMoneyDto(
     val amount: Long,
@@ -9,7 +10,7 @@ internal data class PositiveMoneyDto(
     val currencyCode: String
 ) {
     init {
-        check(amount > 0) { "amount is zero or negative" }
+        validateFiled(amount > 0) { "amount is zero or negative" }
     }
 
     fun toPositiveMoney(): PositiveMoney = PositiveMoney(Currency.valueOf(currencyCode), amount, digits)

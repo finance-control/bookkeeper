@@ -27,4 +27,5 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
     testImplementation("org.springframework.security:spring-security-test:${rootProject.extra["springframework_version"]}")
+    testImplementation(project(":common:common-rest"))
 }

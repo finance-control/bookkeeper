@@ -8,6 +8,7 @@ import com.marsofandrew.bookkeeper.account.controller.dto.CreateAccountDto
 import com.marsofandrew.bookkeeper.account.controller.dto.toMoneyDto
 import com.marsofandrew.bookkeeper.account.fixtures.account
 import com.marsofandrew.bookkeeper.base.date
+import com.marsofandrew.bookkeeper.controller.BaseExceptionHandler
 import com.marsofandrew.bookkeeper.properties.id.StringId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
@@ -35,7 +36,8 @@ import org.springframework.test.web.servlet.post
 @ContextConfiguration(
     classes = [
         AccountsControllerTest.ContextConfiguration::class,
-        AuthArgumentContextConfiguration::class
+        AuthArgumentContextConfiguration::class,
+        BaseExceptionHandler::class
     ]
 )
 internal class AccountsControllerTest {
@@ -83,6 +85,16 @@ internal class AccountsControllerTest {
     }
 
     @Test
+    fun `post when incorrect body is provided returns bad request`() {
+        mockMvc.post("/api/v1/accounts") {
+            contentType = MediaType.APPLICATION_JSON
+            content = "{}"
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
     fun `close when id is provided closes provided account`() {
         val accountId = "test"
         mockMvc.post("/api/v1/accounts/$accountId/close")
@@ -100,7 +112,7 @@ internal class AccountsControllerTest {
             openedAt = accOpenedAt
         }
         val identifiedAccount = account.copy(id = "test".asId())
-        every { Companion.accountSelection.select(USER_ID.asId()) } returns setOf(identifiedAccount)
+        every { accountSelection.select(USER_ID.asId()) } returns setOf(identifiedAccount)
 
         mockMvc.get("/api/v1/accounts")
             .andExpect {
