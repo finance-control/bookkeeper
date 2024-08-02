@@ -14,6 +14,7 @@ interface CategoryStorage {
     fun findByUserIdAndId(userId: NumericId<User>, id: NumericId<UserCategory>): UserCategory?
 
     fun existsByUserIdAndCategoryId(userId: NumericId<User>, id: NumericId<UserCategory>): Boolean
+    fun existsByUserIdAndCategoryTitle(userId: NumericId<User>, title: String): Boolean
 
     fun create(userCategory: UserCategory): UserCategory
     fun update(userCategory: UserCategory): UserCategory

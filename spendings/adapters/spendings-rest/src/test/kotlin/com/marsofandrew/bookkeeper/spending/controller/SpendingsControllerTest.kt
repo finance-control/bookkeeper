@@ -46,7 +46,8 @@ import org.springframework.test.web.servlet.post
 @ContextConfiguration(
     classes = [
         SpendingsControllerTest.TestContextConfiguration::class,
-        AuthArgumentContextConfiguration::class]
+        AuthArgumentContextConfiguration::class,
+    ]
 )
 internal class SpendingsControllerTest {
 

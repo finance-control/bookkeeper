@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.account
 
+import com.marsofandrew.bookkeeper.account.exception.AccountIllegalStateException
 import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.properties.exception.ObjectCreateValidationException
 import com.marsofandrew.bookkeeper.base.model.Version
@@ -92,7 +93,7 @@ internal class AccountTest {
             status = Account.Status.FOR_REMOVAL,
             version = Version(0)
         )
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<AccountIllegalStateException> {
             account.topUp(PositiveMoney(Currency.EUR, 10, 0))
         }
     }
@@ -109,7 +110,7 @@ internal class AccountTest {
             status = Account.Status.IN_USE,
             version = Version(0)
         )
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<AccountIllegalStateException> {
             account.topUp(PositiveMoney(Currency.EUR, 10, 0))
         }
     }
@@ -143,7 +144,7 @@ internal class AccountTest {
             status = Account.Status.FOR_REMOVAL,
             version = Version(0)
         )
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<AccountIllegalStateException> {
             account.withdraw(PositiveMoney(Currency.EUR, 10, 0))
         }
     }
@@ -160,7 +161,7 @@ internal class AccountTest {
             status = Account.Status.IN_USE,
             version = Version(0)
         )
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<AccountIllegalStateException> {
             account.withdraw(PositiveMoney(Currency.EUR, 10, 0))
         }
     }

@@ -23,6 +23,10 @@ internal class CategoryStorageImpl(
         return userCategoryRepository.existsByIdAndUserId(id.value, userId.value)
     }
 
+    override fun existsByUserIdAndCategoryTitle(userId: NumericId<User>, title: String): Boolean {
+        return userCategoryRepository.existsByUserIdAndTitle(userId.value, title)
+    }
+
     override fun findAllByUserIdAndIds(
         userId: NumericId<User>,
         ids: Set<NumericId<UserCategory>>

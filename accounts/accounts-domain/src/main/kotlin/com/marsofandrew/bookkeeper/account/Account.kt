@@ -1,5 +1,6 @@
 package com.marsofandrew.bookkeeper.account
 
+import com.marsofandrew.bookkeeper.account.exception.validateAccount
 import com.marsofandrew.bookkeeper.account.user.User
 import com.marsofandrew.bookkeeper.base.model.DomainModel
 import com.marsofandrew.bookkeeper.base.model.Version
@@ -31,19 +32,19 @@ data class Account(
     }
 
     fun topUp(money: PositiveMoney): Account {
-        check(closedAt == null) { "Account $id is already closed" }
-        check(status != Status.FOR_REMOVAL) { "Account $id is for removal" }
+        validateAccount(closedAt == null) { "Account $id is already closed" }
+        validateAccount(status != Status.FOR_REMOVAL) { "Account $id is for removal" }
         return copy(money = this.money + money)
     }
 
     fun withdraw(money: PositiveMoney): Account {
-        check(closedAt == null) { "Account $id is already closed" }
-        check(status != Status.FOR_REMOVAL) { "Account $id is for removal" }
+        validateAccount(closedAt == null) { "Account $id is already closed" }
+        validateAccount(status != Status.FOR_REMOVAL) { "Account $id is for removal" }
         return copy(money = this.money - money)
     }
 
     fun close(closedAt: LocalDate): Account {
-        check(money == Money.zero(money.currency)) { "Account $id either have non zero balance" }
+        validateAccount(money == Money.zero(money.currency)) { "Account $id have non zero balance" }
 
         return copy(status = Status.FOR_REMOVAL, closedAt = closedAt)
     }

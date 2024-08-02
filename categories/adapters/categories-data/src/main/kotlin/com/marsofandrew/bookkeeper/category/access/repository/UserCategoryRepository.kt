@@ -12,4 +12,6 @@ internal interface UserCategoryRepository : JpaRepository<UserCategoryEntity, Lo
     fun findAllByUserIdAndIdIn(userId: Long, ids: Set<Long>): List<UserCategoryEntity>
 
     fun existsByIdAndUserId(id: Long, userId: Long): Boolean
+
+    fun existsByUserIdAndTitle(userId: Long, title: String): Boolean
 }

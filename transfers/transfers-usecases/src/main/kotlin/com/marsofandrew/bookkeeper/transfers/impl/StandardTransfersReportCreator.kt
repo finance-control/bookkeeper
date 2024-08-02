@@ -3,10 +3,10 @@ package com.marsofandrew.bookkeeper.transfers.impl
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.transfers.CommonTransfer
 import com.marsofandrew.bookkeeper.transfers.CommonTransferBase
 import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
+import com.marsofandrew.bookkeeper.transfers.impl.utils.validateDates
 import com.marsofandrew.bookkeeper.transfers.user.User
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -39,11 +39,5 @@ internal class StandardTransfersReportCreator(
         return TransferReport(
             total = transfersByCurrency.map { (currency, amount) -> Money(currency, amount) }
         )
-    }
-
-    private fun validateDates(startDate: LocalDate, endDate: LocalDate) {
-        if (startDate > endDate) {
-            throw IllegalArgumentException("Start date om more than end date")
-        }
     }
 }

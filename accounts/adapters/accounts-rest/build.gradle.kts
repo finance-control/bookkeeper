@@ -20,6 +20,7 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springdoc:springdoc-openapi-starter-common:2.4.0")
+    implementation(project(":common:common-rest"))
 
     testImplementation(testFixtures(project(":accounts:accounts-domain")))
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
@@ -27,5 +28,4 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
     testImplementation("org.springframework.security:spring-security-test:${rootProject.extra["springframework_version"]}")
-    testImplementation(project(":common:common-rest"))
 }
