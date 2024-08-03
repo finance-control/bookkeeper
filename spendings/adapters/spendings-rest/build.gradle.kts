@@ -22,7 +22,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-common:2.4.0")
 
     testImplementation(testFixtures(project(":spendings:spendings-domain")))
-    testImplementation(testFixtures(project(":common:common-rest")))
+    testImplementation(project(":common:common-rest"))
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -2,6 +2,7 @@ package com.marsofandrew.bookkeeper.transfers.impl.commonTransfer
 
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
+import com.marsofandrew.bookkeeper.transfers.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
 import com.marsofandrew.bookkeeper.transfers.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
@@ -83,7 +84,7 @@ internal class CommonTransferSelectorTest {
 
     @Test
     fun `select throws exception when invalid dates interval is provided`() {
-        shouldThrowExactly<IllegalArgumentException> {
+        shouldThrowExactly<InvalidDateIntervalException> {
             selectingTransfersImpl.select(
                 userId,
                 LocalDate.now(),

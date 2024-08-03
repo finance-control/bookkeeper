@@ -6,6 +6,7 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.AccountMoney
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
+import com.marsofandrew.bookkeeper.transfers.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
 import com.marsofandrew.bookkeeper.transfers.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
@@ -88,7 +89,7 @@ internal class CommonTransferReportCreationImplTest {
     @Test
     fun `createReport throws exception when invalid date interval is provided`() {
         val now = LocalDate.now()
-        shouldThrowExactly<IllegalArgumentException> {
+        shouldThrowExactly<InvalidDateIntervalException> {
             creatingTransfersReportImpl.createReport(
                 5.asId(),
                 now,
