@@ -20,6 +20,10 @@ internal class SpendingStorageImpl(
             .toModelsSet()
     }
 
+    override fun findByIdAndUserId(id: NumericId<Spending>, userId: NumericId<User>): Spending? {
+        return spendingRepository.findByIdAndUserId(id.value, userId.value)?.toModel()
+    }
+
     override fun findAllByUserId(userId: NumericId<User>): List<Spending> {
         return spendingRepository.findAllByUserIdOrderByDate(userId.value).toModels()
     }
@@ -34,6 +38,10 @@ internal class SpendingStorageImpl(
 
     override fun create(spending: Spending): Spending {
         return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
+    }
+
+    override fun update(spending: Spending): Spending {
+       return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
     }
 
     override fun delete(ids: Collection<NumericId<Spending>>) {

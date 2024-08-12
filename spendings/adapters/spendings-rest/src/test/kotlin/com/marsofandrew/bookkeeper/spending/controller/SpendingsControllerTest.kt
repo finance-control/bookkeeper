@@ -6,17 +6,14 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.spending.Spending
-import com.marsofandrew.bookkeeper.spending.SpendingAdding
-import com.marsofandrew.bookkeeper.spending.SpendingDeletion
-import com.marsofandrew.bookkeeper.spending.SpendingReport
-import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
-import com.marsofandrew.bookkeeper.spending.SpendingSelection
+import com.marsofandrew.bookkeeper.spending.*
 import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.controller.dto.AccountBoundedMoneyDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.CreateSpendingDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.PositiveMoneyDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.UpdateSpendingDto
 import com.marsofandrew.bookkeeper.spending.fixture.spending
+import com.marsofandrew.bookkeeper.spending.fixture.spendingUpdate
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
@@ -36,10 +33,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.*
 
 
 @WebMvcTest
@@ -144,6 +138,37 @@ internal class SpendingsControllerTest {
     }
 
     @Test
+    fun `patch modifies spending`() {
+        val update = spendingUpdate(1.asId()) {
+            description = "description"
+        }
+
+        val now = LocalDate.now()
+        val updateSpendingDto = UpdateSpendingDto(
+            money = null,
+            date = null,
+            description = update.description,
+            categoryId = null,
+            version = 0
+        )
+
+        val identifiedSpending = spending(update.id, userId.asId())
+
+        every { spendingModification.modify(userId.asId(), update) } returns identifiedSpending
+
+        mockMvc.patch("/api/v1/spendings/${identifiedSpending.id.value}") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(updateSpendingDto)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("id") { value(identifiedSpending.id.value) }
+            jsonPath("userId") { value(userId) }
+        }
+
+        verify(exactly = 1) { spendingModification.modify(userId.asId(), update) }
+    }
+
+    @Test
     fun `report returns report`() {
         val now = LocalDate.now()
         val startDate = now.minusDays(1)
@@ -183,6 +208,7 @@ internal class SpendingsControllerTest {
             spendingAdding,
             spendingDeletion,
             spendingSelection,
+            spendingModification,
             spendingReportCreation,
             clock
         )
@@ -195,6 +221,7 @@ internal class SpendingsControllerTest {
         val spendingDeletion = mockk<SpendingDeletion>()
         val spendingSelection = mockk<SpendingSelection>()
         val spendingReportCreation = mockk<SpendingReportCreation>()
+        val spendingModification = mockk<SpendingModification>()
         val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     }
 }

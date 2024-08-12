@@ -16,6 +16,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
 
     testImplementation(testFixtures(project(":spendings:spendings-domain")))
+    testImplementation(testFixtures(project(":common:common-base")))
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -17,4 +17,6 @@ internal interface SpendingRepository : JpaRepository<SpendingEntity, Long> {
         startDate: LocalDate,
         endDate: LocalDate
     ): List<SpendingEntity>
+
+    fun findByIdAndUserId(id: Long, userId: Long): SpendingEntity?
 }

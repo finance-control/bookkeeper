@@ -6,6 +6,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.category.access.CategoryStorage
 import com.marsofandrew.bookkeeper.category.fixture.userCategory
 import com.marsofandrew.bookkeeper.category.user.User
+import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import com.marsofandrew.bookkeeper.properties.id.asId
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
@@ -51,7 +52,7 @@ internal class CategoryModificationImplTest {
             userId = categoryUserId
         }
 
-        shouldThrowExactly<RuntimeException> {
+        shouldThrowExactly<ValidationException> {
             categoryModificationImpl.modify(5.asId(), category)
         }
 

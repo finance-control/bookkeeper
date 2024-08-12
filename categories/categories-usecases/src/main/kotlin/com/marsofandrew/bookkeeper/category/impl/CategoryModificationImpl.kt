@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.category.CategoryModification
 import com.marsofandrew.bookkeeper.category.UserCategory
 import com.marsofandrew.bookkeeper.category.access.CategoryStorage
 import com.marsofandrew.bookkeeper.category.user.User
+import com.marsofandrew.bookkeeper.properties.exception.ValidationException
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 class CategoryModificationImpl(
@@ -23,7 +24,7 @@ class CategoryModificationImpl(
 
     private fun validateCategory(userId: NumericId<User>, category: UserCategory) {
         if (category.userId != userId) {
-            throw RuntimeException("User ID doesn't match category ID $category") // TODO
+            throw ValidationException("User ID doesn't match category ID $category")
         }
     }
 }

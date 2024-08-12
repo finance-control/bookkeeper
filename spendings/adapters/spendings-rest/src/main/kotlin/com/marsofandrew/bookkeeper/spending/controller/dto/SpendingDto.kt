@@ -9,13 +9,15 @@ internal data class SpendingDto(
     val date: String,
     val description: String,
     val categoryId: Long,
+    val version: Int
 )
 
 internal fun Spending.toSpendingDto() = SpendingDto(
-    id.value,
-    userId.value,
-    AccountBoundedMoneyDto(money.toPositiveMoneyDto(), sourceAccountId?.value),
-    date.toString(),
-    description,
-    categoryId.value,
+    id = id.value,
+    userId = userId.value,
+    money = AccountBoundedMoneyDto(money.toPositiveMoneyDto(), sourceAccountId?.value),
+    date = date.toString(),
+    description = description,
+    categoryId = categoryId.value,
+    version = version.value
 )

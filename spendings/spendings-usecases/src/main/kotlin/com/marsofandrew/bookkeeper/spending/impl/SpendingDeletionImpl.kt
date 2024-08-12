@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingDeletion
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
+import com.marsofandrew.bookkeeper.spending.impl.util.toRollbackMoneyIsSendEvent
 import com.marsofandrew.bookkeeper.spending.user.User
 import org.apache.logging.log4j.LogManager
 
@@ -24,10 +25,3 @@ class SpendingDeletionImpl(
         eventPublisher.publish(spendings.map { it.toRollbackMoneyIsSendEvent() })
     }
 }
-
-private fun Spending.toRollbackMoneyIsSendEvent() = RollbackMoneyIsSpendEvent(
-    userId = userId.value,
-    date = date,
-    money = AccountBondedMoney(money, sourceAccountId?.value),
-    category = categoryId.value
-)

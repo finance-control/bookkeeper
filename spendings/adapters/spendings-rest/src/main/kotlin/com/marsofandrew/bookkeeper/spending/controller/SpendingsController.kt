@@ -1,10 +1,7 @@
 package com.marsofandrew.bookkeeper.spending.controller
 
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.spending.SpendingAdding
-import com.marsofandrew.bookkeeper.spending.SpendingDeletion
-import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
-import com.marsofandrew.bookkeeper.spending.SpendingSelection
+import com.marsofandrew.bookkeeper.spending.*
 import com.marsofandrew.bookkeeper.spending.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
 import io.swagger.v3.oas.annotations.Parameter
@@ -19,6 +16,7 @@ internal class SpendingsController(
     private val spendingAdding: SpendingAdding,
     private val spendingDeletion: SpendingDeletion,
     private val spendingSelection: SpendingSelection,
+    private val spendingModification: SpendingModification,
     private val spendingReportCreation: SpendingReportCreation,
     private val clock: Clock
 ) {
@@ -38,6 +36,15 @@ internal class SpendingsController(
         @PathVariable("id") id: Long
     ) {
         spendingDeletion.delete(userId.asId(), setOf(id.asId()))
+    }
+
+    @PatchMapping("/{id}")
+    fun patch(
+        @Parameter(hidden = true) @UserId userId: Long,
+        @PathVariable("id") id: Long,
+        @RequestBody body: UpdateSpendingDto,
+    ): SpendingDto {
+        return spendingModification.modify(userId.asId(), body.toSpendingUpdate(id.asId())).toSpendingDto()
     }
 
     @GetMapping
