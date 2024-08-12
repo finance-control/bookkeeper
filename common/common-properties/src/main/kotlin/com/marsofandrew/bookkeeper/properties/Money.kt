@@ -41,6 +41,8 @@ data class Money(
         return Objects.hash(currency, amount.normalize())
     }
 
+    fun isZero() = amount.compareTo(BigDecimal.ZERO) == 0
+
     companion object {
         fun zero(currency: Currency) = Money(currency, BigDecimal.ZERO)
     }

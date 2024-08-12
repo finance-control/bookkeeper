@@ -42,6 +42,7 @@ internal class CategoryStorageImpl(
             .orElse(null)
     }
 
+    @Transactional
     override fun delete(ids: Set<NumericId<UserCategory>>) {
         userCategoryRepository.deleteAllById(ids.map { it.value })
     }

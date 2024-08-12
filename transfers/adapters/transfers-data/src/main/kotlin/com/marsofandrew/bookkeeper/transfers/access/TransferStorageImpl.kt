@@ -10,6 +10,7 @@ import com.marsofandrew.bookkeeper.transfers.access.repository.TransferRepositor
 import com.marsofandrew.bookkeeper.transfers.user.User
 import java.time.LocalDate
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
 internal class TransferStorageImpl(
@@ -42,6 +43,7 @@ internal class TransferStorageImpl(
         return transferRepository.saveAndFlush(commonTransfer.toTransferEntity()).toModel()
     }
 
+    @Transactional
     override fun delete(ids: Collection<NumericId<CommonTransfer>>) {
         transferRepository.deleteAllById(ids.map { it.value })
     }

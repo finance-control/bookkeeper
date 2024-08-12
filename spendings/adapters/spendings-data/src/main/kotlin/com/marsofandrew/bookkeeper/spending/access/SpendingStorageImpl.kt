@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.spending.access.repository.SpendingRepository
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class SpendingStorageImpl(
@@ -36,14 +37,17 @@ internal class SpendingStorageImpl(
         return spendingRepository.findAllByUserIdAndDateBetweenOrderByDate(userId.value, startDate, endDate).toModels()
     }
 
+    @Transactional
     override fun create(spending: Spending): Spending {
         return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
     }
 
+    @Transactional
     override fun update(spending: Spending): Spending {
        return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
     }
 
+    @Transactional
     override fun delete(ids: Collection<NumericId<Spending>>) {
         spendingRepository.deleteAllById(ids.map { it.value })
     }

@@ -31,5 +31,5 @@ internal operator fun Money.unaryMinus(): Money = copy(amount = -amount)
 internal fun List<PositiveMoney>.addNegative(money: Money): List<PositiveMoney> =
     map { it.toMoney() }
         .addMoney(money)
-        .filter { it.amount != BigDecimal.ZERO }
+        .filter { !it.isZero() }
         .map { it.toPositiveMoney() }

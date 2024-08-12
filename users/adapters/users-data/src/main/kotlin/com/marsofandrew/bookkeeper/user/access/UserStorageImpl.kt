@@ -18,7 +18,7 @@ internal class UserStorageImpl(
     }
 
     override fun create(user: User): User {
-        require(!user.id.initialized) { "user has already has id" }
+        require(!user.id.initialized) { "user has already initialized has id" }
 
         return userRepository.saveAndFlush(user.copy(id = userIdGenerator.generateId()).toUserEntity()).toModel()
     }
