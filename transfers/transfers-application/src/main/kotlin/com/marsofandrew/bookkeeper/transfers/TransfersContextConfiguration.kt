@@ -1,22 +1,27 @@
 package com.marsofandrew.bookkeeper.transfers
 
+import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.account.TransferAccountValidator
 import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.earning.EarningAdding
+import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
 import com.marsofandrew.bookkeeper.transfers.earning.EarningReportCreation
 import com.marsofandrew.bookkeeper.transfers.earning.EarningSelection
 import com.marsofandrew.bookkeeper.transfers.impl.commonTransfer.CommonTransferDeletionImpl
 import com.marsofandrew.bookkeeper.transfers.impl.commonTransfer.CommonTransferSelectionImpl
 import com.marsofandrew.bookkeeper.transfers.impl.commonTransfer.CommonTransfersReportCreationImpl
 import com.marsofandrew.bookkeeper.transfers.impl.earning.EarningAddingImpl
+import com.marsofandrew.bookkeeper.transfers.impl.earning.EarningModificationImpl
 import com.marsofandrew.bookkeeper.transfers.impl.earning.EarningReportCreationImpl
 import com.marsofandrew.bookkeeper.transfers.impl.earning.EarningSelectionImpl
 import com.marsofandrew.bookkeeper.transfers.impl.transfer.TransferAddingImpl
+import com.marsofandrew.bookkeeper.transfers.impl.transfer.TransferModificationImpl
 import com.marsofandrew.bookkeeper.transfers.impl.transfer.TransferReportCreationImpl
 import com.marsofandrew.bookkeeper.transfers.impl.transfer.TransferSelectionImpl
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferAdding
+import com.marsofandrew.bookkeeper.transfers.transfer.TransferModification
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferSelection
 import org.springframework.context.annotation.Bean
@@ -65,6 +70,21 @@ class TransfersContextConfiguration {
     ): EarningSelection = EarningSelectionImpl(transferStorage)
 
     @Bean
+    fun earningModification(
+        transferStorage: TransferStorage,
+        eventPublisher: EventPublisher,
+        transferAccountValidator: TransferAccountValidator,
+        transferCategoryValidator: TransferCategoryValidator,
+        transactionExecutor: TransactionExecutor
+    ): EarningModification = EarningModificationImpl(
+        transferStorage,
+        eventPublisher,
+        transferAccountValidator,
+        transferCategoryValidator,
+        transactionExecutor
+    )
+
+    @Bean
     fun transferAdding(
         transferStorage: TransferStorage,
         eventPublisher: EventPublisher,
@@ -86,4 +106,19 @@ class TransfersContextConfiguration {
     fun transferSelection(
         transferStorage: TransferStorage
     ): TransferSelection = TransferSelectionImpl(transferStorage)
+
+    @Bean
+    fun transferModification(
+        transferStorage: TransferStorage,
+        eventPublisher: EventPublisher,
+        transferAccountValidator: TransferAccountValidator,
+        transferCategoryValidator: TransferCategoryValidator,
+        transactionExecutor: TransactionExecutor
+    ): TransferModification = TransferModificationImpl(
+        transferStorage,
+        eventPublisher,
+        transferAccountValidator,
+        transferCategoryValidator,
+        transactionExecutor
+    )
 }

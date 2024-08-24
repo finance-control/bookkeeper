@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.report.access.repository.DailyUserReportRepos
 import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
@@ -30,7 +31,7 @@ internal class DailyUserReportStorageImpl(
         return dailyUserReportRepository.findAllByUserIdAndDateBetween(userId.value, startDate, endDate).toModels()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun createOrUpdate(report: DailyUserReport) {
         dailyUserReportRepository.saveAndFlush(report.toDailyReportEntity())
     }

@@ -10,6 +10,7 @@ import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import java.time.Year
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
@@ -27,7 +28,7 @@ internal class YearlyUserReportStorageImpl(
         return yearlyUserReportRepository.findAllByUserId(userId.value).toModels()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun createOrUpdate(report: YearlyUserReport) {
         yearlyUserReportRepository.saveAndFlush(report.toYearlyReportEntity())
     }

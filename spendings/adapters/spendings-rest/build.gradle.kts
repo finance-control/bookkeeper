@@ -29,4 +29,5 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.2")
     testImplementation("org.springframework.security:spring-security-test:6.1.4")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 }

@@ -8,9 +8,10 @@ import com.marsofandrew.bookkeeper.transfers.CommonTransferBase
 import com.marsofandrew.bookkeeper.transfers.access.entity.toTransferEntity
 import com.marsofandrew.bookkeeper.transfers.access.repository.TransferRepository
 import com.marsofandrew.bookkeeper.transfers.user.User
-import java.time.LocalDate
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Repository
 internal class TransferStorageImpl(
@@ -37,13 +38,22 @@ internal class TransferStorageImpl(
         return transferRepository.findAllByUserIdAndDateBetweenOrderByDate(userId.value, startDate, endDate).toModels()
     }
 
+    override fun findByIdAndUserId(id: NumericId<CommonTransfer>, userId: NumericId<User>): CommonTransferBase? {
+        return transferRepository.findByIdAndUserId(id.value, userId.value)?.toModel()
+    }
+
     override fun create(commonTransfer: CommonTransferBase): CommonTransfer {
         require(!commonTransfer.id.initialized)
 
         return transferRepository.saveAndFlush(commonTransfer.toTransferEntity()).toModel()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
+    override fun update(updated: CommonTransferBase): CommonTransferBase {
+        return transferRepository.saveAndFlush(updated.toTransferEntity()).toModel()
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun delete(ids: Collection<NumericId<CommonTransfer>>) {
         transferRepository.deleteAllById(ids.map { it.value })
     }

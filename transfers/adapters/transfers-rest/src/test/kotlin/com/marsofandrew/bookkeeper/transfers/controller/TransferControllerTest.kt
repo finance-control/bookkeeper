@@ -8,12 +8,11 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Transfer
 import com.marsofandrew.bookkeeper.transfers.TransferReport
-import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
+import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
+import com.marsofandrew.bookkeeper.transfers.fixtures.transferUpdate
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferAdding
+import com.marsofandrew.bookkeeper.transfers.transfer.TransferModification
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferSelection
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
@@ -33,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
@@ -109,6 +109,37 @@ internal class TransferControllerTest {
     }
 
     @Test
+    fun `patch modifies earning`() {
+        val update = transferUpdate(1.asId()) {
+            description = "description"
+        }
+
+        val updateTransferDto = UpdateTransferDto(
+            received = null,
+            send = null,
+            date = null,
+            description = update.description,
+            categoryId = null,
+            version = 0
+        )
+
+        val identifiedTransfer = transfer(update.id, userId.asId())
+
+        every { transferModification.modify(userId.asId(), update) } returns identifiedTransfer
+
+        mockMvc.patch("/api/v1/transfers/${identifiedTransfer.id.value}") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(updateTransferDto)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("id") { value(identifiedTransfer.id.value) }
+            jsonPath("userId") { value(userId) }
+        }
+
+        verify(exactly = 1) { transferModification.modify(userId.asId(), update) }
+    }
+
+    @Test
     fun `get returns transfers`() {
         val now = LocalDate.now()
         val transfers = listOf(
@@ -161,6 +192,7 @@ internal class TransferControllerTest {
         fun transfersController() = TransferController(
             transferAdding,
             transferSelection,
+            transferModification,
             transferReportCreation,
             clock
         )
@@ -172,6 +204,7 @@ internal class TransferControllerTest {
         val transferAdding = mockk<TransferAdding>()
         val transferSelection = mockk<TransferSelection>()
         val transferReportCreation = mockk<TransferReportCreation>()
+        val transferModification = mockk<TransferModification>()
         val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     }
 }

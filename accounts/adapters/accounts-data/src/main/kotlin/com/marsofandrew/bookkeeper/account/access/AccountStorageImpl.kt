@@ -18,6 +18,7 @@ import java.time.LocalDate
 import java.util.Objects
 import java.util.concurrent.ThreadLocalRandom
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
@@ -55,7 +56,7 @@ internal class AccountStorageImpl(
         return accountRepository.saveAndFlush(accountForSaving.toAccountEntity()).toModel()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun setMoney(id: StringId<Account>, money: Money) {
         val account = accountRepository.findById(id.value).getOrNull().orElseThrow(id)
 
@@ -69,12 +70,12 @@ internal class AccountStorageImpl(
     }
 
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun setForRemovalAndClose(ids: Set<StringId<Account>>, closedAt: LocalDate) {
         accountRepository.setForRemovalAndClose(ids.map { it.value }, closedAt)
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun delete(ids: Set<StringId<Account>>) {
         accountRepository.deleteAllById(ids.map { it.value })
     }

@@ -3,6 +3,7 @@ package com.marsofandrew.bookkeeper.transfers.controller
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.transfers.earning.EarningAdding
+import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
 import com.marsofandrew.bookkeeper.transfers.earning.EarningReportCreation
 import com.marsofandrew.bookkeeper.transfers.earning.EarningSelection
 import com.marsofandrew.bookkeeper.userContext.UserId
@@ -17,6 +18,7 @@ internal class EarningController(
     private val earningAdding: EarningAdding,
     private val earningSelection: EarningSelection,
     private val earningReportCreation: EarningReportCreation,
+    private val earningModification: EarningModification,
     private val clock: Clock,
 ) {
 
@@ -42,6 +44,15 @@ internal class EarningController(
         }
 
         return transfers.map { it.toTransferDto() }
+    }
+
+    @PatchMapping("{id}")
+    fun update(
+        @Parameter(hidden = true) @UserId userId: Long,
+        @PathVariable("id") id: Long,
+        @RequestBody(required = true) body: UpdateEarningDto,
+    ): TransferDto {
+        return earningModification.modify(userId.asId(), body.toEarningUpdate(id.asId())).toTransferDto()
     }
 
     @GetMapping("/report")

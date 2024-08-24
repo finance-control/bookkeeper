@@ -8,12 +8,12 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.Period
 import java.time.ZoneId
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 internal class AccountCleanupImplTest {
 

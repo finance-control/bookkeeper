@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.category.access.repository.UserCategoryReposi
 import com.marsofandrew.bookkeeper.category.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
@@ -42,7 +43,7 @@ internal class CategoryStorageImpl(
             .orElse(null)
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun delete(ids: Set<NumericId<UserCategory>>) {
         userCategoryRepository.deleteAllById(ids.map { it.value })
     }
@@ -51,7 +52,7 @@ internal class CategoryStorageImpl(
         return userCategoryRepository.saveAndFlush(userCategory.toSpendingUserCategoryEntity()).toModel()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun update(userCategory: UserCategory): UserCategory {
         if (!userCategoryRepository.existsById(userCategory.id.value)) {
             throw DomainModelNotFoundException(userCategory.id)

@@ -10,6 +10,7 @@ import com.marsofandrew.bookkeeper.report.user.User
 import java.time.LocalDate
 import java.time.YearMonth
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
@@ -34,7 +35,7 @@ internal class MonthlyUserReportStorageImpl(
         return monthlyUserReportRepository.findAllByUserIdAndDateBetween(userId.value, startMonth, endMonth).toModels()
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun createOrUpdate(report: MonthlyUserReport) {
         monthlyUserReportRepository.saveAndFlush(report.toMonthlyReportEntity())
     }

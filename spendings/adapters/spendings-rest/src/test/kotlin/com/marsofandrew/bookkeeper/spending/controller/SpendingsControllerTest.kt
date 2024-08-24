@@ -1,6 +1,7 @@
 package com.marsofandrew.bookkeeper.spending.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.marsofandrew.bookkeeper.base.date
 import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
@@ -20,10 +21,6 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,6 +31,10 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.*
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 
 @WebMvcTest
@@ -59,7 +60,7 @@ internal class SpendingsControllerTest {
 
     @Test
     fun `add when correct values are set when creates the spending and returns id`() {
-        val now = LocalDate.now()
+        val now = clock.date()
         val createSpendingDto = CreateSpendingDto(
             money = AccountBoundedMoneyDto(PositiveMoneyDto(200, 2, "EUR"), null),
             date = now,

@@ -8,15 +8,17 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Earning
 import com.marsofandrew.bookkeeper.transfers.TransferReport
+import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
 import com.marsofandrew.bookkeeper.transfers.earning.EarningAdding
+import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
 import com.marsofandrew.bookkeeper.transfers.earning.EarningReportCreation
 import com.marsofandrew.bookkeeper.transfers.earning.EarningSelection
-import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
+import com.marsofandrew.bookkeeper.transfers.fixtures.earningUpdate
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
@@ -38,6 +40,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
 
 @WebMvcTest
@@ -147,6 +150,36 @@ internal class EarningControllerTest {
         verify(exactly = 1) { earningReportCreation.createReport(userId.asId(), startDate, endDate) }
     }
 
+    @Test
+    fun `patch modifies earning`() {
+        val update = earningUpdate(1.asId()) {
+            description = "description"
+        }
+
+        val updateEarningDto = UpdateEarningDto(
+            received = null,
+            date = null,
+            description = update.description,
+            categoryId = null,
+            version = 0
+        )
+
+        val identifiedEarning = earning(update.id, userId.asId())
+
+        every { earningModification.modify(userId.asId(), update) } returns identifiedEarning
+
+        mockMvc.patch("/api/v1/earnings/${identifiedEarning.id.value}") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(updateEarningDto)
+        }.andExpect {
+            status { isOk() }
+            jsonPath("id") { value(identifiedEarning.id.value) }
+            jsonPath("userId") { value(userId) }
+        }
+
+        verify(exactly = 1) { earningModification.modify(userId.asId(), update) }
+    }
+
     @ContextConfiguration
     class TestContextConfiguration {
 
@@ -156,6 +189,7 @@ internal class EarningControllerTest {
             earningAdding,
             earningSelection,
             earningReportCreation,
+            earningModification,
             clock
         )
     }
@@ -166,6 +200,7 @@ internal class EarningControllerTest {
         val earningAdding = mockk<EarningAdding>()
         val earningSelection = mockk<EarningSelection>()
         val earningReportCreation = mockk<EarningReportCreation>()
+        val earningModification = mockk<EarningModification>()
         val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     }
 }

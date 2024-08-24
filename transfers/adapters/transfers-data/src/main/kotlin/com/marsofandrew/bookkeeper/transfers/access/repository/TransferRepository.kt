@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.transfers.access.entity.TransferEntity
 import java.time.LocalDate
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 internal interface TransferRepository : JpaRepository<TransferEntity, Long> {
@@ -17,4 +18,6 @@ internal interface TransferRepository : JpaRepository<TransferEntity, Long> {
         startDate: LocalDate,
         endDate: LocalDate
     ): List<TransferEntity>
+
+    fun findByIdAndUserId(id: Long, userId: Long): TransferEntity?
 }

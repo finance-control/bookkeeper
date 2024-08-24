@@ -7,6 +7,7 @@ import com.marsofandrew.bookkeeper.credentials.user.User
 import com.marsofandrew.bookkeeper.properties.email.Email
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
@@ -28,7 +29,7 @@ internal class CredentialsStorageImpl(
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     override fun createOrUpdate(userCredentials: UserCredentials) {
         credentialsRepository.saveAndFlush(userCredentials.toCredentialsEntity())
     }
