@@ -1,7 +1,7 @@
 package com.marsofandrew.bookkeeper.auth.security.configuration
 
 import com.marsofandrew.bookkeeper.auth.security.exception.AuthExceptionHandler
-import com.marsofandrew.bookkeeper.auth.security.filter.AuthenticationFilter
+import com.marsofandrew.bookkeeper.auth.security.filter.AbstractAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableMethodSecurity(prePostEnabled = true)
 internal class SecurityContextConfiguration(
     private val authenticationProviders: List<AuthenticationProvider>,
-    private val authenticationFilters: List<AuthenticationFilter>,
+    private val authenticationFilters: List<AbstractAuthenticationFilter>,
 ) {
 
     @Bean

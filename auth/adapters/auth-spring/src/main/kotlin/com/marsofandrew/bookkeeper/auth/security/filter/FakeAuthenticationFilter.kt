@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
-internal class FakeAuthenticationFilter : AuthenticationFilter() {
+internal class FakeAuthenticationFilter : AbstractAuthenticationFilter() {
 
     override fun getAuthentication(request: HttpServletRequest): Authentication? {
         val userId = request.userId

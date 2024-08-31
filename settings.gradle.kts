@@ -73,6 +73,7 @@ include(
     "credentials:credentials-application",
     "credentials:adapters:credentials-data",
     "credentials:adapters:credentials-encryption",
+    "credentials:adapters:credentials-rest",
 )
 
 include(

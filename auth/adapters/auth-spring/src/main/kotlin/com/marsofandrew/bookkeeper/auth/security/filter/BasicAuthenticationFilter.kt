@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
-internal class BasicAuthenticationFilter : AuthenticationFilter() {
+internal class BasicAuthenticationFilter : AbstractAuthenticationFilter() {
 
     override fun getAuthentication(request: HttpServletRequest): Authentication? {
 
