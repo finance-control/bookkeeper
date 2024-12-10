@@ -47,6 +47,7 @@ include(
     "auth:auth-application",
     "auth:adapters:auth-spring",
     "auth:adapters:auth-credentials",
+    "auth:adapters:auth-tokens",
 )
 
 include(
@@ -74,6 +75,14 @@ include(
     "credentials:adapters:credentials-data",
     "credentials:adapters:credentials-encryption",
     "credentials:adapters:credentials-rest",
+)
+
+include(
+    "tokens:tokens-domain",
+    "tokens:tokens-usecases",
+    "tokens:tokens-application",
+    "tokens:adapters:tokens-data",
+    "tokens:adapters:tokens-hashing",
 )
 
 include(

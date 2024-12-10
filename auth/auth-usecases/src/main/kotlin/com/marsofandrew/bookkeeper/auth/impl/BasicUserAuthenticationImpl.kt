@@ -11,7 +11,7 @@ class BasicUserAuthenticationImpl(
 ) : AbstractUserAuthenticationImpl() {
 
     override fun getUserIdByAuth(authKey: String): Long {
-        val params = kotlin.runCatching {String(Base64.getDecoder().decode(authKey))}
+        val params = kotlin.runCatching { String(Base64.getDecoder().decode(authKey)) }
             .getOrElse { authKey }
             .split(":")
         if (params.size < 2) throw forbidden(IllegalArgumentException("Password is not provided"))

@@ -4,5 +4,5 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 
 interface UserLogin {
 
-    fun login(id: NumericId<User>): User
+    fun login(id: NumericId<User>, clientId: String?, ipAddress: String): UserWithToken
 }

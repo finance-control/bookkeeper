@@ -6,7 +6,10 @@ import com.marsofandrew.bookkeeper.user.UserRegistration
 import com.marsofandrew.bookkeeper.user.UserSelection
 import com.marsofandrew.bookkeeper.user.controller.dto.*
 import com.marsofandrew.bookkeeper.userContext.UserId
+import com.marsofandrew.bookkeeper.userContext.getRequestClientId
+import com.marsofandrew.bookkeeper.userContext.getRequestIpAddress
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.headers.Header
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -29,10 +32,10 @@ internal class UsersController(
 
     @GetMapping("/signing")
     fun login(
-        @Parameter(hidden = true) @UserId userId: Long
-    ): UserIdDto {
-        val user = userLogin.login(userId.asId())
-        return UserIdDto(id = user.id.value)
+        @Parameter(hidden = true) @UserId userId: Long,
+    ): UserIdTokenDto {
+        val user = userLogin.login(userId.asId(), getRequestClientId(), getRequestIpAddress())
+        return UserIdTokenDto(id = user.id.value)
     }
 
     @GetMapping("/current")
