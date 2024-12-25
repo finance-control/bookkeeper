@@ -4,14 +4,24 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.UserLogin
 import com.marsofandrew.bookkeeper.user.UserRegistration
 import com.marsofandrew.bookkeeper.user.UserSelection
-import com.marsofandrew.bookkeeper.user.controller.dto.*
+import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserIdDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserIdTokenDto
+import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
+import com.marsofandrew.bookkeeper.user.controller.dto.toUserDto
+import com.marsofandrew.bookkeeper.userContext.DEFAULT_CLIENT_ID
 import com.marsofandrew.bookkeeper.userContext.UserId
 import com.marsofandrew.bookkeeper.userContext.getRequestClientId
 import com.marsofandrew.bookkeeper.userContext.getRequestIpAddress
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.headers.Header
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,8 +44,8 @@ internal class UsersController(
     fun login(
         @Parameter(hidden = true) @UserId userId: Long,
     ): UserIdTokenDto {
-        val user = userLogin.login(userId.asId(), getRequestClientId(), getRequestIpAddress())
-        return UserIdTokenDto(id = user.id.value)
+        val user = userLogin.login(userId.asId(), getRequestClientId() ?: DEFAULT_CLIENT_ID, getRequestIpAddress())
+        return UserIdTokenDto(id = user.user.id.value, user.token)
     }
 
     @GetMapping("/current")

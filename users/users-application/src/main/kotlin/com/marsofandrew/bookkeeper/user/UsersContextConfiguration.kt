@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.user.access.UserStorage
 import com.marsofandrew.bookkeeper.user.credentials.UserCredentialsSetter
 import com.marsofandrew.bookkeeper.user.credentials.UserEmailSelector
+import com.marsofandrew.bookkeeper.user.credentials.UserTokenCreator
 import com.marsofandrew.bookkeeper.user.impl.UserLoginImpl
 import com.marsofandrew.bookkeeper.user.impl.UserRegistrationImpl
 import com.marsofandrew.bookkeeper.user.impl.UserSelectionImpl
@@ -28,7 +29,8 @@ internal class UsersContextConfiguration {
     )
 
     @Bean
-    fun userLogin(userStorage: UserStorage): UserLogin = UserLoginImpl(userStorage)
+    fun userLogin(userStorage: UserStorage, userTokenCreator: UserTokenCreator): UserLogin =
+        UserLoginImpl(userStorage, userTokenCreator)
 
     @Bean
     fun userSelection(

@@ -12,7 +12,7 @@ class TokenUserAuthenticationImpl(
 ) : AbstractUserAuthenticationImpl() {
 
     override fun getUserIdByAuth(authKey: String): Long {
-        val clientId = clientIdProvider.getClientId() ?: throw IncorrectCredentialsException("Invalid token")
+        val clientId = clientIdProvider.getClientId()
 
         return userIdByTokenProvider.getIdByToken(authKey, ipAddressProvider.getIpAddress(), clientId)
             ?: throw IncorrectCredentialsException("Incorrect token")

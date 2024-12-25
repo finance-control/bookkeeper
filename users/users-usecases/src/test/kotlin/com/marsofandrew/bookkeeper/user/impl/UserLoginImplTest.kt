@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
 import com.marsofandrew.bookkeeper.user.access.UserStorage
+import com.marsofandrew.bookkeeper.user.credentials.UserTokenCreator
 import com.marsofandrew.bookkeeper.user.fixture.user
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.should
@@ -16,13 +17,15 @@ import org.junit.jupiter.api.Test
 internal class UserLoginImplTest {
 
     private val userStorage = mockk<UserStorage>(relaxUnitFun = true)
+    private val userTokenCreator: UserTokenCreator = mockk(relaxUnitFun = true)
+
 
     private lateinit var userLoginImpl: UserLoginImpl
 
     @BeforeEach
     fun setup() {
-
-        userLoginImpl = UserLoginImpl(userStorage)
+        userLoginImpl = UserLoginImpl(userStorage, userTokenCreator)
+        every { userTokenCreator.create(any(), any(), any()) } returns "token"
     }
 
     @Test
@@ -32,7 +35,7 @@ internal class UserLoginImplTest {
         every { userStorage.findByIdOrThrow(userId) } throws DomainModelNotFoundException(userId)
 
         shouldThrowExactly<DomainModelNotFoundException> {
-            userLoginImpl.login(userId)
+            userLoginImpl.login(userId, "", "")
         }
     }
 
@@ -42,8 +45,8 @@ internal class UserLoginImplTest {
 
         every { userStorage.findByIdOrThrow(user.id) } returns user
 
-        val result = userLoginImpl.login(user.id)
+        val result = userLoginImpl.login(user.id, "", "")
 
-        result shouldBe user
+        result.user shouldBe user
     }
 }

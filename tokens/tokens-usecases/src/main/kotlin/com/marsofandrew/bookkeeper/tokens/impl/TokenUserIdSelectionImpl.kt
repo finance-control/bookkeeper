@@ -20,6 +20,6 @@ class TokenUserIdSelectionImpl(
     }
 
     private fun filterByIpAddress(credentials: TokenCredentials, ipAddress: String?): Boolean {
-        return ipAddress == null || ipAddress == credentials.ipAddress
+        return credentials.ipAddress == null || ipAddress == credentials.ipAddress
     }
 }

@@ -12,7 +12,10 @@ class UserLoginImpl(
     private val userTokenCreator: UserTokenCreator,
 ): UserLogin {
 
-    override fun login(id: NumericId<User>, clientId: String?, ipAddress: String): UserWithToken {
-        return userStorage.findByIdOrThrow(id)
+    override fun login(id: NumericId<User>, clientId: String, ipAddress: String): UserWithToken {
+        val user = userStorage.findByIdOrThrow(id)
+        // temporary avoid to pass Ip address for tokens
+        val token = userTokenCreator.create(id, clientId, null)
+        return UserWithToken(user, token)
     }
 }
