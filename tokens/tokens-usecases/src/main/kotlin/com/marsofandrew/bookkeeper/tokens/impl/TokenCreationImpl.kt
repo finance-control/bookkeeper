@@ -44,5 +44,4 @@ class TokenCreationImpl(
                 "UUID: ${UUID.randomUUID()}"
         return Base64.getEncoder().encodeToString(hashGenerator.hash(token.toByteArray()))
     }
-
 }

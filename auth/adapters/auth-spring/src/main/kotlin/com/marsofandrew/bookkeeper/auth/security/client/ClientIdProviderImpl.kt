@@ -8,6 +8,5 @@ import org.springframework.stereotype.Service
 @Service
 internal class ClientIdProviderImpl : ClientIdProvider {
 
-    // TODO: check
-    override fun getClientId(): String = getRequestClientId() ?: "ddd"//throw IncorrectCredentialsException("Invalid client id")
+    override fun getClientId(): String = getRequestClientId() ?: throw IncorrectCredentialsException("Invalid client id")
 }

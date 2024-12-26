@@ -8,9 +8,9 @@ const val DEFAULT_CLIENT_ID = "warning-default-client-id-not-use"
 private const val DEFAULT_IP_ADDRESS = "0.0.0.0"
 private const val CLIENT_ID_HEADER = "X-Client-Id"
 
+//TODO: get real IP
 fun getRequestIpAddress(): String = getRequestAttributes()?.request?.remoteAddr ?: DEFAULT_IP_ADDRESS
 
-// TODO: throw appropriate exception
 fun getRequestClientId(): String? = getRequestAttributes()?.request?.getHeader(CLIENT_ID_HEADER)
 
 private fun getRequestAttributes(): ServletRequestAttributes? =
