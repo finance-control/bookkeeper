@@ -12,4 +12,5 @@ dependencies {
     api(project(":auth:auth-usecases"))
     api(project(":auth:adapters:auth-spring"))
     api(project(":auth:adapters:auth-credentials"))
+    api(project(":auth:adapters:auth-tokens"))
 }

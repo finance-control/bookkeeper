@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":categories:categories-application"))
     implementation(project(":accounts:accounts-application"))
     implementation(project(":credentials:credentials-application"))
+    implementation(project(":tokens:tokens-application"))
     implementation(project(":users:users-application"))
     implementation(project(":reports:reports-application"))
     implementation(project(":assets:assets-application"))

@@ -15,11 +15,16 @@ import com.marsofandrew.bookkeeper.userContext.UserId
 import com.marsofandrew.bookkeeper.userContext.getRequestClientId
 import com.marsofandrew.bookkeeper.userContext.getRequestIpAddress
 import io.swagger.v3.oas.annotations.Parameter
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -43,9 +48,19 @@ internal class UsersController(
     @GetMapping("/signing")
     fun login(
         @Parameter(hidden = true) @UserId userId: Long,
+        @RequestParam("token_ttl", required = false, defaultValue = "PT6H") duration: Duration
     ): UserIdTokenDto {
-        val user = userLogin.login(userId.asId(), getRequestClientId() ?: DEFAULT_CLIENT_ID, getRequestIpAddress())
-        return UserIdTokenDto(id = user.user.id.value, user.token)
+        val user = userLogin.login(
+            id = userId.asId(),
+            clientId = getRequestClientId() ?: DEFAULT_CLIENT_ID,
+            ipAddress = getRequestIpAddress(),
+            ttl = duration
+        )
+        return UserIdTokenDto(
+            id = user.user.id.value,
+            token = user.token,
+            tokenExpiresAt = LocalDateTime.ofInstant(user.tokenExpiresAt, ZoneId.of("Z")).toString()
+        )
     }
 
     @GetMapping("/current")

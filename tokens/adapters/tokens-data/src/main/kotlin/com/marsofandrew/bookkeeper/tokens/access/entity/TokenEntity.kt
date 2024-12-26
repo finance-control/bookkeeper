@@ -24,11 +24,6 @@ internal data class TokenEntity(
     internal data class TokenId(
         val clientId: String,
         val userId: Long,
-        @Column
-        @ColumnTransformer(
-            read = "pgp_sym_decrypt(token, '134Rrnyt567Brew,d9783!')",
-            write = "pgp_sym_encrypt(token, '134Rrnyt567Brew,d9783!')"
-        )
         val token: String
     )
 

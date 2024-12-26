@@ -15,6 +15,7 @@ import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -104,7 +105,8 @@ internal class UsersControllerTest {
     @Test
     fun `signing when user exists returns userId`() {
         val user = user(5.asId())
-        every { userLogin.login(user.id, any(), any()) } returns UserWithToken(user, "myToken")
+        every { userLogin.login(user.id, any(), any()) } returns
+                UserWithToken(user, "myToken", Instant.now().plusSeconds(1000))
 
         SecurityContextHolder.getContext().authentication = UserIdToken(user.id.value)
 

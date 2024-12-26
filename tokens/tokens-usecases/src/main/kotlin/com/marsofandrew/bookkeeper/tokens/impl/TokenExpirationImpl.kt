@@ -20,7 +20,7 @@ class TokenExpirationImpl(
     override fun expireAll(userId: NumericId<User>) {
         val now = clock.instant()
         tokenStorage.findAllByUserId(userId).forEach {
-            tokenStorage.expire(it.userId, it.clientId, it.token, clock.instant())
+            tokenStorage.expire(it.userId, it.clientId, it.token, now)
         }
     }
 }

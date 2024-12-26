@@ -10,7 +10,7 @@ configurations {
 
 dependencies {
     api(project(":auth:auth-usecases"))
-    api(project(":token:token-usecases"))
+    api(project(":tokens:tokens-usecases"))
 
     implementation("org.springframework:spring-context:6.1.4")
 

@@ -5,9 +5,9 @@ import com.marsofandrew.bookkeeper.tokens.hash.HashGenerator
 import com.marsofandrew.bookkeeper.tokens.impl.TokenCreationImpl
 import com.marsofandrew.bookkeeper.tokens.impl.TokenExpirationImpl
 import com.marsofandrew.bookkeeper.tokens.impl.TokenUserIdSelectionImpl
+import java.time.Clock
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.time.Clock
 
 @Configuration
 internal class TokensContextConfiguration {
@@ -40,4 +40,5 @@ internal class TokensContextConfiguration {
         tokenStorage = tokenStorage,
         clock = clock
     )
+
 }

@@ -43,6 +43,14 @@ internal class TokenStorageImpl(
         return tokenRepository.findAllByClientIdAndTokenAndExpiredAfter(clientId, token, now).toModels()
     }
 
+    override fun findAllByUserIdANdClientIdNotExpired(
+        userId: NumericId<User>,
+        clientId: String,
+        now: Instant
+    ): List<TokenCredentials> {
+        return tokenRepository.findAllByUserIdAndClientIdAndExpiredAfter(userId.value, clientId, now).toModels()
+    }
+
     override fun create(tokenCredentials: TokenCredentials): TokenCredentials {
         return tokenRepository.save(tokenCredentials.toTokenEntity()).toModel()
     }

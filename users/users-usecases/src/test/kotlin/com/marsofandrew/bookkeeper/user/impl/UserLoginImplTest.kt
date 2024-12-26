@@ -4,10 +4,9 @@ import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.User
 import com.marsofandrew.bookkeeper.user.access.UserStorage
-import com.marsofandrew.bookkeeper.user.credentials.UserTokenCreator
+import com.marsofandrew.bookkeeper.user.token.UserTokenCreator
 import com.marsofandrew.bookkeeper.user.fixture.user
 import io.kotest.assertions.throwables.shouldThrowExactly
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +24,7 @@ internal class UserLoginImplTest {
     @BeforeEach
     fun setup() {
         userLoginImpl = UserLoginImpl(userStorage, userTokenCreator)
-        every { userTokenCreator.create(any(), any(), any()) } returns "token"
+        every { userTokenCreator.getOrCreate(any(), any(), any()) } returns "token"
     }
 
     @Test

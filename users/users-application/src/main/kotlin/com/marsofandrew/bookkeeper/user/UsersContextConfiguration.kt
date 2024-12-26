@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.user.access.UserStorage
 import com.marsofandrew.bookkeeper.user.credentials.UserCredentialsSetter
 import com.marsofandrew.bookkeeper.user.credentials.UserEmailSelector
-import com.marsofandrew.bookkeeper.user.credentials.UserTokenCreator
+import com.marsofandrew.bookkeeper.user.token.UserTokenCreator
 import com.marsofandrew.bookkeeper.user.impl.UserLoginImpl
 import com.marsofandrew.bookkeeper.user.impl.UserRegistrationImpl
 import com.marsofandrew.bookkeeper.user.impl.UserSelectionImpl

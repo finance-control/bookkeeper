@@ -19,7 +19,10 @@ interface TokenStorage {
     fun findByUserIdAndClientIdAndToken(userId: NumericId<User>, clientId: String, token: String): TokenCredentials?
     fun findAllByUserId(userId: NumericId<User>): List<TokenCredentials>
 
+    //TODO: remove
     fun findAllByTokenAndClientIdNotExpired(token: String, clientId: String, now: Instant): List<TokenCredentials>
+
+    fun findAllByUserIdANdClientIdNotExpired(userId: NumericId<User>, clientId: String, now: Instant): List<TokenCredentials>
 
     fun create(tokenCredentials: TokenCredentials): TokenCredentials
     fun expire(userId: NumericId<User>, clientId: String, token: String, now: Instant)

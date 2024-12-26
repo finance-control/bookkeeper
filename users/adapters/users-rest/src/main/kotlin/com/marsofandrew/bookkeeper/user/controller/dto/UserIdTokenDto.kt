@@ -2,5 +2,6 @@ package com.marsofandrew.bookkeeper.user.controller.dto
 
 internal data class UserIdTokenDto(
     val id: Long,
-    val token: String
+    val token: String,
+    val tokenExpiresAt: String
 )

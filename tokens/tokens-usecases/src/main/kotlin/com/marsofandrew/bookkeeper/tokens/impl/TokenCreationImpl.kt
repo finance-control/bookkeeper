@@ -21,7 +21,7 @@ class TokenCreationImpl(
         val now = clock.instant()
         val expiredAt = now + creationParams.ttl
 
-        var rawToken = TokenCredentials(
+        val rawToken = TokenCredentials(
             userId = userId,
             clientId = creationParams.clientId,
             ipAddress = creationParams.ipAddress,

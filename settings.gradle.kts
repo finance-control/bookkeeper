@@ -92,6 +92,7 @@ include(
     "users:adapters:users-data",
     "users:adapters:users-credentials",
     "users:adapters:users-rest",
+    "users:adapters:users-tokens",
 )
 
 include(
