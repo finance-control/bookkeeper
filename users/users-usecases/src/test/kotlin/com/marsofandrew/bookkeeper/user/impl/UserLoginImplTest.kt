@@ -6,10 +6,13 @@ import com.marsofandrew.bookkeeper.user.User
 import com.marsofandrew.bookkeeper.user.access.UserStorage
 import com.marsofandrew.bookkeeper.user.token.UserTokenCreator
 import com.marsofandrew.bookkeeper.user.fixture.user
+import com.marsofandrew.bookkeeper.user.token.UserToken
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Duration
+import java.time.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -24,7 +27,8 @@ internal class UserLoginImplTest {
     @BeforeEach
     fun setup() {
         userLoginImpl = UserLoginImpl(userStorage, userTokenCreator)
-        every { userTokenCreator.getOrCreate(any(), any(), any()) } returns "token"
+        every { userTokenCreator.getOrCreate(any(), any(), any(), any()) } returns
+                UserToken(token = "token", Instant.now().plusSeconds(1000))
     }
 
     @Test
@@ -34,7 +38,7 @@ internal class UserLoginImplTest {
         every { userStorage.findByIdOrThrow(userId) } throws DomainModelNotFoundException(userId)
 
         shouldThrowExactly<DomainModelNotFoundException> {
-            userLoginImpl.login(userId, "", "")
+            userLoginImpl.login(userId, "", "", Duration.ofHours(1))
         }
     }
 
@@ -44,7 +48,7 @@ internal class UserLoginImplTest {
 
         every { userStorage.findByIdOrThrow(user.id) } returns user
 
-        val result = userLoginImpl.login(user.id, "", "")
+        val result = userLoginImpl.login(user.id, "", "", Duration.ofHours(1))
 
         result.user shouldBe user
     }

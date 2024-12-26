@@ -105,7 +105,7 @@ internal class UsersControllerTest {
     @Test
     fun `signing when user exists returns userId`() {
         val user = user(5.asId())
-        every { userLogin.login(user.id, any(), any()) } returns
+        every { userLogin.login(user.id, any(), any(), any()) } returns
                 UserWithToken(user, "myToken", Instant.now().plusSeconds(1000))
 
         SecurityContextHolder.getContext().authentication = UserIdToken(user.id.value)
