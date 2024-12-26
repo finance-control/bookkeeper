@@ -14,6 +14,7 @@ configurations {
 dependencies {
     api(project(":auth:auth-usecases"))
     api(project(":common:user-context"))
+    api(project(":common:common-rest"))
     api(project(":common:common-base"))
 
     implementation("org.springframework.boot:spring-boot-starter:3.2.3")

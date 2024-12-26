@@ -10,13 +10,12 @@ import com.marsofandrew.bookkeeper.user.controller.dto.UserIdDto
 import com.marsofandrew.bookkeeper.user.controller.dto.UserIdTokenDto
 import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
 import com.marsofandrew.bookkeeper.user.controller.dto.toUserDto
-import com.marsofandrew.bookkeeper.userContext.DEFAULT_CLIENT_ID
+import com.marsofandrew.bookkeeper.controller.DEFAULT_CLIENT_ID
+import com.marsofandrew.bookkeeper.controller.getRequestClientId
+import com.marsofandrew.bookkeeper.controller.getRequestIpAddress
 import com.marsofandrew.bookkeeper.userContext.UserId
-import com.marsofandrew.bookkeeper.userContext.getRequestClientId
-import com.marsofandrew.bookkeeper.userContext.getRequestIpAddress
 import io.swagger.v3.oas.annotations.Parameter
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.springframework.http.HttpStatus

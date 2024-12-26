@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.auth.security.client
 
 import com.marsofandrew.bookkeeper.auth.client.ClientIdProvider
 import com.marsofandrew.bookkeeper.auth.exception.IncorrectCredentialsException
-import com.marsofandrew.bookkeeper.userContext.getRequestClientId
+import com.marsofandrew.bookkeeper.controller.getRequestClientId
 import org.springframework.stereotype.Service
 
 @Service
