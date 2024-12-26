@@ -9,3 +9,6 @@ data class Version(
         validateFiled(value >= 0) { "Version is negative" }
     }
 }
+
+fun Int.asVersion() = Version(this)
+fun Long.asVersion() = Version(this.toInt())

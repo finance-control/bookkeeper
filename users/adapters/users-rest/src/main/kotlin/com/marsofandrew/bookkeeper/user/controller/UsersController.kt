@@ -4,11 +4,29 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.user.UserLogin
 import com.marsofandrew.bookkeeper.user.UserRegistration
 import com.marsofandrew.bookkeeper.user.UserSelection
-import com.marsofandrew.bookkeeper.user.controller.dto.*
+import com.marsofandrew.bookkeeper.user.controller.dto.RegistrationDataDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserIdDto
+import com.marsofandrew.bookkeeper.user.controller.dto.UserIdTokenDto
+import com.marsofandrew.bookkeeper.user.controller.dto.toUnregisteredUser
+import com.marsofandrew.bookkeeper.user.controller.dto.toUserDto
+import com.marsofandrew.bookkeeper.userContext.DEFAULT_CLIENT_ID
 import com.marsofandrew.bookkeeper.userContext.UserId
+import com.marsofandrew.bookkeeper.userContext.getRequestClientId
+import com.marsofandrew.bookkeeper.userContext.getRequestIpAddress
 import io.swagger.v3.oas.annotations.Parameter
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -29,10 +47,20 @@ internal class UsersController(
 
     @GetMapping("/signing")
     fun login(
-        @Parameter(hidden = true) @UserId userId: Long
-    ): UserIdDto {
-        val user = userLogin.login(userId.asId())
-        return UserIdDto(id = user.id.value)
+        @Parameter(hidden = true) @UserId userId: Long,
+        @RequestParam("token_ttl", required = false, defaultValue = "PT6H") duration: Duration
+    ): UserIdTokenDto {
+        val user = userLogin.login(
+            id = userId.asId(),
+            clientId = getRequestClientId() ?: DEFAULT_CLIENT_ID,
+            ipAddress = getRequestIpAddress(),
+            ttl = duration
+        )
+        return UserIdTokenDto(
+            id = user.user.id.value,
+            token = user.token,
+            tokenExpiresAt = LocalDateTime.ofInstant(user.tokenExpiresAt, ZoneId.of("Z")).toString()
+        )
     }
 
     @GetMapping("/current")

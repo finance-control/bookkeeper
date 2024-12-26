@@ -144,7 +144,6 @@ internal class SpendingsControllerTest {
             description = "description"
         }
 
-        val now = LocalDate.now()
         val updateSpendingDto = UpdateSpendingDto(
             money = null,
             date = null,

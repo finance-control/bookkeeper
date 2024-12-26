@@ -10,7 +10,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
-// OPen for test purposes
+// Open for test purposes
 @ControllerAdvice
 class BaseExceptionHandler {
 
@@ -43,5 +43,10 @@ class BaseExceptionHandler {
         logger.error("DomainModelNotFoundException: ${exception.message}", exception)
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(ErrorMessages(listOf(exception.message ?: "")))
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleAccessDeniedException(ex: AccessDeniedException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body<String>("Access denied: " + ex.message)
     }
 }

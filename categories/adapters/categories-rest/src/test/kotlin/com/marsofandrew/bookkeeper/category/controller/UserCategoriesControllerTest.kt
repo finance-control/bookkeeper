@@ -23,12 +23,13 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.*
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 
 @WebMvcTest
 @ContextConfiguration(
     classes = [
         UserCategoriesControllerTest.TestContextConfiguration::class,
-        AuthArgumentContextConfiguration::class
+        AuthArgumentContextConfiguration::class,
     ]
 )
 internal class UserCategoriesControllerTest {

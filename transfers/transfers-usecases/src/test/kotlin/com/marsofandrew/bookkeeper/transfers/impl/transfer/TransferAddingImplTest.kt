@@ -69,7 +69,7 @@ internal class TransferAddingImplTest {
                 MoneyIsTransferredEvent(
                     userId = transfer.userId.value,
                     date = transfer.date,
-                    send = transfer.send?.toAccountBoundedMoney(),
+                    send = transfer.send.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
                     category = transfer.categoryId.value
                 )
@@ -105,7 +105,7 @@ internal class TransferAddingImplTest {
                 MoneyIsTransferredEvent(
                     userId = transfer.userId.value,
                     date = transfer.date,
-                    send = transfer.send?.toAccountBoundedMoney(),
+                    send = transfer.send.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
                     category = transfer.categoryId.value
                 )
@@ -130,7 +130,7 @@ internal class TransferAddingImplTest {
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns true
-        every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns true
+        every { transferAccountValidator.validate(transfer.userId, transfer.send.accountId!!) } returns true
         every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         every { transferStorage.create(transfer) } returns transfer
@@ -143,7 +143,7 @@ internal class TransferAddingImplTest {
                 MoneyIsTransferredEvent(
                     userId = transfer.userId.value,
                     date = transfer.date,
-                    send = transfer.send?.toAccountBoundedMoney(),
+                    send = transfer.send.toAccountBoundedMoney(),
                     received = transfer.received.toAccountBoundedMoney(),
                     category = transfer.categoryId.value
                 )
@@ -152,7 +152,7 @@ internal class TransferAddingImplTest {
 
         verify(exactly = 1) { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) }
         verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) }
-        verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) }
+        verify(exactly = 1) { transferAccountValidator.validate(transfer.userId, transfer.send.accountId!!) }
     }
 
     @Test
@@ -169,7 +169,7 @@ internal class TransferAddingImplTest {
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns false
-        every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns true
+        every { transferAccountValidator.validate(transfer.userId, transfer.send.accountId!!) } returns true
         every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         shouldThrowExactly<InvalidAccountException> {
@@ -194,7 +194,7 @@ internal class TransferAddingImplTest {
         }
 
         every { transferAccountValidator.validate(transfer.userId, transfer.received.accountId!!) } returns true
-        every { transferAccountValidator.validate(transfer.userId, transfer.send!!.accountId!!) } returns false
+        every { transferAccountValidator.validate(transfer.userId, transfer.send.accountId!!) } returns false
         every { transferCategoryValidator.validate(transfer.userId, transfer.categoryId) } returns true
 
         shouldThrowExactly<InvalidAccountException> {
