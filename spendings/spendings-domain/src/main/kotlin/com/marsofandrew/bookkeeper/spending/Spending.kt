@@ -14,6 +14,7 @@ import java.time.LocalDate
 data class Spending(
     override val id: NumericId<Spending>,
     val userId: NumericId<User>,
+    //TODO: switch to AccountMoney
     val money: PositiveMoney,
     val date: LocalDate,
     val description: String,

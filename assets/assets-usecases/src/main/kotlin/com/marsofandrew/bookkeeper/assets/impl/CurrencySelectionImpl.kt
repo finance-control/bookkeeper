@@ -12,7 +12,7 @@ class CurrencySelectionImpl : CurrencySelection {
         CurrencyAsset(Currency.USD, "US Dollar"),
         CurrencyAsset(Currency.GBP, "GB Pound"),
         CurrencyAsset(Currency.GEL, "Georgian Lari"),
-        CurrencyAsset(Currency.AED, "Arab Emirates Dirham"),
+        CurrencyAsset(Currency.AED, "United Arab Emirates Dirham"),
         CurrencyAsset(Currency.RSD, "Republic of Serbia Dinar")
     )
 }

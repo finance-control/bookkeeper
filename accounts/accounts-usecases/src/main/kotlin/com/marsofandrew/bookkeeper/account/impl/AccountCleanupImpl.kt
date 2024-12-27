@@ -20,7 +20,11 @@ class AccountCleanupImpl(
         do {
             val accountsForRemoval =
                 accountStorage.findAccountsForRemoval(batchSize)
-                    .filter { it.closedAt != null && Period.between(it.closedAt, clock.date()).periodRemovalFilter() }
+                    .filter {
+                        it.closedAt != null
+                                && Period.between(it.closedAt, clock.date()).periodRemovalFilter()
+                                && it.money.isZero()
+                    }
             accountStorage.delete(accountsForRemoval.mapTo(HashSet()) { it.id })
             logger.info("Old accounts: ${accountsForRemoval.map { it.id }} are removed")
         } while (accountsForRemoval.isNotEmpty())
