@@ -1,4 +1,4 @@
-package com.marsofandrew.bookkeeper.credentials.encoder
+package com.marsofandrew.bookkeeper.credentials.encryptor
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

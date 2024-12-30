@@ -12,6 +12,10 @@ interface CategoryStorage {
         findByUserIdAndId(userId, id).orElseThrow(id)
 
     fun findByUserIdAndId(userId: NumericId<User>, id: NumericId<UserCategory>): UserCategory?
+    fun findByUserIdAndCategoryTitleOrThrow(userId: NumericId<User>, title: String): UserCategory =
+        findByUserIdAndCategoryTitle(userId, title).orElseThrow("title", title)
+
+    fun findByUserIdAndCategoryTitle(userId: NumericId<User>, title: String): UserCategory?
 
     fun existsByUserIdAndCategoryId(userId: NumericId<User>, id: NumericId<UserCategory>): Boolean
     fun existsByUserIdAndCategoryTitle(userId: NumericId<User>, title: String): Boolean

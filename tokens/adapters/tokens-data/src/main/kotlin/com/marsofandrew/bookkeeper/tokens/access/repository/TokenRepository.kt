@@ -1,19 +1,14 @@
 package com.marsofandrew.bookkeeper.tokens.access.repository
 
 import com.marsofandrew.bookkeeper.tokens.access.entity.TokenEntity
+import java.time.Instant
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.time.Instant
 
 @Repository
-internal interface TokenRepository : JpaRepository<TokenEntity, TokenEntity.TokenId> {
+internal interface TokenRepository : JpaRepository<TokenEntity, Long> {
 
-    @Query(
-        "SELECT * from bookkeeper.app_tokens where user_id = :userId",
-        nativeQuery = true
-    )
     fun findAllByUserId(userId: Long): List<TokenEntity>
 
     @Query(
@@ -34,12 +29,4 @@ internal interface TokenRepository : JpaRepository<TokenEntity, TokenEntity.Toke
     )
     fun findAllByUserIdAndClientIdAndExpiredAfter(userId: Long, clientId: String, now: Instant): List<TokenEntity>
 
-
-    @Modifying
-    @Query(
-        """
-            UPDATE TokenEntity SET expiredAt = :now WHERE tokenId = :tokenId
-        """
-    )
-    fun expireById(tokenId: TokenEntity.TokenId, now: Instant)
 }

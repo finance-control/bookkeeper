@@ -1,12 +1,12 @@
-package com.marsofandrew.bookkeeper.credentials.encoder
+package com.marsofandrew.bookkeeper.credentials.encryptor
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-internal class CredentialsEncoderImpl(
+internal class CredentialsEncryptorImpl(
     private val passwordEncoder: PasswordEncoder
-) : CredentialsEncoder {
+) : CredentialsEncryptor {
 
     override fun encode(value: String): String {
         return passwordEncoder.encode(value)

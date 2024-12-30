@@ -6,14 +6,12 @@ import com.marsofandrew.bookkeeper.user.credentials.UserRawCredentials
 
 internal data class RegistrationDataDto(
     val name: String,
-    val surname: String,
     val email: String,
     val password: String
 )
 
 internal fun RegistrationDataDto.toUnregisteredUser() = UnregisteredUser(
     name = name,
-    surname = surname,
     rawCredentials = UserRawCredentials(
         email = Email(email),
         password = password

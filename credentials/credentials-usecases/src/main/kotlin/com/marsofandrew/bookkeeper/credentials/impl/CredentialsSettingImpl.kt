@@ -6,14 +6,14 @@ import com.marsofandrew.bookkeeper.credentials.CredentialsSetting
 import com.marsofandrew.bookkeeper.credentials.RawUserCredentials
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
-import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
+import com.marsofandrew.bookkeeper.credentials.encryptor.CredentialsEncryptor
 import com.marsofandrew.bookkeeper.credentials.exception.EmailAlreadyInUseException
 import java.time.Clock
 import java.time.Instant
 import org.apache.logging.log4j.LogManager
 
 class CredentialsSettingImpl(
-    private val credentialsEncoder: CredentialsEncoder,
+    private val credentialsEncryptor: CredentialsEncryptor,
     private val credentialsStorage: CredentialsStorage,
     private val clock: Clock,
     private val transactionExecutor: TransactionExecutor
@@ -37,7 +37,7 @@ class CredentialsSettingImpl(
     private fun RawUserCredentials.toCredentials(now: Instant, version: Version?) = UserCredentials(
         userId = userId,
         email = email,
-        password = credentialsEncoder.encode(password),
+        password = credentialsEncryptor.encode(password),
         updatedAt = now,
         version = version ?: Version(0)
     )

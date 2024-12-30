@@ -10,7 +10,6 @@ data class UserFixture(
 ) {
     var version: Version = Version(0)
     var name: String = "name"
-    var surname: String = "surname"
     var createdAt: Instant = Instant.now()
     var updatedAt: Instant = createdAt
 
@@ -18,7 +17,6 @@ data class UserFixture(
         id = id,
         version = version,
         name = name,
-        surname = surname,
         createdAt = createdAt,
         updatedAt = updatedAt
     )

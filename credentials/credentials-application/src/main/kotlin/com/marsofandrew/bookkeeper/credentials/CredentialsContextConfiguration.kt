@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.credentials
 
 import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
-import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
+import com.marsofandrew.bookkeeper.credentials.encryptor.CredentialsEncryptor
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsModificationImpl
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsSettingImpl
 import com.marsofandrew.bookkeeper.credentials.impl.CredentialsUserIdSelectionImpl
@@ -16,18 +16,18 @@ internal class CredentialsContextConfiguration {
 
     @Bean
     fun credentialsSetting(
-        credentialsEncoder: CredentialsEncoder,
+        credentialsEncryptor: CredentialsEncryptor,
         credentialsStorage: CredentialsStorage,
         clock: Clock,
         transactionExecutor: TransactionExecutor
     ): CredentialsSetting =
-        CredentialsSettingImpl(credentialsEncoder, credentialsStorage, clock, transactionExecutor)
+        CredentialsSettingImpl(credentialsEncryptor, credentialsStorage, clock, transactionExecutor)
 
     @Bean
     fun credentialsUserIdSelection(
-        credentialsEncoder: CredentialsEncoder,
+        credentialsEncryptor: CredentialsEncryptor,
         credentialsStorage: CredentialsStorage
-    ): CredentialsUserIdSelection = CredentialsUserIdSelectionImpl(credentialsEncoder, credentialsStorage)
+    ): CredentialsUserIdSelection = CredentialsUserIdSelectionImpl(credentialsEncryptor, credentialsStorage)
 
     @Bean
     fun userEmailSelection(credentialsStorage: CredentialsStorage): UserEmailSelection =
@@ -35,13 +35,13 @@ internal class CredentialsContextConfiguration {
 
     @Bean
     fun credentialsModification(
-        credentialsEncoder: CredentialsEncoder,
+        credentialsEncryptor: CredentialsEncryptor,
         credentialsStorage: CredentialsStorage,
         clock: Clock,
         transactionExecutor: TransactionExecutor
     ): CredentialsModification =
         CredentialsModificationImpl(
-            credentialsEncoder,
+            credentialsEncryptor,
             credentialsStorage,
             clock,
             transactionExecutor

@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.credentials.impl
 
 import com.marsofandrew.bookkeeper.base.transaction.TestTransactionExecutor
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
-import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
+import com.marsofandrew.bookkeeper.credentials.encryptor.CredentialsEncryptor
 import com.marsofandrew.bookkeeper.credentials.user.User
 import com.marsofandrew.bookkeeper.credentials.userCredentials
 import com.marsofandrew.bookkeeper.properties.id.asId
@@ -20,7 +20,7 @@ internal class CredentialsModificationImplTest {
 
     private val USER_ID = 5643.asId<User>()
 
-    private val credentialsEncoder = mockk<CredentialsEncoder>()
+    private val credentialsEncryptor = mockk<CredentialsEncryptor>()
     private val credentialsStorage = mockk<CredentialsStorage>(relaxUnitFun = true)
     private val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     private val transactionExecutor = TestTransactionExecutor()
@@ -30,7 +30,7 @@ internal class CredentialsModificationImplTest {
     @BeforeEach
     fun setup() {
         credentialsModification = CredentialsModificationImpl(
-            credentialsEncoder = credentialsEncoder,
+            credentialsEncryptor = credentialsEncryptor,
             credentialsStorage = credentialsStorage,
             clock = clock,
             transactionExecutor = transactionExecutor
@@ -55,7 +55,7 @@ internal class CredentialsModificationImplTest {
         )
 
         every { credentialsStorage.findByUserIdOrThrow(USER_ID) } returns credentials
-        every { credentialsEncoder.encode(updatedCredentials.password) } returns updatedCredentials.password
+        every { credentialsEncryptor.encode(updatedCredentials.password) } returns updatedCredentials.password
         every { credentialsStorage.createOrUpdate(updatedCredentials) } returns Unit
 
         credentialsModification.modify(USER_ID, updatedCredentials.password)

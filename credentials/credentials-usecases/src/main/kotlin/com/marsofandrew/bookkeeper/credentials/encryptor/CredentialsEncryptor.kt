@@ -1,6 +1,6 @@
-package com.marsofandrew.bookkeeper.credentials.encoder
+package com.marsofandrew.bookkeeper.credentials.encryptor
 
-interface CredentialsEncoder {
+interface CredentialsEncryptor {
 
     fun encode(value: String): String
 

@@ -83,6 +83,7 @@ include(
     "tokens:tokens-application",
     "tokens:adapters:tokens-data",
     "tokens:adapters:tokens-hashing",
+    "tokens:adapters:tokens-encryption",
 )
 
 include(
