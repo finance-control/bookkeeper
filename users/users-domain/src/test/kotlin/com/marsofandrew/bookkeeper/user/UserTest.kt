@@ -20,13 +20,11 @@ internal class UserTest {
         val id = 1.asId<User>()
         val version = Version(0)
         val name = " my name"
-        val surname = "surname"
 
         val result = User(
             id = id,
             version = version,
             name = name,
-            surname = surname,
             createdAt = createdAt,
             updatedAt = createdAt
         )
@@ -34,7 +32,6 @@ internal class UserTest {
         result.id shouldBe id
         result.version shouldBe version
         result.name shouldBe name
-        result.surname shouldBe surname
         result.createdAt shouldBe createdAt
         result.updatedAt shouldBe createdAt
     }
@@ -48,23 +45,6 @@ internal class UserTest {
                 id = 1.asId(),
                 version = Version(0),
                 name = name,
-                surname = "surname",
-                createdAt = now,
-                updatedAt = now
-            )
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["", "\t", "\n"])
-    fun `constructor throws exception when surname is blank`(surname: String) {
-        val now = Instant.now()
-        shouldThrowExactly<ObjectCreateValidationException> {
-            User(
-                id = 1.asId(),
-                version = Version(0),
-                name = "name",
-                surname = surname,
                 createdAt = now,
                 updatedAt = now
             )
@@ -81,7 +61,6 @@ internal class UserTest {
                 id = 1.asId(),
                 version = Version(0),
                 name = "name",
-                surname = "surname",
                 createdAt = createdAt,
                 updatedAt = now
             )
@@ -96,7 +75,6 @@ internal class UserTest {
                 id = 1.asId(),
                 version = Version(0),
                 name = "name",
-                surname = "surname",
                 createdAt = now,
                 updatedAt = now.minusSeconds(10)
             )

@@ -36,7 +36,6 @@ internal class UserRegistrationImplTest {
         val unregisteredUser = unregisteredUser()
         val unidentifiedUser = user(NumericId.unidentified()) {
             name = unregisteredUser.name
-            surname = unregisteredUser.surname
             createdAt = clock.instant()
             updatedAt = clock.instant()
         }

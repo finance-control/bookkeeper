@@ -43,6 +43,13 @@ internal class CategoryStorageImpl(
             .orElse(null)
     }
 
+    override fun findByUserIdAndCategoryTitle(
+        userId: NumericId<User>,
+        title: String
+    ): UserCategory? {
+        return userCategoryRepository.findByUserIdAndTitle(userId.value, title)?.toModel()
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     override fun delete(ids: Set<NumericId<UserCategory>>) {
         userCategoryRepository.deleteAllById(ids.map { it.value })

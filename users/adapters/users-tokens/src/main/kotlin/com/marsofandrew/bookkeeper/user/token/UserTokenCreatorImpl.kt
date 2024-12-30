@@ -5,14 +5,12 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.tokens.TokenCreation
 import com.marsofandrew.bookkeeper.tokens.TokenCreationParams
 import com.marsofandrew.bookkeeper.user.User
-import java.time.Clock
 import java.time.Duration
 import org.springframework.stereotype.Service
 
 @Service
 internal class UserTokenCreatorImpl(
-    private val tokenCreation: TokenCreation,
-    private val clock: Clock
+    private val tokenCreation: TokenCreation
 ) : UserTokenCreator {
 
     override fun getOrCreate(userId: NumericId<User>, clientId: String, ipAddress: String?, ttl: Duration): UserToken {

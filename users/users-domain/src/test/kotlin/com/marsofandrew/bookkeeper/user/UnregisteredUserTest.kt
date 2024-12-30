@@ -14,7 +14,6 @@ internal class UnregisteredUserTest {
     @Test
     fun `constructor when all values are correct creates UnregisteredUser`() {
         val name = "test"
-        val surname = "tester"
         val rawCredentials = UserRawCredentials(
             email = Email("test@test.com"),
             password = "password"
@@ -22,12 +21,10 @@ internal class UnregisteredUserTest {
 
         val result = UnregisteredUser(
             name = name,
-            surname = surname,
             rawCredentials = rawCredentials
         )
 
         result.name shouldBe name
-        result.surname shouldBe surname
         result.rawCredentials shouldBe rawCredentials
     }
 
@@ -37,22 +34,6 @@ internal class UnregisteredUserTest {
         shouldThrowExactly<ObjectCreateValidationException> {
             UnregisteredUser(
                 name = name,
-                surname = "ajhsa",
-                rawCredentials = UserRawCredentials(
-                    email = Email("test@test.com"),
-                    password = "password"
-                )
-            )
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["", "\t", "\n"])
-    fun `constructor when surname is blank throws exception`(surname: String) {
-        shouldThrowExactly<ObjectCreateValidationException> {
-            UnregisteredUser(
-                name = "jhsasa",
-                surname = surname,
                 rawCredentials = UserRawCredentials(
                     email = Email("test@test.com"),
                     password = "password"

@@ -10,14 +10,12 @@ data class User(
     override val id: NumericId<User>,
     override val version: Version,
     val name: String,
-    val surname: String,
     val createdAt: Instant,
     val updatedAt: Instant
 ) : DomainModel {
 
     init {
         validateFiled(name.isNotBlank()) { "name is blank" }
-        validateFiled(surname.isNotBlank()) { "surname is blank" }
         validateFiled(createdAt.epochSecond > APP_EPOCH_SECONDS) { "User created before 2024-03-01" }
         validateFiled(updatedAt >= createdAt) { "User updated before creation" }
     }

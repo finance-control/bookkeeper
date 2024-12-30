@@ -38,6 +38,7 @@ internal class SpendingStorageImpl(
         return spendingRepository.findAllByUserIdAndDateBetweenOrderByDate(userId.value, startDate, endDate).toModels()
     }
 
+    @Transactional
     override fun create(spending: Spending): Spending {
         return spendingRepository.saveAndFlush(spending.toSpendingEntity()).toModel()
     }

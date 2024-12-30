@@ -64,7 +64,6 @@ internal class UsersControllerTest {
     fun `register when email is already in use then returns HTTP CODE 400`() {
         val registrationDataDto = RegistrationDataDto(
             name = "name",
-            surname = "surname",
             email = "myTestEmail@Google.com",
             password = "my password"
         )
@@ -85,7 +84,6 @@ internal class UsersControllerTest {
     fun `register when all values are correct then returns created user id`() {
         val registrationDataDto = RegistrationDataDto(
             name = "name",
-            surname = "surname",
             email = "myTestEmail@Google.com",
             password = "my password"
         )
@@ -128,11 +126,9 @@ internal class UsersControllerTest {
             status { isOk() }
             jsonPath("id") { value(user.id.value) }
             jsonPath("name") { value(user.name) }
-            jsonPath("surname") { value(user.surname) }
             jsonPath("email") { value(email.value) }
         }
     }
-
 
     @ContextConfiguration
     class TestContextConfiguration {

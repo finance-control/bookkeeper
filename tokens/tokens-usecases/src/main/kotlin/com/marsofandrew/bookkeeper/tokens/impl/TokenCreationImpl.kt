@@ -22,6 +22,7 @@ class TokenCreationImpl(
         val expiredAt = now + creationParams.ttl
 
         val rawToken = TokenCredentials(
+            id = NumericId.unidentified(),
             userId = userId,
             clientId = creationParams.clientId,
             ipAddress = creationParams.ipAddress,

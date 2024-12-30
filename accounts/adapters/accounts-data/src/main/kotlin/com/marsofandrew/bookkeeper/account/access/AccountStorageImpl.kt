@@ -49,6 +49,7 @@ internal class AccountStorageImpl(
         return accountRepository.findAllByStatusEquals(Account.Status.FOR_REMOVAL).toModelsSet()
     }
 
+    @Transactional
     override fun create(account: Account): Account {
         validateFiled(!account.id.initialized) { "Attempt to create identified account" }
         val accountForSaving = account.identify()

@@ -1,4 +1,4 @@
-package com.marsofandrew.bookkeeper.credentials.encoder
+package com.marsofandrew.bookkeeper.credentials.encryptor
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -16,11 +16,11 @@ internal class CredentialsEncoderImplTest {
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder
 
-    private lateinit var credentialsEncoderImpl: CredentialsEncoderImpl
+    private lateinit var credentialsEncoderImpl: CredentialsEncryptorImpl
 
     @BeforeEach
     fun setup() {
-        credentialsEncoderImpl = CredentialsEncoderImpl(passwordEncoder)
+        credentialsEncoderImpl = CredentialsEncryptorImpl(passwordEncoder)
     }
 
     @ParameterizedTest

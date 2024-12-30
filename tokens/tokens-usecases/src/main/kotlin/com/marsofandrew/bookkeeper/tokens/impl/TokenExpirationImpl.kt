@@ -14,13 +14,13 @@ class TokenExpirationImpl(
     override fun expire(userId: NumericId<User>, clientId: String, token: String) {
         val tokenCredentials = tokenStorage.findByUserIdAndClientIdAndTokenOrThrow(userId, clientId, token)
 
-        tokenStorage.expire(tokenCredentials.userId, tokenCredentials.clientId, tokenCredentials.token, clock.instant())
+        tokenStorage.update(tokenCredentials.expire(clock.instant()))
     }
 
     override fun expireAll(userId: NumericId<User>) {
         val now = clock.instant()
         tokenStorage.findAllByUserId(userId).forEach {
-            tokenStorage.expire(it.userId, it.clientId, it.token, now)
+            tokenStorage.update(it.expire(now))
         }
     }
 }

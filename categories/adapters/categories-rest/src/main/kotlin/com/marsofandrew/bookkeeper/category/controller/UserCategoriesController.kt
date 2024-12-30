@@ -11,9 +11,17 @@ import com.marsofandrew.bookkeeper.category.controller.dto.toUserCategoryDto
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.userContext.UserId
 import io.swagger.v3.oas.annotations.Parameter
-import org.apache.catalina.mapper.Mapper
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -27,12 +35,15 @@ internal class UserCategoriesController(
     @GetMapping
     fun get(
         @Parameter(hidden = true) @UserId userId: Long,
-        @RequestParam("ids", required = false) ids: Set<Long>?
+        @RequestParam("ids", required = false) ids: Set<Long>?,
+        @RequestParam("title", required = false) title: String?,
     ): List<UserCategoryDto> {
-        val categories = if (ids == null) {
+        val categories = if (ids == null && title == null) {
             categorySelection.select(userId.asId())
-        } else {
+        } else if (ids != null && title == null) {
             categorySelection.select(userId.asId(), ids.mapTo(HashSet()) { it.asId() })
+        } else {
+            listOf(categorySelection.select(userId.asId(), requireNotNull(title)))
         }
         return categories.map { it.toUserCategoryDto() }
     }

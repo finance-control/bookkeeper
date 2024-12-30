@@ -20,4 +20,11 @@ class CategorySelectionImpl(
     override fun select(userId: NumericId<User>): List<UserCategory> {
         return categoryStorage.findAllByUserId(userId)
     }
+
+    override fun select(
+        userId: NumericId<User>,
+        title: String
+    ): UserCategory {
+        return categoryStorage.findByUserIdAndCategoryTitleOrThrow(userId, title)
+    }
 }

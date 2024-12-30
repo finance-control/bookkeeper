@@ -2,7 +2,7 @@ package com.marsofandrew.bookkeeper.credentials.impl
 
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
 import com.marsofandrew.bookkeeper.credentials.credentials
-import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
+import com.marsofandrew.bookkeeper.credentials.encryptor.CredentialsEncryptor
 import com.marsofandrew.bookkeeper.credentials.user.User
 import com.marsofandrew.bookkeeper.credentials.userCredentials
 import com.marsofandrew.bookkeeper.properties.id.asId
@@ -14,14 +14,14 @@ import org.junit.jupiter.api.Test
 
 internal class CredentialsUserIdSelectionImplTest {
 
-    private val credentialsEncoder = mockk<CredentialsEncoder>()
+    private val credentialsEncryptor = mockk<CredentialsEncryptor>()
     private val credentialsStorage = mockk<CredentialsStorage>()
 
     private lateinit var credentialsUserIdSelectionImpl: CredentialsUserIdSelectionImpl
 
     @BeforeEach
     fun setup() {
-        credentialsUserIdSelectionImpl = CredentialsUserIdSelectionImpl(credentialsEncoder, credentialsStorage)
+        credentialsUserIdSelectionImpl = CredentialsUserIdSelectionImpl(credentialsEncryptor, credentialsStorage)
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class CredentialsUserIdSelectionImplTest {
         }
 
         every { credentialsStorage.findByEmail(credentials.email) } returns userCredentials
-        every { credentialsEncoder.matches(credentials.password, userCredentials.password) } returns false
+        every { credentialsEncryptor.matches(credentials.password, userCredentials.password) } returns false
 
         val result = credentialsUserIdSelectionImpl.select(credentials)
 
@@ -57,7 +57,7 @@ internal class CredentialsUserIdSelectionImplTest {
         val userCredentials = userCredentials(userId)
 
         every { credentialsStorage.findByEmail(credentials.email) } returns userCredentials
-        every { credentialsEncoder.matches(credentials.password, userCredentials.password) } returns true
+        every { credentialsEncryptor.matches(credentials.password, userCredentials.password) } returns true
 
         val result = credentialsUserIdSelectionImpl.select(credentials)
 

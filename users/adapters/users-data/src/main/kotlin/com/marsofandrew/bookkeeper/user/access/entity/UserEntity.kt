@@ -17,7 +17,6 @@ internal data class UserEntity(
     @Version
     var version: Int,
     var name: String,
-    var surname: String,
     var createdAt: Instant,
     var updatedAt: Instant
 ) : BaseEntity<User> {
@@ -26,7 +25,6 @@ internal data class UserEntity(
         id = requireNotNull(id).asId(),
         version = com.marsofandrew.bookkeeper.base.model.Version(version),
         name = name,
-        surname = surname,
         createdAt = createdAt,
         updatedAt = updatedAt
     )
@@ -36,7 +34,6 @@ internal fun User.toUserEntity() = UserEntity(
     id = id.value,
     version = version.value,
     name = name,
-    surname = surname,
     createdAt = createdAt,
     updatedAt = updatedAt,
 )

@@ -40,7 +40,6 @@ class UserRegistrationImpl(
             id = NumericId.unidentified(),
             version = Version(0),
             name = name,
-            surname = surname,
             createdAt = now,
             updatedAt = now
         )

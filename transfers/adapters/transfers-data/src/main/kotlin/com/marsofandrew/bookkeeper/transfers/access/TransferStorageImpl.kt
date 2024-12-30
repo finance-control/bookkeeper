@@ -42,6 +42,7 @@ internal class TransferStorageImpl(
         return transferRepository.findByIdAndUserId(id.value, userId.value)?.toModel()
     }
 
+    @Transactional
     override fun create(commonTransfer: CommonTransferBase): CommonTransfer {
         require(!commonTransfer.id.initialized)
 

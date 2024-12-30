@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.base.transaction.TestTransactionExecutor
 import com.marsofandrew.bookkeeper.credentials.UserCredentials
 import com.marsofandrew.bookkeeper.credentials.access.CredentialsStorage
-import com.marsofandrew.bookkeeper.credentials.encoder.CredentialsEncoder
+import com.marsofandrew.bookkeeper.credentials.encryptor.CredentialsEncryptor
 import com.marsofandrew.bookkeeper.credentials.exception.EmailAlreadyInUseException
 import com.marsofandrew.bookkeeper.credentials.rawUserCredentials
 import com.marsofandrew.bookkeeper.credentials.userCredentials
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 
 internal class CredentialsSettingImplTest {
 
-    private val credentialsEncoder = mockk<CredentialsEncoder>()
+    private val credentialsEncryptor = mockk<CredentialsEncryptor>()
     private val credentialsStorage = mockk<CredentialsStorage>(relaxUnitFun = true)
     private val clock = Clock.fixed(Instant.now(), ZoneId.of("Z"))
     private val transactionExecutor = TestTransactionExecutor()
@@ -32,7 +32,7 @@ internal class CredentialsSettingImplTest {
     @BeforeEach
     fun setup() {
         credentialsSettingImpl =
-            CredentialsSettingImpl(credentialsEncoder, credentialsStorage, clock, transactionExecutor)
+            CredentialsSettingImpl(credentialsEncryptor, credentialsStorage, clock, transactionExecutor)
     }
 
     @Test
@@ -61,7 +61,7 @@ internal class CredentialsSettingImplTest {
 
         every { credentialsStorage.findByUserId(credentials.userId) } returns userCredentials
         every { credentialsStorage.existByEmailAndNotOwnsById(userEmail, any()) } returns false
-        every { credentialsEncoder.encode(credentials.password) } returns credentials.password
+        every { credentialsEncryptor.encode(credentials.password) } returns credentials.password
         credentialsSettingImpl.set(credentials)
 
         verify(exactly = 1) {
@@ -86,7 +86,7 @@ internal class CredentialsSettingImplTest {
 
         every { credentialsStorage.findByUserId(credentials.userId) } returns null
         every { credentialsStorage.existByEmailAndNotOwnsById(userEmail, any()) } returns false
-        every { credentialsEncoder.encode(credentials.password) } returns credentials.password
+        every { credentialsEncryptor.encode(credentials.password) } returns credentials.password
         credentialsSettingImpl.set(credentials)
 
         verify(exactly = 1) {
