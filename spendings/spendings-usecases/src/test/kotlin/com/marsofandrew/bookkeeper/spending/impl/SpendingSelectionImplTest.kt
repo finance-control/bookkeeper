@@ -18,11 +18,12 @@ internal class SpendingSelectionImplTest {
 
     private val spendingStorage = mockk<SpendingStorage>()
 
+
     private lateinit var selectingSpendingImpl: SpendingSelectionImpl
 
     @BeforeEach
     fun setup() {
-        selectingSpendingImpl = SpendingSelectionImpl(spendingStorage)
+        selectingSpendingImpl = SpendingSelectionImpl(spendingStorage, TestCategorySelector())
     }
 
     @Test
@@ -38,10 +39,10 @@ internal class SpendingSelectionImplTest {
 
         every { spendingStorage.findAllByUserId(userId) } returns spendings
 
-        val result = selectingSpendingImpl.select(userId)
+        val resultsWithCategories = selectingSpendingImpl.select(userId)
 
         verify(exactly = 1) { spendingStorage.findAllByUserId(userId) }
-        result shouldContainExactlyInAnyOrder spendings
+        resultsWithCategories.map { it.spending } shouldContainExactlyInAnyOrder spendings
     }
 
     @Test
@@ -60,7 +61,7 @@ internal class SpendingSelectionImplTest {
         val result = selectingSpendingImpl.select(userId, date1)
 
         verify(exactly = 1) { spendingStorage.findAllByUserIdBetween(userId, date1, now.plusDays(1)) }
-        result shouldContainExactlyInAnyOrder spendings
+        result.map { it.spending } shouldContainExactlyInAnyOrder spendings
     }
 
     @Test
@@ -79,7 +80,7 @@ internal class SpendingSelectionImplTest {
         val result = selectingSpendingImpl.select(userId, date1, now)
 
         verify(exactly = 1) { spendingStorage.findAllByUserIdBetween(userId, date1, now) }
-        result shouldContainExactlyInAnyOrder spendings
+        result.map { it.spending } shouldContainExactlyInAnyOrder spendings
     }
 
     @Test

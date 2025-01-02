@@ -15,6 +15,7 @@ import com.marsofandrew.bookkeeper.transfers.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import com.marsofandrew.bookkeeper.transfers.fixtures.transferUpdate
+import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toRollbackMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.updateTransfer
@@ -44,7 +45,8 @@ internal class TransferModificationImplTest {
             eventPublisher = eventPublisher,
             transferAccountValidator = transferAccountValidator,
             transferCategoryValidator = transferCategoryValidator,
-            transactionExecutor = TestTransactionExecutor()
+            transactionExecutor = TestTransactionExecutor(),
+            categorySelector = TestCategorySelector()
         )
 
         every { eventPublisher.publish(any<Event>()) } returns Unit
@@ -168,7 +170,7 @@ internal class TransferModificationImplTest {
 
         val result = transferModificationImpl.modify(USER_ID, update)
 
-        result.description shouldBe update.description
+        result.transfer.description shouldBe update.description
         verify(exactly = 1) { eventPublisher.publish(DEFAULT_TRANSFER.toRollbackMoneyIsTransferredEvent()) }
         verify(exactly = 1) {
             eventPublisher.publish(

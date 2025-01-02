@@ -3,6 +3,7 @@ package com.marsofandrew.bookkeeper.spending.fixture
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingUpdate
+import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.user.User
 
 fun spending(
@@ -17,5 +18,12 @@ fun spendingUpdate(
     id: NumericId<Spending>,
     init: SpendingUpdateFixture.() -> Unit = {}
 ): SpendingUpdate = SpendingUpdateFixture(id)
+    .apply(init)
+    .build()
+
+fun category(
+    id: NumericId<Category>,
+    init: CategoryFixture.() -> Unit = {}
+): Category = CategoryFixture(id)
     .apply(init)
     .build()

@@ -10,5 +10,5 @@ interface CommonTransferSelection {
         userId: NumericId<User>,
         startDate: LocalDate? = null,
         endDate: LocalDate = LocalDate.now().plusDays(1),
-    ): List<CommonTransfer>
+    ): List<TransferWithCategory<CommonTransfer>>
 }

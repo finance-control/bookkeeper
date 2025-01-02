@@ -11,10 +11,12 @@ import com.marsofandrew.bookkeeper.transfers.CommonTransferDeletion
 import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.CommonTransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.CommonTransferSelection
+import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
+import com.marsofandrew.bookkeeper.transfers.fixtures.category
 import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
@@ -82,7 +84,12 @@ internal class CommonTransferControllerTest {
             commonTransfer(3.asId(), userId.asId())
         )
 
-        every { commonTransferSelection.select(userId.asId(), null, now) } returns transfers
+        every { commonTransferSelection.select(userId.asId(), null, now) } returns transfers.map {
+            TransferWithCategory<CommonTransfer>(
+                transfer = it,
+                category = category(it.categoryId)
+            )
+        }
 
         mockMvc.get("/api/v1/common-transfers?end_date=${now}")
             .andExpect {

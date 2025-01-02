@@ -8,6 +8,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Earning
 import com.marsofandrew.bookkeeper.transfers.TransferReport
+import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.controller.dto.*
 import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
@@ -17,8 +18,10 @@ import com.marsofandrew.bookkeeper.transfers.earning.EarningAdding
 import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
 import com.marsofandrew.bookkeeper.transfers.earning.EarningReportCreation
 import com.marsofandrew.bookkeeper.transfers.earning.EarningSelection
+import com.marsofandrew.bookkeeper.transfers.fixtures.category
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
 import com.marsofandrew.bookkeeper.transfers.fixtures.earningUpdate
+import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
 import com.marsofandrew.bookkeeper.userContext.UserIdToken
 import io.mockk.clearAllMocks
@@ -86,7 +89,10 @@ internal class EarningControllerTest {
         )
         val identifiedTransfer = earning.copy(id = 100.asId())
 
-        every { earningAdding.add(earning) } returns identifiedTransfer
+        every { earningAdding.add(earning) } returns TransferWithCategory(
+            transfer = identifiedTransfer,
+            category = category(identifiedTransfer.categoryId)
+        )
 
         mockMvc.post("/api/v1/earnings") {
             contentType = MediaType.APPLICATION_JSON
@@ -115,7 +121,12 @@ internal class EarningControllerTest {
             earning(3.asId(), userId.asId())
         )
 
-        every { earningSelection.select(userId.asId(), null, now) } returns earnings
+        every { earningSelection.select(userId.asId(), null, now) } returns earnings.map {
+            TransferWithCategory(
+                transfer = it,
+                category = category(it.categoryId)
+            )
+        }
 
         mockMvc.get("/api/v1/earnings?end_date=${now}")
             .andExpect {
@@ -166,7 +177,10 @@ internal class EarningControllerTest {
 
         val identifiedEarning = earning(update.id, userId.asId())
 
-        every { earningModification.modify(userId.asId(), update) } returns identifiedEarning
+        every { earningModification.modify(userId.asId(), update) } returns TransferWithCategory(
+            transfer = identifiedEarning,
+            category = category(identifiedEarning.categoryId)
+        )
 
         mockMvc.patch("/api/v1/earnings/${identifiedEarning.id.value}") {
             contentType = MediaType.APPLICATION_JSON

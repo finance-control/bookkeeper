@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
+import com.marsofandrew.bookkeeper.spending.category.CategorySelector
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.impl.*
 import org.springframework.context.annotation.Bean
@@ -16,15 +17,17 @@ class SpendingContextConfiguration {
     fun addingSpending(
         spendingStorage: SpendingStorage,
         eventPublisher: EventPublisher,
+        categorySelector: CategorySelector,
         spendingCategoryValidator: SpendingCategoryValidator,
         spendingAccountValidator: SpendingAccountValidator
     ): SpendingAdding =
-        SpendingAddingImpl(spendingStorage, eventPublisher, spendingCategoryValidator, spendingAccountValidator)
+        SpendingAddingImpl(spendingStorage, eventPublisher, categorySelector, spendingCategoryValidator, spendingAccountValidator)
 
     @Bean
     fun creatingSpendingReport(
-        spendingStorage: SpendingStorage
-    ): SpendingReportCreation = SpendingReportCreationImpl(spendingStorage)
+        spendingStorage: SpendingStorage,
+        categorySelector: CategorySelector,
+    ): SpendingReportCreation = SpendingReportCreationImpl(spendingStorage, categorySelector)
 
     @Bean
     fun deletingSpending(
@@ -34,13 +37,15 @@ class SpendingContextConfiguration {
 
     @Bean
     fun selectingSpending(
-        spendingStorage: SpendingStorage
-    ): SpendingSelection = SpendingSelectionImpl(spendingStorage)
+        spendingStorage: SpendingStorage,
+        categorySelector: CategorySelector,
+    ): SpendingSelection = SpendingSelectionImpl(spendingStorage, categorySelector)
 
     @Bean
     fun spendingModification(
         spendingStorage: SpendingStorage,
         eventPublisher: EventPublisher,
+        categorySelector: CategorySelector,
         transactionExecutor: TransactionExecutor,
         spendingCategoryValidator: SpendingCategoryValidator,
         spendingAccountValidator: SpendingAccountValidator
@@ -48,6 +53,7 @@ class SpendingContextConfiguration {
         spendingStorage,
         eventPublisher,
         transactionExecutor,
+        categorySelector,
         spendingCategoryValidator,
         spendingAccountValidator
     )

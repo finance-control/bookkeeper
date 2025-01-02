@@ -6,6 +6,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.Category
+import com.marsofandrew.bookkeeper.spending.category.CategorySelector
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
@@ -23,11 +24,12 @@ import org.junit.jupiter.api.Test
 internal class SpendingReportCreationImplTest {
 
     private val spendingStorage = mockk<SpendingStorage>()
-    private lateinit var creatingSpendingReportImpl: SpendingReportCreationImpl;
+
+    private lateinit var creatingSpendingReportImpl: SpendingReportCreationImpl
 
     @BeforeEach
     fun setup() {
-        creatingSpendingReportImpl = SpendingReportCreationImpl(spendingStorage)
+        creatingSpendingReportImpl = SpendingReportCreationImpl(spendingStorage, TestCategorySelector())
     }
 
     @Test
@@ -38,10 +40,10 @@ internal class SpendingReportCreationImplTest {
 
         every { spendingStorage.findAllByUserIdBetween(userId, startDate, endDate) } returns emptyList()
 
-        val report = creatingSpendingReportImpl.createReport(userId, startDate, endDate)
+        val reportWithCategories = creatingSpendingReportImpl.createReport(userId, startDate, endDate)
 
-        report.total shouldHaveSize 0
-        report.spendingByCategory shouldBe emptyMap()
+        reportWithCategories.report.total shouldHaveSize 0
+        reportWithCategories.report.spendingByCategory shouldBe emptyMap()
     }
 
     @Test
@@ -83,24 +85,24 @@ internal class SpendingReportCreationImplTest {
 
         every { spendingStorage.findAllByUserIdBetween(userId, date2, date1) } returns spendings
 
-        val report = creatingSpendingReportImpl.createReport(userId, date2, date1)
+        val reportWithCategories = creatingSpendingReportImpl.createReport(userId, date2, date1)
 
-        report.total shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.total shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(Currency.USD, BigDecimal(45.5)),
             PositiveMoney(Currency.EUR, BigDecimal(107.75))
         )
-        report.spendingByCategory.keys shouldContainExactlyInAnyOrder listOf(category1, category2, category3)
-        report.spendingByCategory[category1] shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.spendingByCategory.keys shouldContainExactlyInAnyOrder listOf(category1, category2, category3)
+        reportWithCategories.report.spendingByCategory[category1] shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(Currency.USD, BigDecimal(15)),
             PositiveMoney(Currency.EUR, BigDecimal(15))
         )
-        report.spendingByCategory[category2] shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.spendingByCategory[category2] shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(
                 Currency.EUR,
                 BigDecimal(92.75)
             )
         )
-        report.spendingByCategory[category3] shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.spendingByCategory[category3] shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(Currency.USD, BigDecimal(30.5))
         )
     }
@@ -145,19 +147,19 @@ internal class SpendingReportCreationImplTest {
 
         every { spendingStorage.findAllByUserIdBetween(userId, date2, date1) } returns spendings
 
-        val report =
+        val reportWithCategories =
             creatingSpendingReportImpl.createReport(userId, date2, date1, categories = setOf(category1, category2))
 
-        report.total shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.total shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(Currency.USD, BigDecimal(15)),
             PositiveMoney(Currency.EUR, BigDecimal(107.75))
         )
-        report.spendingByCategory.keys shouldContainExactlyInAnyOrder listOf(category1, category2)
-        report.spendingByCategory[category1] shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.spendingByCategory.keys shouldContainExactlyInAnyOrder listOf(category1, category2)
+        reportWithCategories.report.spendingByCategory[category1] shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(Currency.USD, BigDecimal(15)),
             PositiveMoney(Currency.EUR, BigDecimal(15))
         )
-        report.spendingByCategory[category2] shouldContainExactlyInAnyOrder listOf(
+        reportWithCategories.report.spendingByCategory[category2] shouldContainExactlyInAnyOrder listOf(
             PositiveMoney(
                 Currency.EUR,
                 BigDecimal(92.75)

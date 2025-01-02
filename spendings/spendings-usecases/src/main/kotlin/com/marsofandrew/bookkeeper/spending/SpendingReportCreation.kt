@@ -12,5 +12,5 @@ interface SpendingReportCreation {
         startDate: LocalDate,
         endDate: LocalDate,
         categories: Set<NumericId<Category>>? = null
-    ): SpendingReport
+    ): SpendingReportsWithCategories
 }

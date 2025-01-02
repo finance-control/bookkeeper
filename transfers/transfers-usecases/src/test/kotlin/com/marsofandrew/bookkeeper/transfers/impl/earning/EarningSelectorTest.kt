@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
+import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
 import com.marsofandrew.bookkeeper.transfers.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -22,7 +23,7 @@ internal class EarningSelectorTest {
 
     @BeforeEach
     fun setup() {
-        earningSelectionImpl = EarningSelectionImpl(transferStorage)
+        earningSelectionImpl = EarningSelectionImpl(transferStorage, TestCategorySelector())
     }
 
     @Test
@@ -41,7 +42,7 @@ internal class EarningSelectorTest {
         val result = earningSelectionImpl.select(userId)
 
         verify(exactly = 1) { transferStorage.findAllByUserId(userId) }
-        result shouldContainExactlyInAnyOrder earnings
+        result.map { it.transfer } shouldContainExactlyInAnyOrder earnings
     }
 
     @Test
@@ -60,7 +61,7 @@ internal class EarningSelectorTest {
         val result = earningSelectionImpl.select(userId, date1)
 
         verify(exactly = 1) { transferStorage.findAllByUserIdBetween(userId, date1, now.plusDays(1)) }
-        result shouldContainExactlyInAnyOrder earnings
+        result.map { it.transfer } shouldContainExactlyInAnyOrder earnings
     }
 
     @Test
@@ -79,7 +80,7 @@ internal class EarningSelectorTest {
         val result = earningSelectionImpl.select(userId, date1, now)
 
         verify(exactly = 1) { transferStorage.findAllByUserIdBetween(userId, date1, now) }
-        result shouldContainExactlyInAnyOrder earnings
+        result.map { it.transfer } shouldContainExactlyInAnyOrder earnings
     }
 
     @Test

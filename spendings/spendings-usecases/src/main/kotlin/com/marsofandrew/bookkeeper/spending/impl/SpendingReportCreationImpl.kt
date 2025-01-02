@@ -5,14 +5,17 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingReport
 import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
+import com.marsofandrew.bookkeeper.spending.SpendingReportsWithCategories
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.Category
+import com.marsofandrew.bookkeeper.spending.category.CategorySelector
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 
 class SpendingReportCreationImpl(
-    private val spendingStorage: SpendingStorage
+    private val spendingStorage: SpendingStorage,
+    private val categorySelector: CategorySelector,
 ) : SpendingReportCreation {
 
     override fun createReport(
@@ -20,7 +23,7 @@ class SpendingReportCreationImpl(
         startDate: LocalDate,
         endDate: LocalDate,
         categories: Set<NumericId<Category>>?
-    ): SpendingReport {
+    ): SpendingReportsWithCategories {
 
         if (startDate > endDate) {
             throw InvalidDateIntervalException(startDate, endDate)
@@ -29,9 +32,21 @@ class SpendingReportCreationImpl(
         val spendings = spendingStorage.findAllByUserIdBetween(userId, startDate, endDate)
             .filter { categories == null || it.categoryId in categories }
 
-        return SpendingReport(
+        val report =  SpendingReport(
             spendingByCategory = spendings.byCategories(),
-            total = spendings.total()
+            total = spendings.total(),
+        )
+
+        val reportCategories = spendings.map { it.categoryId }
+            .distinct()
+            .toList()
+
+        val categoriesById = categorySelector.selectAllByIds(userId, reportCategories)
+            .associateBy { it.id }
+
+        return SpendingReportsWithCategories(
+            report = report,
+            categories = categoriesById
         )
     }
 

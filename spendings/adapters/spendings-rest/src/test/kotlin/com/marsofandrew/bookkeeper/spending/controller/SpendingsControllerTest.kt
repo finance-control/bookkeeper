@@ -7,12 +7,21 @@ import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.spending.*
+import com.marsofandrew.bookkeeper.spending.Spending
+import com.marsofandrew.bookkeeper.spending.SpendingAdding
+import com.marsofandrew.bookkeeper.spending.SpendingDeletion
+import com.marsofandrew.bookkeeper.spending.SpendingModification
+import com.marsofandrew.bookkeeper.spending.SpendingReport
+import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
+import com.marsofandrew.bookkeeper.spending.SpendingReportsWithCategories
+import com.marsofandrew.bookkeeper.spending.SpendingSelection
+import com.marsofandrew.bookkeeper.spending.SpendingWithCategory
 import com.marsofandrew.bookkeeper.spending.category.Category
 import com.marsofandrew.bookkeeper.spending.controller.dto.AccountBoundedMoneyDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.CreateSpendingDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.PositiveMoneyDto
 import com.marsofandrew.bookkeeper.spending.controller.dto.UpdateSpendingDto
+import com.marsofandrew.bookkeeper.spending.fixture.category
 import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.fixture.spendingUpdate
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
@@ -21,6 +30,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,11 +43,11 @@ import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.*
-import java.time.Clock
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
+import org.springframework.test.web.servlet.post
 
 
 @WebMvcTest
@@ -80,7 +93,8 @@ internal class SpendingsControllerTest {
         )
         val identifiedSpending = spending.copy(id = 1100.asId())
 
-        every { spendingAdding.add(spending) } returns identifiedSpending
+        every { spendingAdding.add(spending) } returns
+                SpendingWithCategory(identifiedSpending, category(identifiedSpending.categoryId))
 
         mockMvc.post("/api/v1/spendings") {
             contentType = MediaType.APPLICATION_JSON
@@ -125,7 +139,9 @@ internal class SpendingsControllerTest {
             spending(3.asId(), userId.asId())
         )
 
-        every { spendingSelection.select(userId.asId(), null, now) } returns spendings
+        every { spendingSelection.select(userId.asId(), null, now) } returns spendings.map {
+            SpendingWithCategory(it, category(it.categoryId))
+        }
 
         mockMvc.get("/api/v1/spendings?end_date=${now}")
             .andExpect {
@@ -154,7 +170,8 @@ internal class SpendingsControllerTest {
 
         val identifiedSpending = spending(update.id, userId.asId())
 
-        every { spendingModification.modify(userId.asId(), update) } returns identifiedSpending
+        every { spendingModification.modify(userId.asId(), update) } returns
+                SpendingWithCategory(identifiedSpending, category(identifiedSpending.categoryId))
 
         mockMvc.patch("/api/v1/spendings/${identifiedSpending.id.value}") {
             contentType = MediaType.APPLICATION_JSON
@@ -181,7 +198,11 @@ internal class SpendingsControllerTest {
             total = listOf(PositiveMoney(Currency.EUR, 5, 0), PositiveMoney(Currency.USD, 5, 0))
         )
 
-        every { spendingReportCreation.createReport(userId.asId(), startDate, endDate) } returns spendingReport
+        every { spendingReportCreation.createReport(userId.asId(), startDate, endDate) } returns
+                SpendingReportsWithCategories(
+                    report = spendingReport,
+                    categories = spendingReport.spendingByCategory.keys.associate { it to category(it) }
+                )
 
         mockMvc.get("/api/v1/spendings/report?end_date=${endDate}&start_date=${startDate}")
             .andExpect {

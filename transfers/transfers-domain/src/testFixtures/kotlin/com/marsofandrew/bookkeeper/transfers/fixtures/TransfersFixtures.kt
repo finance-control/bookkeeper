@@ -1,8 +1,13 @@
 package com.marsofandrew.bookkeeper.transfers.fixtures
 
-import com.marsofandrew.bookkeeper.transfers.user.User
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.transfers.*
+import com.marsofandrew.bookkeeper.transfers.CommonTransfer
+import com.marsofandrew.bookkeeper.transfers.Earning
+import com.marsofandrew.bookkeeper.transfers.EarningUpdate
+import com.marsofandrew.bookkeeper.transfers.Transfer
+import com.marsofandrew.bookkeeper.transfers.TransferUpdate
+import com.marsofandrew.bookkeeper.transfers.category.Category
+import com.marsofandrew.bookkeeper.transfers.user.User
 
 fun commonTransfer(
     id: NumericId<CommonTransfer>,
@@ -33,3 +38,9 @@ fun transferUpdate(
     init: TransferUpdateFixture.() -> Unit = {}
 ): TransferUpdate = TransferUpdateFixture(id).apply(init).build()
 
+fun category(
+    id: NumericId<Category>,
+    init: CategoryFixture.() -> Unit = {}
+): Category = CategoryFixture(id)
+    .apply(init)
+    .build()

@@ -5,6 +5,7 @@ import com.marsofandrew.bookkeeper.transfers.CommonTransfer
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
+import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
 import com.marsofandrew.bookkeeper.transfers.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -23,7 +24,7 @@ internal class TransferSelectorTest {
 
     @BeforeEach
     fun setup() {
-        transferSelectionImpl = TransferSelectionImpl(transferStorage)
+        transferSelectionImpl = TransferSelectionImpl(transferStorage, TestCategorySelector())
     }
 
     @Test
@@ -42,7 +43,7 @@ internal class TransferSelectorTest {
         val result = transferSelectionImpl.select(userId)
 
         verify(exactly = 1) { transferStorage.findAllByUserId(userId) }
-        result shouldContainExactlyInAnyOrder transfers
+        result.map { it.transfer } shouldContainExactlyInAnyOrder transfers
     }
 
     @Test
@@ -61,7 +62,7 @@ internal class TransferSelectorTest {
         val result = transferSelectionImpl.select(userId, date1)
 
         verify(exactly = 1) { transferStorage.findAllByUserIdBetween(userId, date1, now.plusDays(1)) }
-        result shouldContainExactlyInAnyOrder transfers
+        result.map { it.transfer } shouldContainExactlyInAnyOrder transfers
     }
 
     @Test
@@ -80,7 +81,7 @@ internal class TransferSelectorTest {
         val result = transferSelectionImpl.select(userId, date1, now)
 
         verify(exactly = 1) { transferStorage.findAllByUserIdBetween(userId, date1, now) }
-        result shouldContainExactlyInAnyOrder transfers
+        result.map { it.transfer } shouldContainExactlyInAnyOrder transfers
     }
 
     @Test

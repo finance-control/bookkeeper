@@ -1,14 +1,32 @@
 package com.marsofandrew.bookkeeper.spending.controller
 
 import com.marsofandrew.bookkeeper.properties.id.asId
-import com.marsofandrew.bookkeeper.spending.*
-import com.marsofandrew.bookkeeper.spending.controller.dto.*
+import com.marsofandrew.bookkeeper.spending.SpendingAdding
+import com.marsofandrew.bookkeeper.spending.SpendingDeletion
+import com.marsofandrew.bookkeeper.spending.SpendingModification
+import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
+import com.marsofandrew.bookkeeper.spending.SpendingSelection
+import com.marsofandrew.bookkeeper.spending.controller.dto.CreateSpendingDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.SpendingDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.SpendingReportDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.UpdateSpendingDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.toSpendingDto
+import com.marsofandrew.bookkeeper.spending.controller.dto.toSpendingReportDto
 import com.marsofandrew.bookkeeper.userContext.UserId
 import io.swagger.v3.oas.annotations.Parameter
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
 import java.time.Clock
 import java.time.LocalDate
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/spendings")

@@ -16,6 +16,7 @@ import com.marsofandrew.bookkeeper.transfers.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
 import com.marsofandrew.bookkeeper.transfers.fixtures.earningUpdate
+import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toRollbackMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.updateEarning
@@ -45,7 +46,8 @@ internal class EarningModificationImplTest {
             eventPublisher = eventPublisher,
             transferAccountValidator = transferAccountValidator,
             transferCategoryValidator = transferCategoryValidator,
-            transactionExecutor = TestTransactionExecutor()
+            transactionExecutor = TestTransactionExecutor(),
+            categorySelector = TestCategorySelector()
         )
 
         every { eventPublisher.publish(any<Event>()) } returns Unit
@@ -144,7 +146,7 @@ internal class EarningModificationImplTest {
 
         val result = earningModificationImpl.modify(USER_ID, update)
 
-        result.description shouldBe update.description
+        result.transfer.description shouldBe update.description
         verify(exactly = 1) { eventPublisher.publish(DEFAULT_EARNING.toRollbackMoneyIsTransferredEvent()) }
         verify(exactly = 1) {
             eventPublisher.publish(

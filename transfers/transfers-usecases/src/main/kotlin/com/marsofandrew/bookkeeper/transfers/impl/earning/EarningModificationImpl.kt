@@ -6,8 +6,10 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.transfers.CommonTransferBase
 import com.marsofandrew.bookkeeper.transfers.Earning
 import com.marsofandrew.bookkeeper.transfers.EarningUpdate
+import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.account.TransferAccountValidator
+import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
 import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
 import com.marsofandrew.bookkeeper.transfers.impl.StandardTransferModifier
@@ -17,6 +19,7 @@ import com.marsofandrew.bookkeeper.transfers.user.User
 class EarningModificationImpl(
     transferStorage: TransferStorage,
     eventPublisher: EventPublisher,
+    categorySelector: CategorySelector,
     transferAccountValidator: TransferAccountValidator,
     transferCategoryValidator: TransferCategoryValidator,
     transactionExecutor: TransactionExecutor
@@ -25,6 +28,7 @@ class EarningModificationImpl(
     private val modifier = StandardTransferModifier(
         transferStorage,
         eventPublisher,
+        categorySelector,
         transferAccountValidator,
         transferCategoryValidator,
         transactionExecutor,
@@ -32,7 +36,7 @@ class EarningModificationImpl(
         CommonTransferBase::updateEarning
     )
 
-    override fun modify(userId: NumericId<User>, earning: EarningUpdate): Earning {
+    override fun modify(userId: NumericId<User>, earning: EarningUpdate): TransferWithCategory<Earning> {
         return modifier.modify(userId, earning)
     }
 }

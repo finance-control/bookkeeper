@@ -10,5 +10,5 @@ interface SpendingSelection {
         userId: NumericId<User>,
         startDate: LocalDate? = null,
         endDate: LocalDate = LocalDate.now().plusDays(1),
-    ): List<Spending>
+    ): List<SpendingWithCategory>
 }

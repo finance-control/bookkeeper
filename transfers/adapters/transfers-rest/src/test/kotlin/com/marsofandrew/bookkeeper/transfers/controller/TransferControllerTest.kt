@@ -8,7 +8,13 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Transfer
 import com.marsofandrew.bookkeeper.transfers.TransferReport
-import com.marsofandrew.bookkeeper.transfers.controller.dto.*
+import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
+import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.UpdateTransferDto
+import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
+import com.marsofandrew.bookkeeper.transfers.fixtures.category
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import com.marsofandrew.bookkeeper.transfers.fixtures.transferUpdate
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferAdding
@@ -21,6 +27,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,10 +44,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
-import java.time.Clock
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 
 @WebMvcTest
 @ContextConfiguration(
@@ -83,7 +89,10 @@ internal class TransferControllerTest {
         )
         val identifiedTransfer = transfer.copy(id = 100.asId())
 
-        every { transferAdding.add(transfer) } returns identifiedTransfer
+        every { transferAdding.add(transfer) } returns TransferWithCategory(
+            transfer = identifiedTransfer,
+            category = category(identifiedTransfer.categoryId)
+        )
 
         mockMvc.post("/api/v1/transfers") {
             contentType = MediaType.APPLICATION_JSON
@@ -125,7 +134,10 @@ internal class TransferControllerTest {
 
         val identifiedTransfer = transfer(update.id, userId.asId())
 
-        every { transferModification.modify(userId.asId(), update) } returns identifiedTransfer
+        every { transferModification.modify(userId.asId(), update) } returns TransferWithCategory(
+            transfer = identifiedTransfer,
+            category = category(identifiedTransfer.categoryId)
+        )
 
         mockMvc.patch("/api/v1/transfers/${identifiedTransfer.id.value}") {
             contentType = MediaType.APPLICATION_JSON
@@ -148,7 +160,12 @@ internal class TransferControllerTest {
             transfer(3.asId(), userId.asId())
         )
 
-        every { transferSelection.select(userId.asId(), null, now) } returns transfers
+        every { transferSelection.select(userId.asId(), null, now) } returns transfers.map {
+            TransferWithCategory(
+                transfer = it,
+                category = category(it.categoryId)
+            )
+        }
 
         mockMvc.get("/api/v1/transfers?end_date=${now}")
             .andExpect {

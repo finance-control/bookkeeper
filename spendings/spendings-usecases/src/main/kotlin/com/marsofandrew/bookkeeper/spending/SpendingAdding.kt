@@ -2,5 +2,5 @@ package com.marsofandrew.bookkeeper.spending
 
 interface SpendingAdding {
 
-    fun add(spending: Spending): Spending
+    fun add(spending: Spending): SpendingWithCategory
 }

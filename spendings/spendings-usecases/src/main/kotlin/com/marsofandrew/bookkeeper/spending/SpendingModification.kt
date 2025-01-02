@@ -5,5 +5,5 @@ import com.marsofandrew.bookkeeper.spending.user.User
 
 interface SpendingModification {
 
-    fun modify(userId: NumericId<User>, modification: SpendingUpdate): Spending
+    fun modify(userId: NumericId<User>, modification: SpendingUpdate): SpendingWithCategory
 }

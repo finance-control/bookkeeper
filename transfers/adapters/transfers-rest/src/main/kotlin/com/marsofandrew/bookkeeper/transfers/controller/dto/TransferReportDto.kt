@@ -4,6 +4,7 @@ import com.marsofandrew.bookkeeper.transfers.TransferReport
 
 internal data class TransferReportDto(
     val total: List<MoneyDto>
+    // TODO: add by category
 )
 
 internal fun TransferReport.toTransferReportDto() = TransferReportDto(
