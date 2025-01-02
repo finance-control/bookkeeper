@@ -1,21 +1,16 @@
 package com.marsofandrew.bookkeeper.transfers.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.marsofandrew.bookkeeper.base.model.Version
 import com.marsofandrew.bookkeeper.properties.Currency
 import com.marsofandrew.bookkeeper.properties.Money
-import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.CommonTransfer
 import com.marsofandrew.bookkeeper.transfers.CommonTransferDeletion
-import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.CommonTransferReportCreation
 import com.marsofandrew.bookkeeper.transfers.CommonTransferSelection
+import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
-import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
-import com.marsofandrew.bookkeeper.transfers.controller.dto.toAccountMoney
+import com.marsofandrew.bookkeeper.transfers.category.Category
 import com.marsofandrew.bookkeeper.transfers.fixtures.category
 import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
 import com.marsofandrew.bookkeeper.userContext.AuthArgumentContextConfiguration
@@ -34,13 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
-import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
 
 @WebMvcTest
 @ContextConfiguration(
@@ -109,7 +102,8 @@ internal class CommonTransferControllerTest {
         val endDate = now.plusDays(1)
         val transferReport = TransferReport(
 
-            total = listOf(Money(Currency.EUR, 5, 0), Money(Currency.USD, -5, 0))
+            total = listOf(Money(Currency.EUR, 5, 0), Money(Currency.USD, -5, 0)),
+            byCategory = mapOf(1.asId<Category>() to listOf(Money(Currency.EUR, 5, 0)))
         )
 
         every { commonTransferReportCreation.createReport(userId.asId(), startDate, endDate) } returns transferReport
@@ -120,6 +114,7 @@ internal class CommonTransferControllerTest {
                 jsonPath("total[0].currencyCode") { value(Currency.EUR.name) }
                 jsonPath("total[1].currencyCode") { value(Currency.USD.name) }
                 jsonPath("total[1].amount") { value(-5) }
+                jsonPath("byCategory.1[0].currencyCode") { value(Currency.EUR.name) }
             }
 
         verify(exactly = 1) { commonTransferReportCreation.createReport(userId.asId(), startDate, endDate) }

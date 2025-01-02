@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.transfers.fixtures.commonTransfer
-import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
+import com.marsofandrew.bookkeeper.transfers.impl.TestTransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.user.User
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -23,7 +23,7 @@ internal class CommonTransferSelectorTest {
 
     @BeforeEach
     fun setup() {
-        selectingTransfersImpl = CommonTransferSelectionImpl(transferStorage, TestCategorySelector())
+        selectingTransfersImpl = CommonTransferSelectionImpl(transferStorage, TestTransferCategorySelector())
     }
 
     @Test

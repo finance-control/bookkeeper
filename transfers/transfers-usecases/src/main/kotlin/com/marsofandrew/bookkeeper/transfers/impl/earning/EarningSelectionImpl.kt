@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.transfers.Earning
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.earning.EarningSelection
 import com.marsofandrew.bookkeeper.transfers.impl.StandardTransferSelector
 import com.marsofandrew.bookkeeper.transfers.user.User
@@ -12,12 +12,12 @@ import java.time.LocalDate
 
 class EarningSelectionImpl(
     transferStorage: TransferStorage,
-    categorySelector: CategorySelector,
+    transferCategorySelector: TransferCategorySelector,
 ) : EarningSelection {
 
     private val standardTransferSelector = StandardTransferSelector(
         transferStorage,
-        categorySelector,
+        transferCategorySelector,
         { it.send == null }
     ) { Earning.of(it) }
 

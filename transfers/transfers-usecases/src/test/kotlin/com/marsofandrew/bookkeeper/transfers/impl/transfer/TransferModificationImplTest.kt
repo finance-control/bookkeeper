@@ -15,7 +15,7 @@ import com.marsofandrew.bookkeeper.transfers.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfers.fixtures.transfer
 import com.marsofandrew.bookkeeper.transfers.fixtures.transferUpdate
-import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
+import com.marsofandrew.bookkeeper.transfers.impl.TestTransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toRollbackMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.updateTransfer
@@ -46,7 +46,7 @@ internal class TransferModificationImplTest {
             transferAccountValidator = transferAccountValidator,
             transferCategoryValidator = transferCategoryValidator,
             transactionExecutor = TestTransactionExecutor(),
-            categorySelector = TestCategorySelector()
+            transferCategorySelector = TestTransferCategorySelector()
         )
 
         every { eventPublisher.publish(any<Event>()) } returns Unit

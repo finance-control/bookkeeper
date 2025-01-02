@@ -8,9 +8,9 @@ import com.marsofandrew.bookkeeper.spending.user.User
 import org.springframework.stereotype.Service
 
 @Service
-internal class CategorySelectorImpl(
+internal class SpendingCategorySelectorImpl(
     private val categorySelection: CategorySelection,
-) : CategorySelector {
+) : SpendingCategorySelector {
     override fun select(
         userId: NumericId<User>,
         categoryId: NumericId<Category>

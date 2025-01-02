@@ -3,7 +3,7 @@ package com.marsofandrew.bookkeeper.spending.category
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.user.User
 
-interface CategorySelector {
+interface SpendingCategorySelector {
 
     // has to be safe
     fun select(userId: NumericId<User>, categoryId: NumericId<Category>) : Category

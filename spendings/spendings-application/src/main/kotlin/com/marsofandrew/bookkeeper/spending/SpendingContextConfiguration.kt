@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategorySelector
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.impl.*
 import org.springframework.context.annotation.Bean
@@ -17,17 +17,17 @@ class SpendingContextConfiguration {
     fun addingSpending(
         spendingStorage: SpendingStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        spendingCategorySelector: SpendingCategorySelector,
         spendingCategoryValidator: SpendingCategoryValidator,
         spendingAccountValidator: SpendingAccountValidator
     ): SpendingAdding =
-        SpendingAddingImpl(spendingStorage, eventPublisher, categorySelector, spendingCategoryValidator, spendingAccountValidator)
+        SpendingAddingImpl(spendingStorage, eventPublisher, spendingCategorySelector, spendingCategoryValidator, spendingAccountValidator)
 
     @Bean
     fun creatingSpendingReport(
         spendingStorage: SpendingStorage,
-        categorySelector: CategorySelector,
-    ): SpendingReportCreation = SpendingReportCreationImpl(spendingStorage, categorySelector)
+        spendingCategorySelector: SpendingCategorySelector,
+    ): SpendingReportCreation = SpendingReportCreationImpl(spendingStorage, spendingCategorySelector)
 
     @Bean
     fun deletingSpending(
@@ -38,14 +38,14 @@ class SpendingContextConfiguration {
     @Bean
     fun selectingSpending(
         spendingStorage: SpendingStorage,
-        categorySelector: CategorySelector,
-    ): SpendingSelection = SpendingSelectionImpl(spendingStorage, categorySelector)
+        spendingCategorySelector: SpendingCategorySelector,
+    ): SpendingSelection = SpendingSelectionImpl(spendingStorage, spendingCategorySelector)
 
     @Bean
     fun spendingModification(
         spendingStorage: SpendingStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        spendingCategorySelector: SpendingCategorySelector,
         transactionExecutor: TransactionExecutor,
         spendingCategoryValidator: SpendingCategoryValidator,
         spendingAccountValidator: SpendingAccountValidator
@@ -53,7 +53,7 @@ class SpendingContextConfiguration {
         spendingStorage,
         eventPublisher,
         transactionExecutor,
-        categorySelector,
+        spendingCategorySelector,
         spendingCategoryValidator,
         spendingAccountValidator
     )

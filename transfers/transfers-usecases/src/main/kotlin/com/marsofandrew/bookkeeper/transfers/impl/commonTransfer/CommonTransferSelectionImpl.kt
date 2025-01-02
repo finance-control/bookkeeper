@@ -5,18 +5,18 @@ import com.marsofandrew.bookkeeper.transfers.CommonTransfer
 import com.marsofandrew.bookkeeper.transfers.CommonTransferSelection
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.StandardTransferSelector
 import com.marsofandrew.bookkeeper.transfers.user.User
 import java.time.LocalDate
 
 class CommonTransferSelectionImpl(
     transferStorage: TransferStorage,
-    categorySelector: CategorySelector,
+    transferCategorySelector: TransferCategorySelector,
 ) : CommonTransferSelection {
 
     private val standardTransferSelector =
-        StandardTransferSelector(transferStorage, categorySelector, { true }) { CommonTransfer.of(it) }
+        StandardTransferSelector(transferStorage, transferCategorySelector, { true }) { CommonTransfer.of(it) }
 
     override fun select(
         userId: NumericId<User>,

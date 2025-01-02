@@ -2,7 +2,6 @@ package com.marsofandrew.bookkeeper.transfers.impl.earning
 
 import com.marsofandrew.bookkeeper.base.exception.DomainModelNotFoundException
 import com.marsofandrew.bookkeeper.base.transaction.TestTransactionExecutor
-import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.event.Event
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.properties.Currency
@@ -16,7 +15,7 @@ import com.marsofandrew.bookkeeper.transfers.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
 import com.marsofandrew.bookkeeper.transfers.fixtures.earningUpdate
-import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
+import com.marsofandrew.bookkeeper.transfers.impl.TestTransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toRollbackMoneyIsTransferredEvent
 import com.marsofandrew.bookkeeper.transfers.updateEarning
@@ -47,7 +46,7 @@ internal class EarningModificationImplTest {
             transferAccountValidator = transferAccountValidator,
             transferCategoryValidator = transferCategoryValidator,
             transactionExecutor = TestTransactionExecutor(),
-            categorySelector = TestCategorySelector()
+            transferCategorySelector = TestTransferCategorySelector()
         )
 
         every { eventPublisher.publish(any<Event>()) } returns Unit

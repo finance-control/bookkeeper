@@ -4,7 +4,7 @@ import com.marsofandrew.bookkeeper.base.transaction.TransactionExecutor
 import com.marsofandrew.bookkeeper.event.publisher.EventPublisher
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.account.TransferAccountValidator
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.earning.EarningAdding
 import com.marsofandrew.bookkeeper.transfers.earning.EarningModification
@@ -45,20 +45,20 @@ class TransfersContextConfiguration {
     @Bean
     fun commonTransferSelection(
         transferStorage: TransferStorage,
-        categorySelector: CategorySelector,
-    ): CommonTransferSelection = CommonTransferSelectionImpl(transferStorage, categorySelector)
+        transferCategorySelector: TransferCategorySelector,
+    ): CommonTransferSelection = CommonTransferSelectionImpl(transferStorage, transferCategorySelector)
 
     @Bean
     fun earningAdding(
         transferStorage: TransferStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        transferCategorySelector: TransferCategorySelector,
         transferAccountValidator: TransferAccountValidator,
         transferCategoryValidator: TransferCategoryValidator
     ): EarningAdding = EarningAddingImpl(
         transferStorage,
         eventPublisher,
-        categorySelector,
+        transferCategorySelector,
         transferAccountValidator,
         transferCategoryValidator
     )
@@ -71,21 +71,21 @@ class TransfersContextConfiguration {
     @Bean
     fun earningSelection(
         transferStorage: TransferStorage,
-        categorySelector: CategorySelector,
-    ): EarningSelection = EarningSelectionImpl(transferStorage, categorySelector)
+        transferCategorySelector: TransferCategorySelector,
+    ): EarningSelection = EarningSelectionImpl(transferStorage, transferCategorySelector)
 
     @Bean
     fun earningModification(
         transferStorage: TransferStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        transferCategorySelector: TransferCategorySelector,
         transferAccountValidator: TransferAccountValidator,
         transferCategoryValidator: TransferCategoryValidator,
         transactionExecutor: TransactionExecutor
     ): EarningModification = EarningModificationImpl(
         transferStorage,
         eventPublisher,
-        categorySelector,
+        transferCategorySelector,
         transferAccountValidator,
         transferCategoryValidator,
         transactionExecutor
@@ -95,13 +95,13 @@ class TransfersContextConfiguration {
     fun transferAdding(
         transferStorage: TransferStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        transferCategorySelector: TransferCategorySelector,
         transferAccountValidator: TransferAccountValidator,
         transferCategoryValidator: TransferCategoryValidator
     ): TransferAdding = TransferAddingImpl(
         transferStorage,
         eventPublisher,
-        categorySelector,
+        transferCategorySelector,
         transferAccountValidator,
         transferCategoryValidator
     )
@@ -114,21 +114,21 @@ class TransfersContextConfiguration {
     @Bean
     fun transferSelection(
         transferStorage: TransferStorage,
-        categorySelector: CategorySelector,
-    ): TransferSelection = TransferSelectionImpl(transferStorage, categorySelector)
+        transferCategorySelector: TransferCategorySelector,
+    ): TransferSelection = TransferSelectionImpl(transferStorage, transferCategorySelector)
 
     @Bean
     fun transferModification(
         transferStorage: TransferStorage,
         eventPublisher: EventPublisher,
-        categorySelector: CategorySelector,
+        transferCategorySelector: TransferCategorySelector,
         transferAccountValidator: TransferAccountValidator,
         transferCategoryValidator: TransferCategoryValidator,
         transactionExecutor: TransactionExecutor
     ): TransferModification = TransferModificationImpl(
         transferStorage,
         eventPublisher,
-        categorySelector,
+        transferCategorySelector,
         transferAccountValidator,
         transferCategoryValidator,
         transactionExecutor

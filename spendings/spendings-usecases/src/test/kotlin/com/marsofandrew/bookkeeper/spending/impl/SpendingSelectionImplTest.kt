@@ -23,7 +23,7 @@ internal class SpendingSelectionImplTest {
 
     @BeforeEach
     fun setup() {
-        selectingSpendingImpl = SpendingSelectionImpl(spendingStorage, TestCategorySelector())
+        selectingSpendingImpl = SpendingSelectionImpl(spendingStorage, TestSpendingCategorySelector())
     }
 
     @Test

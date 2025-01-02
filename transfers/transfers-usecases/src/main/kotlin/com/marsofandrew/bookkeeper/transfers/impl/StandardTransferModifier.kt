@@ -8,7 +8,7 @@ import com.marsofandrew.bookkeeper.transfers.CommonTransferUpdateBase
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.account.TransferAccountValidator
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.impl.utils.StandardTransferValidator
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toMoneyIsTransferredEvent
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.LogManager
 internal class StandardTransferModifier<T: CommonTransferBase, U: CommonTransferUpdateBase>(
     private val transferStorage: TransferStorage,
     private val eventPublisher: EventPublisher,
-    private val categorySelector: CategorySelector,
+    private val transferCategorySelector: TransferCategorySelector,
     transferAccountValidator: TransferAccountValidator,
     transferCategoryValidator: TransferCategoryValidator,
     private val transactionExecutor: TransactionExecutor,
@@ -41,7 +41,7 @@ internal class StandardTransferModifier<T: CommonTransferBase, U: CommonTransfer
         eventPublisher.publish(original.toRollbackMoneyIsTransferredEvent())
         eventPublisher.publish(updated.toMoneyIsTransferredEvent())
         val updatedTransfer = mapper(updated)
-        val category = categorySelector.select(userId, updatedTransfer.categoryId)
+        val category = transferCategorySelector.select(userId, updatedTransfer.categoryId)
 
         TransferWithCategory(
             transfer = updatedTransfer,

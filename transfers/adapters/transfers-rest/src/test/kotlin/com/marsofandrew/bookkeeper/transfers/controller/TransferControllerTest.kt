@@ -9,6 +9,7 @@ import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.transfers.Transfer
 import com.marsofandrew.bookkeeper.transfers.TransferReport
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
+import com.marsofandrew.bookkeeper.transfers.category.Category
 import com.marsofandrew.bookkeeper.transfers.controller.dto.AccountMoneyDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.CreateTransferDto
 import com.marsofandrew.bookkeeper.transfers.controller.dto.PositiveMoneyDto
@@ -184,8 +185,8 @@ internal class TransferControllerTest {
         val startDate = now.minusDays(1)
         val endDate = now.plusDays(1)
         val transferReport = TransferReport(
-
-            total = listOf(Money(Currency.EUR, 5, 0), Money(Currency.USD, -5, 0))
+            total = listOf(Money(Currency.EUR, 5, 0), Money(Currency.USD, -5, 0)),
+            byCategory = mapOf(1.asId<Category>() to listOf(Money(Currency.EUR, 5, 0)))
         )
 
         every { transferReportCreation.createReport(userId.asId(), startDate, endDate) } returns transferReport
@@ -196,6 +197,7 @@ internal class TransferControllerTest {
                 jsonPath("total[0].currencyCode") { value(Currency.EUR.name) }
                 jsonPath("total[1].currencyCode") { value(Currency.USD.name) }
                 jsonPath("total[1].amount") { value(-5) }
+                jsonPath("byCategory.1[0].currencyCode") { value(Currency.EUR.name) }
             }
 
         verify(exactly = 1) { transferReportCreation.createReport(userId.asId(), startDate, endDate) }

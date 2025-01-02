@@ -13,7 +13,7 @@ import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.transfers.exception.InvalidCategoryException
 import com.marsofandrew.bookkeeper.transfers.fixtures.earning
-import com.marsofandrew.bookkeeper.transfers.impl.TestCategorySelector
+import com.marsofandrew.bookkeeper.transfers.impl.TestTransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.toAccountBoundedMoney
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.mockk.Called
@@ -40,7 +40,7 @@ internal class EarningAddingImplTest {
             EarningAddingImpl(
                 transferStorage,
                 eventPublisher,
-                TestCategorySelector(),
+                TestTransferCategorySelector(),
                 transferAccountValidator,
                 transferCategoryValidator
             )

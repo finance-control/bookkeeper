@@ -10,7 +10,6 @@ import com.marsofandrew.bookkeeper.properties.PositiveMoney
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.account.SpendingAccountValidator
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
 import com.marsofandrew.bookkeeper.spending.category.SpendingCategoryValidator
 import com.marsofandrew.bookkeeper.spending.exception.InvalidAccountException
 import com.marsofandrew.bookkeeper.spending.exception.InvalidCategoryException
@@ -41,7 +40,7 @@ internal class SpendingModificationImplTest {
             spendingStorage,
             eventPublisher,
             TestTransactionExecutor(),
-            TestCategorySelector(),
+            TestSpendingCategorySelector(),
             spendingCategoryValidator,
             spendingAccountValidator
         )

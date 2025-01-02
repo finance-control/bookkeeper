@@ -8,14 +8,14 @@ import com.marsofandrew.bookkeeper.spending.SpendingReportCreation
 import com.marsofandrew.bookkeeper.spending.SpendingReportsWithCategories
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.Category
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategorySelector
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 
 class SpendingReportCreationImpl(
     private val spendingStorage: SpendingStorage,
-    private val categorySelector: CategorySelector,
+    private val spendingCategorySelector: SpendingCategorySelector,
 ) : SpendingReportCreation {
 
     override fun createReport(
@@ -41,7 +41,7 @@ class SpendingReportCreationImpl(
             .distinct()
             .toList()
 
-        val categoriesById = categorySelector.selectAllByIds(userId, reportCategories)
+        val categoriesById = spendingCategorySelector.selectAllByIds(userId, reportCategories)
             .associateBy { it.id }
 
         return SpendingReportsWithCategories(

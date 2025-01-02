@@ -6,7 +6,6 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.properties.id.asId
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
 import com.marsofandrew.bookkeeper.spending.category.Category
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.fixture.spending
 import com.marsofandrew.bookkeeper.spending.user.User
@@ -29,7 +28,7 @@ internal class SpendingReportCreationImplTest {
 
     @BeforeEach
     fun setup() {
-        creatingSpendingReportImpl = SpendingReportCreationImpl(spendingStorage, TestCategorySelector())
+        creatingSpendingReportImpl = SpendingReportCreationImpl(spendingStorage, TestSpendingCategorySelector())
     }
 
     @Test

@@ -8,9 +8,9 @@ import com.marsofandrew.bookkeeper.transfers.user.User
 import org.springframework.stereotype.Service
 
 @Service
-internal class CategorySelectorImpl(
+internal class TransferCategorySelectorImpl(
     private val categorySelection: CategorySelection,
-) : CategorySelector {
+) : TransferCategorySelector {
     override fun select(
         userId: NumericId<User>,
         categoryId: NumericId<Category>

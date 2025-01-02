@@ -4,14 +4,14 @@ import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.transfers.CommonTransferBase
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.impl.utils.validateDates
 import com.marsofandrew.bookkeeper.transfers.user.User
 import java.time.LocalDate
 
 internal class StandardTransferSelector<T : CommonTransferBase>(
     private val transferStorage: TransferStorage,
-    private val categorySelector: CategorySelector,
+    private val transferCategorySelector: TransferCategorySelector,
     private val filter: (CommonTransferBase) -> Boolean,
     private val mapper: (CommonTransferBase) -> T
 ) {
@@ -33,7 +33,7 @@ internal class StandardTransferSelector<T : CommonTransferBase>(
             .filter(filter)
             .map(mapper)
 
-        val categoryById = categorySelector.selectAllByIds(userId, resultTransfers.map { it.categoryId })
+        val categoryById = transferCategorySelector.selectAllByIds(userId, resultTransfers.map { it.categoryId })
             .associateBy { it.id }
 
         return resultTransfers.map {

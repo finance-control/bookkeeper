@@ -5,7 +5,7 @@ import com.marsofandrew.bookkeeper.transfers.Transfer
 import com.marsofandrew.bookkeeper.transfers.TransferWithCategory
 import com.marsofandrew.bookkeeper.transfers.access.TransferStorage
 import com.marsofandrew.bookkeeper.transfers.account.TransferAccountValidator
-import com.marsofandrew.bookkeeper.transfers.category.CategorySelector
+import com.marsofandrew.bookkeeper.transfers.category.TransferCategorySelector
 import com.marsofandrew.bookkeeper.transfers.category.TransferCategoryValidator
 import com.marsofandrew.bookkeeper.transfers.impl.StandardTransferCreator
 import com.marsofandrew.bookkeeper.transfers.transfer.TransferAdding
@@ -13,7 +13,7 @@ import com.marsofandrew.bookkeeper.transfers.transfer.TransferAdding
 class TransferAddingImpl(
     transferStorage: TransferStorage,
     eventPublisher: EventPublisher,
-    categorySelector: CategorySelector,
+    transferCategorySelector: TransferCategorySelector,
     transferAccountValidator: TransferAccountValidator,
     transferCategoryValidator: TransferCategoryValidator
 ) : TransferAdding {
@@ -21,7 +21,7 @@ class TransferAddingImpl(
     private val standardTransferCreator = StandardTransferCreator(
         transferStorage,
         eventPublisher,
-        categorySelector,
+        transferCategorySelector,
         transferAccountValidator,
         transferCategoryValidator,
     ) {

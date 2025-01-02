@@ -1,18 +1,17 @@
 package com.marsofandrew.bookkeeper.spending.impl
 
 import com.marsofandrew.bookkeeper.properties.id.NumericId
-import com.marsofandrew.bookkeeper.spending.Spending
 import com.marsofandrew.bookkeeper.spending.SpendingSelection
 import com.marsofandrew.bookkeeper.spending.SpendingWithCategory
 import com.marsofandrew.bookkeeper.spending.access.SpendingStorage
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategorySelector
 import com.marsofandrew.bookkeeper.spending.exception.InvalidDateIntervalException
 import com.marsofandrew.bookkeeper.spending.user.User
 import java.time.LocalDate
 
 class SpendingSelectionImpl(
     private val spendingStorage: SpendingStorage,
-    private val categorySelector: CategorySelector
+    private val spendingCategorySelector: SpendingCategorySelector
 ) : SpendingSelection {
 
     override fun select(
@@ -29,7 +28,7 @@ class SpendingSelectionImpl(
             spendingStorage.findAllByUserIdBetween(userId, startDate, endDate)
         }
 
-        val categoryById = categorySelector.selectAllByIds(userId, spendings.map { it.categoryId }.distinct())
+        val categoryById = spendingCategorySelector.selectAllByIds(userId, spendings.map { it.categoryId }.distinct())
             .associateBy { it.id }
 
         return spendings.map {

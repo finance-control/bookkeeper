@@ -2,11 +2,11 @@ package com.marsofandrew.bookkeeper.spending.impl
 
 import com.marsofandrew.bookkeeper.properties.id.NumericId
 import com.marsofandrew.bookkeeper.spending.category.Category
-import com.marsofandrew.bookkeeper.spending.category.CategorySelector
+import com.marsofandrew.bookkeeper.spending.category.SpendingCategorySelector
 import com.marsofandrew.bookkeeper.spending.fixture.category
 import com.marsofandrew.bookkeeper.spending.user.User
 
-internal class TestCategorySelector : CategorySelector {
+internal class TestSpendingCategorySelector : SpendingCategorySelector {
     override fun select(
         userId: NumericId<User>,
         categoryId: NumericId<Category>
